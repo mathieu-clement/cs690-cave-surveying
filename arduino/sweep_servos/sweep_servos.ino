@@ -35,7 +35,7 @@ void loop() {
     int vert_min = 40;
     int vert_max = 120; // actually: 180
 
-    int wait = 50;
+    int wait = 20;
 
     bool left_to_right = true;
 
@@ -48,7 +48,7 @@ void loop() {
           delay(wait);
         } // for j
       } else {
-        for (j = hor_max ; j > 0 ; --j) {
+        for (j = hor_max ; j >= hor_min ; --j) {
           hor_servo.write(j);
           printval(i,j);
           delay(wait);
