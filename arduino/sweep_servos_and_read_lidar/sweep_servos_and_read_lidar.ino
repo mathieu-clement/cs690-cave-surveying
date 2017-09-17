@@ -37,9 +37,19 @@ void printval(int i, int j) {
       Serial.println(lidar.distance());
 }
 
+
+
 void loop() {
-    // Send whitespace on serial line to start program
+    // Wait until "sweep" is sent over the serial line
     while (Serial.available() == 0);
+
+    String inputStr = Serial.readString();
+    if (inputStr == "sweep") {
+      sweep();
+    }
+} // loop()
+
+void sweep() {
     int i, j;
 
     int hor_min = 0;
@@ -68,6 +78,4 @@ void loop() {
       } // if
       left_to_right = !left_to_right;
     } // for i
-
-    while(true);
-} // loop
+} // sweep()
