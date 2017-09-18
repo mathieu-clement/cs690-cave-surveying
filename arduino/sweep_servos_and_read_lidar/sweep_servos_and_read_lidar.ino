@@ -60,7 +60,7 @@ void sweep() {
     int vert_min = 60; // 40;
     int vert_max = 170; // 120; // actually: 180
 
-    int wait = 50;
+    int wait = 40;
 
     bool left_to_right = true;
 
