@@ -40,6 +40,9 @@ void printval(int i, int j) {
 
 
 void loop() {
+    // Let client know we are waiting for a command
+    Serial.println("Ready");
+  
     // Wait until "sweep" is sent over the serial line
     while (Serial.available() == 0);
 
