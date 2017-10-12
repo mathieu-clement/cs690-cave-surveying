@@ -1,5 +1,5 @@
 
-long count = 0;
+volatile long count = 0;
 
  void setup()
  {
