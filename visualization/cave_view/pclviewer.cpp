@@ -3,6 +3,7 @@
 #include "xyzpoint.h"
 #include "build/ui_pclviewer.h"
 
+#include <QColorDialog>
 #include <QFileDialog>
 
 PCLViewer::PCLViewer (QWidget *parent) :
@@ -21,13 +22,9 @@ PCLViewer::PCLViewer (QWidget *parent) :
   viewer->setupInteractor (ui->qvtkWidget->GetInteractor (), ui->qvtkWidget->GetRenderWindow ());
   ui->qvtkWidget->update ();
 
-  // Connect R,G,B sliders and their functions
-  connect (ui->horizontalSlider_R, SIGNAL (valueChanged (int)), this, SLOT (redSliderValueChanged (int)));
-  connect (ui->horizontalSlider_G, SIGNAL (valueChanged (int)), this, SLOT (greenSliderValueChanged (int)));
-  connect (ui->horizontalSlider_B, SIGNAL (valueChanged (int)), this, SLOT (blueSliderValueChanged (int)));
-
-  // Connect load file button
+  // Connect buttons
   connect (ui->loadFileButton, SIGNAL(clicked()), this, SLOT(loadFileButtonPressed()));
+  connect (ui->changeColorButton, SIGNAL(clicked()), this, SLOT(changeColorButtonPressed()));
 }
 
 void
@@ -87,7 +84,18 @@ PCLViewer::loadPcdFile (char* filename)
 }
 
 void
-PCLViewer::RGBsliderReleased ()
+PCLViewer::changeColorButtonPressed()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this);
+    if (!color.isValid()) return;
+    red = color.red();
+    green = color.green();
+    blue = color.blue();
+    colorChanged();
+}
+
+void
+PCLViewer::colorChanged ()
 {
   // Set the new color
   for (size_t i = 0; i < cloud->size (); i++)
@@ -98,30 +106,6 @@ PCLViewer::RGBsliderReleased ()
   }
   viewer->updatePointCloud (cloud, "cloud");
   ui->qvtkWidget->update ();
-}
-
-void
-PCLViewer::redSliderValueChanged (int value)
-{
-  red = value;
-  printf ("redSliderValueChanged: [%d|%d|%d]\n", red, green, blue);
-  RGBsliderReleased();
-}
-
-void
-PCLViewer::greenSliderValueChanged (int value)
-{
-  green = value;
-  printf ("greenSliderValueChanged: [%d|%d|%d]\n", red, green, blue);
-  RGBsliderReleased();
-}
-
-void
-PCLViewer::blueSliderValueChanged (int value)
-{
-  blue = value;
-  printf("blueSliderValueChanged: [%d|%d|%d]\n", red, green, blue);
-  RGBsliderReleased();
 }
 
 PCLViewer::~PCLViewer ()

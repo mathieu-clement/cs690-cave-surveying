@@ -35,16 +35,10 @@ public Q_SLOTS:
   loadFileButtonPressed ();
 
   void
-  RGBsliderReleased ();
+  changeColorButtonPressed ();
 
   void
-  redSliderValueChanged (int value);
-
-  void
-  greenSliderValueChanged (int value);
-
-  void
-  blueSliderValueChanged (int value);
+  colorChanged ();
 
 protected:
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
