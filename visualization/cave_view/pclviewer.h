@@ -35,13 +35,7 @@ public Q_SLOTS:
   loadFileButtonPressed ();
 
   void
-  randomButtonPressed ();
-
-  void
   RGBsliderReleased ();
-
-  void
-  pSliderValueChanged (int value);
 
   void
   redSliderValueChanged (int value);
