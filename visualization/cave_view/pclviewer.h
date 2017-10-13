@@ -14,7 +14,7 @@
 // Visualization Toolkit (VTK)
 #include <vtkRenderWindow.h>
 
-typedef pcl::PointXYZRGBA PointT;
+typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
 
 namespace Ui
@@ -34,19 +34,9 @@ public Q_SLOTS:
   void
   loadFileButtonPressed ();
 
-  void
-  changeColorButtonPressed ();
-
-  void
-  colorChanged ();
-
 protected:
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   PointCloudT::Ptr cloud;
-
-  unsigned int red;
-  unsigned int green;
-  unsigned int blue;
 
 private:
   Ui::PCLViewer *ui;

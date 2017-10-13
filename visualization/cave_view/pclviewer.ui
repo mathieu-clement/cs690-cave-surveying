@@ -49,19 +49,6 @@
      <string>Load file</string>
     </property>
    </widget>
-   <widget class="QToolButton" name="changeColorButton">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>100</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Set Color</string>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="showPointsCheckbox">
     <property name="enabled">
      <bool>false</bool>
