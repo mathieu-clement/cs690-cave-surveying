@@ -1,6 +1,4 @@
 #include "pclviewer.h"
-#include "fileloader.h"
-#include "xyzpoint.h"
 #include <QApplication>
 #include <QMainWindow>
 
@@ -14,6 +12,5 @@ int pclviewer_app(int argc, char *argv[])
 
 int main (int argc, char *argv[])
 {
-    // return test_stuff(argc, argv);
     return pclviewer_app(argc, argv);
 }

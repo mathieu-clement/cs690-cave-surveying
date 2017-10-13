@@ -11,7 +11,7 @@ include_directories (${PCL_INCLUDE_DIRS})
 link_directories    (${PCL_LIBRARY_DIRS})
 add_definitions     (${PCL_DEFINITIONS})
 
-set  (project_SOURCES main.cpp pclviewer.cpp fileloader.cpp)
+set  (project_SOURCES main.cpp pclviewer.cpp)
 set  (project_HEADERS pclviewer.h)
 set  (project_FORMS   pclviewer.ui)
 set  (VTK_LIBRARIES   vtkRendering vtkGraphics vtkHybrid QVTK)

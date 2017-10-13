@@ -1,7 +1,8 @@
 #include "pclviewer.h"
-#include "fileloader.h"
-#include "xyzpoint.h"
 #include "build/ui_pclviewer.h"
+
+#include <pcl/io/pcd_io.h>
+#include <pcl/io/vtk_io.h>
 
 #include <QColorDialog>
 #include <QFileDialog>
@@ -37,9 +38,9 @@ PCLViewer::loadFileButtonPressed()
 {
     QString fileName = QFileDialog::getOpenFileName(
                 this,
-                "Load point cloud file",
+                "Load point cloud data file",
                 QDir::currentPath(),
-                "PCF files (*.pcf)"
+                "PCD files (*.pcd)"
                 );
 
     if (fileName.isNull()) return;
@@ -52,26 +53,11 @@ PCLViewer::loadPcdFile (char* filename)
 {
     printf("Loading file: %s\n", filename);
 
-    FileLoader loader(filename);
-
-    std::vector<XYZPoint>* points = loader.getPoints();
-    std::vector<XYZPoint>::iterator it;
-    for (it = points->begin() ;  it != points->end() ; it++) {
-        XYZPoint point  = *it;
-        printf("%.3f %.3f %.3f\n", point.x, point.y, point.z);
-    }
-
-    // The number of points in the cloud
-    cloud->points.resize (points->size());
+    pcl::io::loadPCDFile(filename, *cloud);
 
     // Fill the cloud with some points
     for (size_t i = 0; i < cloud->points.size (); ++i)
     {
-        XYZPoint p = points->at(i);
-        cloud->points[i].x = p.x;
-        cloud->points[i].y = p.y;
-        cloud->points[i].z = p.z;
-
         cloud->points[i].r = red;
         cloud->points[i].g = green;
         cloud->points[i].b = blue;
