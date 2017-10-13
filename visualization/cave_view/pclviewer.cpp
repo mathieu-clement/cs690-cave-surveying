@@ -3,6 +3,8 @@
 #include "xyzpoint.h"
 #include "build/ui_pclviewer.h"
 
+#include <QFileDialog>
+
 PCLViewer::PCLViewer (QWidget *parent) :
   QMainWindow (parent),
   ui (new Ui::PCLViewer)
@@ -12,13 +14,6 @@ PCLViewer::PCLViewer (QWidget *parent) :
 
   // Setup the cloud pointer
   cloud.reset (new PointCloudT);
-
-  // The default color
-  red   = 128;
-  green = 128;
-  blue  = 128;
-
-  loadPcdFile("/tmp/input.pcd");
 
   // Set up the QVTK window
   viewer.reset (new pcl::visualization::PCLVisualizer ("viewer", false));
@@ -40,10 +35,23 @@ PCLViewer::PCLViewer (QWidget *parent) :
   // Connect point size slider
   connect (ui->horizontalSlider_p, SIGNAL (valueChanged (int)), this, SLOT (pSliderValueChanged (int)));
 
-  viewer->addPointCloud (cloud, "cloud");
-  pSliderValueChanged (2);
-  viewer->resetCamera ();
-  ui->qvtkWidget->update ();
+  // Connect load file button
+  connect (ui->loadFileButton, SIGNAL(clicked()), this, SLOT(loadFileButtonPressed()));
+}
+
+void
+PCLViewer::loadFileButtonPressed()
+{
+    QString fileName = QFileDialog::getOpenFileName(
+                this,
+                "Load point cloud file",
+                QDir::currentPath(),
+                "PCF files (*.pcf)"
+                );
+
+    if (fileName.isNull()) return;
+
+    loadPcdFile((char*) fileName.toStdString().c_str());
 }
 
 void
@@ -60,6 +68,11 @@ PCLViewer::loadPcdFile (char* filename)
         printf("%.3f %.3f %.3f\n", point.x, point.y, point.z);
     }
 
+    // The default color
+    red   = 128;
+    green = 128;
+    blue  = 128;
+
     // The number of points in the cloud
     cloud->points.resize (points->size());
 
@@ -75,6 +88,11 @@ PCLViewer::loadPcdFile (char* filename)
         cloud->points[i].g = green;
         cloud->points[i].b = blue;
     }
+
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud (cloud, "cloud");
+    viewer->resetCamera ();
+    ui->qvtkWidget->update ();
 }
 
 void

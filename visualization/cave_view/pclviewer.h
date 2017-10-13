@@ -32,7 +32,7 @@ public:
 
 public Q_SLOTS:
   void
-  loadPcdFile (char* filename);
+  loadFileButtonPressed ();
 
   void
   randomButtonPressed ();
@@ -62,6 +62,9 @@ protected:
 
 private:
   Ui::PCLViewer *ui;
+
+  void
+  loadPcdFile (char* filename);
 
 };
 
