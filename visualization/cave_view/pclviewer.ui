@@ -74,6 +74,13 @@
       <height>18</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Show points</string>
     </property>
@@ -88,10 +95,17 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>130</y>
+      <y>230</y>
       <width>111</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Show mesh</string>
@@ -100,20 +114,20 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>150</y>
-      <width>241</width>
-      <height>31</height>
+      <y>260</y>
+      <width>231</width>
+      <height>51</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Mesh algorithm:</string>
+        <string>Mesh construction:</string>
        </property>
       </widget>
      </item>
@@ -121,17 +135,48 @@
       <widget class="QComboBox" name="meshAlgorithmComboBox">
        <item>
         <property name="text">
-         <string>Poisson</string>
+         <string>Concave Hull</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Greedy triangulation</string>
+         <string>Convex Hull</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Greedy projection triangulation</string>
         </property>
        </item>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QCheckBox" name="pointCloudProcessingCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>130</y>
+      <width>241</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Improve for surface approximation</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="meshSmoothingCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>320</y>
+      <width>161</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Smoothing</string>
+    </property>
    </widget>
   </widget>
  </widget>
