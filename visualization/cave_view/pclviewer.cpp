@@ -1,4 +1,6 @@
 #include "pclviewer.h"
+#include "fileloader.h"
+#include "xyzpoint.h"
 #include "build/ui_pclviewer.h"
 
 PCLViewer::PCLViewer (QWidget *parent) :
@@ -6,29 +8,17 @@ PCLViewer::PCLViewer (QWidget *parent) :
   ui (new Ui::PCLViewer)
 {
   ui->setupUi (this);
-  this->setWindowTitle ("Cave viewer");
+  this->setWindowTitle ("Cave Viewer");
 
   // Setup the cloud pointer
   cloud.reset (new PointCloudT);
-  // The number of points in the cloud
-  cloud->points.resize (200);
 
   // The default color
   red   = 128;
   green = 128;
   blue  = 128;
 
-  // Fill the cloud with some points
-  for (size_t i = 0; i < cloud->points.size (); ++i)
-  {
-    cloud->points[i].x = 1024 * rand () / (RAND_MAX + 1.0f);
-    cloud->points[i].y = 1024 * rand () / (RAND_MAX + 1.0f);
-    cloud->points[i].z = 1024 * rand () / (RAND_MAX + 1.0f);
-
-    cloud->points[i].r = red;
-    cloud->points[i].g = green;
-    cloud->points[i].b = blue;
-  }
+  loadPcdFile("/tmp/input.pcd");
 
   // Set up the QVTK window
   viewer.reset (new pcl::visualization::PCLVisualizer ("viewer", false));
@@ -60,6 +50,31 @@ void
 PCLViewer::loadPcdFile (char* filename)
 {
     printf("Loading file: %s\n", filename);
+
+    FileLoader loader(filename);
+
+    std::vector<XYZPoint>* points = loader.getPoints();
+    std::vector<XYZPoint>::iterator it;
+    for (it = points->begin() ;  it != points->end() ; it++) {
+        XYZPoint point  = *it;
+        printf("%.3f %.3f %.3f\n", point.x, point.y, point.z);
+    }
+
+    // The number of points in the cloud
+    cloud->points.resize (points->size());
+
+    // Fill the cloud with some points
+    for (size_t i = 0; i < cloud->points.size (); ++i)
+    {
+        XYZPoint p = points->at(i);
+        cloud->points[i].x = p.x;
+        cloud->points[i].y = p.y;
+        cloud->points[i].z = p.z;
+
+        cloud->points[i].r = red;
+        cloud->points[i].g = green;
+        cloud->points[i].b = blue;
+    }
 }
 
 void
