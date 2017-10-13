@@ -14,8 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         pclviewer.cpp \
-    fileloader.cpp \
-    xyzpoint.cpp
+    fileloader.cpp
 
 HEADERS  += pclviewer.h \
     fileloader.h \
