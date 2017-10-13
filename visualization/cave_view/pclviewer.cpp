@@ -16,6 +16,11 @@ PCLViewer::PCLViewer (QWidget *parent) :
   // Setup the cloud pointer
   cloud.reset (new PointCloudT);
 
+  // The default color
+  red   = 128;
+  green = 128;
+  blue  = 128;
+
   // Set up the QVTK window
   viewer.reset (new pcl::visualization::PCLVisualizer ("viewer", false));
   ui->qvtkWidget->SetRenderWindow (viewer->getRenderWindow ());
@@ -55,11 +60,6 @@ PCLViewer::loadPcdFile (char* filename)
         XYZPoint point  = *it;
         printf("%.3f %.3f %.3f\n", point.x, point.y, point.z);
     }
-
-    // The default color
-    red   = 128;
-    green = 128;
-    blue  = 128;
 
     // The number of points in the cloud
     cloud->points.resize (points->size());
