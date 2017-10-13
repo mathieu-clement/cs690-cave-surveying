@@ -13,8 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        pclviewer.cpp
+        pclviewer.cpp \
+    fileloader.cpp \
+    xyzpoint.cpp
 
-HEADERS  += pclviewer.h
+HEADERS  += pclviewer.h \
+    fileloader.h \
+    xyzpoint.h
 
 FORMS    += pclviewer.ui

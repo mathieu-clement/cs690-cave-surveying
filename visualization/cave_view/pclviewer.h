@@ -32,6 +32,9 @@ public:
 
 public Q_SLOTS:
   void
+  loadPcdFile (char* filename);
+
+  void
   randomButtonPressed ();
 
   void

@@ -6,7 +6,7 @@ PCLViewer::PCLViewer (QWidget *parent) :
   ui (new Ui::PCLViewer)
 {
   ui->setupUi (this);
-  this->setWindowTitle ("PCL viewer");
+  this->setWindowTitle ("Cave viewer");
 
   // Setup the cloud pointer
   cloud.reset (new PointCloudT);
@@ -54,6 +54,12 @@ PCLViewer::PCLViewer (QWidget *parent) :
   pSliderValueChanged (2);
   viewer->resetCamera ();
   ui->qvtkWidget->update ();
+}
+
+void
+PCLViewer::loadPcdFile (char* filename)
+{
+    printf("Loading file: %s\n", filename);
 }
 
 void
