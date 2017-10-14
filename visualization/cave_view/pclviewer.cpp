@@ -31,6 +31,9 @@ PCLViewer::PCLViewer (QWidget *parent) :
 
   // Connect buttons
   connect (ui->loadFileButton, SIGNAL(clicked()), this, SLOT(loadFileButtonPressed()));
+
+  // Connect checkboxes
+  connect (ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
 }
 
 void
@@ -91,8 +94,10 @@ PCLViewer::loadPcdFile (std::string filename)
     progress.setLabelText("Smoothing point cloud...");
     if (progress.wasCanceled()) return;
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_smoothed (new pcl::PointCloud<pcl::PointXYZ>());
-    mls.process(*cloud_smoothed);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed =
+            new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
+    this->cloud_smoothed = pCloud_smoothed;
+    mls.process(**pCloud_smoothed);
 
     // Progress: 3
 
@@ -102,10 +107,10 @@ PCLViewer::loadPcdFile (std::string filename)
 
     pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
     ne.setNumberOfThreads(8);
-    ne.setInputCloud(cloud_smoothed);
+    ne.setInputCloud(*pCloud_smoothed);
     ne.setRadiusSearch(10);
     Eigen::Vector4f centroid;
-    pcl::compute3DCentroid(*cloud_smoothed, centroid);
+    pcl::compute3DCentroid(**pCloud_smoothed, centroid);
     ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
 
     pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
@@ -124,7 +129,7 @@ PCLViewer::loadPcdFile (std::string filename)
     if (progress.wasCanceled()) return;
 
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
-    pcl::concatenateFields(*cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
+    pcl::concatenateFields(**pCloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
 
     // Progress: 5
 
@@ -142,9 +147,21 @@ PCLViewer::loadPcdFile (std::string filename)
     progress.setValue(6);
 
     viewer->removeAllPointClouds();
-    viewer->addPointCloud (cloud_smoothed, "cloud_smoothed");
+    viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
+    ui->showPointsCheckbox->setChecked(true);
     viewer->addPolygonMesh(mesh);
     viewer->resetCamera ();
+    ui->qvtkWidget->update ();
+}
+
+void
+PCLViewer::showPointsCheckBoxToggled(bool checked)
+{
+    if(checked) {
+        viewer->addPointCloud(*this->cloud_smoothed, "cloud_smoothed");
+    } else {
+        viewer->removePointCloud("cloud_smoothed");
+    }
     ui->qvtkWidget->update ();
 }
 

@@ -50,9 +50,6 @@
     </property>
    </widget>
    <widget class="QCheckBox" name="showPointsCheckbox">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -138,19 +135,6 @@
       </widget>
      </item>
     </layout>
-   </widget>
-   <widget class="QCheckBox" name="pointCloudProcessingCheckBox">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>130</y>
-      <width>241</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Improve for surface approximation</string>
-    </property>
    </widget>
    <widget class="QCheckBox" name="meshSmoothingCheckBox">
     <property name="geometry">

@@ -34,6 +34,9 @@ public Q_SLOTS:
   void
   loadFileButtonPressed ();
 
+  void
+  showPointsCheckBoxToggled (bool checked);
+
 protected:
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   PointCloudT::Ptr cloud;
@@ -43,6 +46,8 @@ protected:
 
 private:
   Ui::PCLViewer *ui;
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr *cloud_smoothed;
 };
 
 #endif // PCLVIEWER_H
