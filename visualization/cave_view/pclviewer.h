@@ -14,6 +14,8 @@
 // Visualization Toolkit (VTK)
 #include <vtkRenderWindow.h>
 
+#include "mlsparams.h"
+
 typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
 
@@ -52,6 +54,9 @@ protected:
 
   void
   enableUi();
+
+  MLSParams
+  getMlsParams();
 
 private:
   Ui::PCLViewer *ui;

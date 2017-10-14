@@ -13,8 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        pclviewer.cpp
+        pclviewer.cpp \
+    mlsparamsdialog.cpp
 
-HEADERS  += pclviewer.h
+HEADERS  += pclviewer.h \
+    mlsparamsdialog.h \
+    mlsparams.h
 
-FORMS    += pclviewer.ui
+FORMS    += pclviewer.ui \
+    mlsparamsdialog.ui

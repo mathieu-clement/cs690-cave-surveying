@@ -1,5 +1,7 @@
 #include "pclviewer.h"
 #include "build/ui_pclviewer.h"
+#include "mlsparams.h"
+#include "mlsparamsdialog.h"
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
@@ -38,6 +40,10 @@ PCLViewer::PCLViewer (QWidget *parent) :
 
   // Controls inactive until file is loaded
   disableUi();
+  ui->filenameLabel->setText(QString::Null());
+
+  this->raise();
+  this->activateWindow();
 }
 
 void
@@ -62,7 +68,7 @@ PCLViewer::loadPcdFile (std::string filename)
 
     disableUi();
 
-    QProgressDialog progress("Loading file...", "Cancel", 0, 6, this);
+    QProgressDialog progress("Loading file...", "Cancel", 0, 5, this);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(0);
     progress.show();
@@ -80,32 +86,28 @@ PCLViewer::loadPcdFile (std::string filename)
     // Progress: 1
 
     progress.setValue(1);
-    progress.setLabelText("Applying Moving Least Squares...");
+    progress.setLabelText("Smoothing...");
     if (progress.wasCanceled()) return;
+
+    MLSParams mlsParams = getMlsParams();
 
     pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ> mls;
     mls.setInputCloud(cloud);
-    mls.setSearchRadius(10);
+    mls.setSearchRadius(mlsParams.searchRadius);
     mls.setPolynomialFit(true);
     mls.setPolynomialOrder(2);
     mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
-    mls.setUpsamplingRadius(5);
-    mls.setUpsamplingStepSize(4);
-
-    // Progress: 2
-
-    progress.setValue(2);
-    progress.setLabelText("Smoothing point cloud...");
-    if (progress.wasCanceled()) return;
+    mls.setUpsamplingRadius(mlsParams.upsamplingRadius);
+    mls.setUpsamplingStepSize(mlsParams.upsamplingStepSize);
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed =
             new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
     this->cloud_smoothed = pCloud_smoothed;
     mls.process(**pCloud_smoothed);
 
-    // Progress: 3
+    // Progress: 2
 
-    progress.setValue(3);
+    progress.setValue(2);
     progress.setLabelText("Computing normals...");
     if (progress.wasCanceled()) return;
 
@@ -126,18 +128,18 @@ PCLViewer::loadPcdFile (std::string filename)
         cloud_normals->points[i].normal_z *= -1;
     }
 
-    // Progress: 4
+    // Progress: 3
 
-    progress.setValue(4);
+    progress.setValue(3);
     progress.setLabelText("Concatenating points and normals...");
     if (progress.wasCanceled()) return;
 
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
     pcl::concatenateFields(**pCloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
 
-    // Progress: 5
+    // Progress: 4
 
-    progress.setValue(5);
+    progress.setValue(4);
     progress.setLabelText("Computing mesh using Poisson...");
     if (progress.wasCanceled()) return;
 
@@ -149,7 +151,7 @@ PCLViewer::loadPcdFile (std::string filename)
     poisson.reconstruct(*pMesh);
 
     // Progress: END
-    progress.setValue(6);
+    progress.setValue(5);
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
@@ -160,6 +162,9 @@ PCLViewer::loadPcdFile (std::string filename)
     enableUi();
     ui->showPointsCheckbox->setChecked(true);
     ui->showMeshCheckbox->setChecked(true);
+
+    QFileInfo fi(QString::fromStdString(filename));
+    ui->filenameLabel->setText(fi.fileName());
 
     this->raise();
     this->activateWindow();
@@ -204,6 +209,15 @@ PCLViewer::setUiEnabled(bool enabled)
 {
     ui->showPointsCheckbox->setEnabled(enabled);
     ui->showMeshCheckbox->setEnabled(enabled);
+}
+
+MLSParams
+PCLViewer::getMlsParams()
+{
+    MLSParamsDialog dialog(this);
+    dialog.setModal(true);
+    dialog.exec();
+    return dialog.getMlsParams();
 }
 
 PCLViewer::~PCLViewer ()
