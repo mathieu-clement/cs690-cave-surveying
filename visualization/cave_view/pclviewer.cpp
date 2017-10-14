@@ -45,13 +45,13 @@ PCLViewer::loadFileButtonPressed()
 
     if (fileName.isNull()) return;
 
-    loadPcdFile((char*) fileName.toStdString().c_str());
+    loadPcdFile(fileName.toStdString());
 }
 
 void
-PCLViewer::loadPcdFile (char* filename)
+PCLViewer::loadPcdFile (std::string filename)
 {
-    printf("Loading file: %s\n", filename);
+    std::cout << "Loading file: " << filename << std::endl;
 
     QProgressDialog progress("Loading file...", "Cancel", 0, 6, this);
     progress.setWindowModality(Qt::WindowModal);
@@ -60,14 +60,17 @@ PCLViewer::loadPcdFile (char* filename)
     progress.raise();
     progress.activateWindow();
 
-    // 0
+    // Progress: 0
 
     progress.setValue(0);
     if (progress.wasCanceled()) return;
 
-    pcl::io::loadPCDFile(filename, *cloud);
+    // Copied / inspired from:
+    // http://www.pointclouds.org/assets/icra2012/surface.pdf
 
-    // 1
+    pcl::io::loadPCDFile(filename.c_str(), *cloud);
+
+    // Progress: 1
 
     progress.setValue(1);
     progress.setLabelText("Applying Moving Least Squares...");
@@ -82,7 +85,7 @@ PCLViewer::loadPcdFile (char* filename)
     mls.setUpsamplingRadius(5);
     mls.setUpsamplingStepSize(4);
 
-    // 2
+    // Progress: 2
 
     progress.setValue(2);
     progress.setLabelText("Smoothing point cloud...");
@@ -91,7 +94,7 @@ PCLViewer::loadPcdFile (char* filename)
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_smoothed (new pcl::PointCloud<pcl::PointXYZ>());
     mls.process(*cloud_smoothed);
 
-    // 3
+    // Progress: 3
 
     progress.setValue(3);
     progress.setLabelText("Computing normals...");
@@ -114,7 +117,7 @@ PCLViewer::loadPcdFile (char* filename)
         cloud_normals->points[i].normal_z *= -1;
     }
 
-    // 4
+    // Progress: 4
 
     progress.setValue(4);
     progress.setLabelText("Concatenating points and normals...");
@@ -123,7 +126,7 @@ PCLViewer::loadPcdFile (char* filename)
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
     pcl::concatenateFields(*cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
 
-    // 5
+    // Progress: 5
 
     progress.setValue(5);
     progress.setLabelText("Computing mesh using Poisson...");
@@ -135,8 +138,7 @@ PCLViewer::loadPcdFile (char* filename)
     pcl::PolygonMesh mesh;
     poisson.reconstruct(mesh);
 
-    // 6
-
+    // Progress: END
     progress.setValue(6);
 
     viewer->removeAllPointClouds();

@@ -38,12 +38,11 @@ protected:
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   PointCloudT::Ptr cloud;
 
+  void
+  loadPcdFile (std::string filename);
+
 private:
   Ui::PCLViewer *ui;
-
-  void
-  loadPcdFile (char* filename);
-
 };
 
 #endif // PCLVIEWER_H
