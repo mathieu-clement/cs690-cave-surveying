@@ -34,6 +34,10 @@ PCLViewer::PCLViewer (QWidget *parent) :
 
   // Connect checkboxes
   connect (ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
+  connect (ui->showMeshCheckbox, SIGNAL(toggled(bool)), this, SLOT(showMeshCheckBoxToggled(bool)));
+
+  // Controls inactive until file is loaded
+  disableUi();
 }
 
 void
@@ -56,12 +60,12 @@ PCLViewer::loadPcdFile (std::string filename)
 {
     std::cout << "Loading file: " << filename << std::endl;
 
+    disableUi();
+
     QProgressDialog progress("Loading file...", "Cancel", 0, 6, this);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(0);
     progress.show();
-    progress.raise();
-    progress.activateWindow();
 
     // Progress: 0
 
@@ -140,18 +144,25 @@ PCLViewer::loadPcdFile (std::string filename)
     pcl::Poisson<pcl::PointNormal> poisson;
     poisson.setDepth(9);
     poisson.setInputCloud(cloud_smoothed_normals);
-    pcl::PolygonMesh mesh;
-    poisson.reconstruct(mesh);
+    pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
+    this->mesh = pMesh;
+    poisson.reconstruct(*pMesh);
 
     // Progress: END
     progress.setValue(6);
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
+    viewer->addPolygonMesh(*pMesh, "mesh");
+    viewer->resetCamera();
+    ui->qvtkWidget->update();
+
+    enableUi();
     ui->showPointsCheckbox->setChecked(true);
-    viewer->addPolygonMesh(mesh);
-    viewer->resetCamera ();
-    ui->qvtkWidget->update ();
+    ui->showMeshCheckbox->setChecked(true);
+
+    this->raise();
+    this->activateWindow();
 }
 
 void
@@ -162,7 +173,37 @@ PCLViewer::showPointsCheckBoxToggled(bool checked)
     } else {
         viewer->removePointCloud("cloud_smoothed");
     }
-    ui->qvtkWidget->update ();
+    ui->qvtkWidget->update();
+}
+
+void
+PCLViewer::showMeshCheckBoxToggled(bool checked)
+{
+    if(checked) {
+        viewer->addPolygonMesh(*this->mesh, "mesh");
+    } else {
+        viewer->removePolygonMesh("mesh");
+    }
+    ui->qvtkWidget->update();
+}
+
+void
+PCLViewer::disableUi()
+{
+    setUiEnabled(false);
+}
+
+void
+PCLViewer::enableUi()
+{
+    setUiEnabled(true);
+}
+
+void
+PCLViewer::setUiEnabled(bool enabled)
+{
+    ui->showPointsCheckbox->setEnabled(enabled);
+    ui->showMeshCheckbox->setEnabled(enabled);
 }
 
 PCLViewer::~PCLViewer ()

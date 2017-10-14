@@ -37,6 +37,9 @@ public Q_SLOTS:
   void
   showPointsCheckBoxToggled (bool checked);
 
+  void
+  showMeshCheckBoxToggled (bool checked);
+
 protected:
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   PointCloudT::Ptr cloud;
@@ -44,10 +47,20 @@ protected:
   void
   loadPcdFile (std::string filename);
 
+  void
+  disableUi();
+
+  void
+  enableUi();
+
 private:
   Ui::PCLViewer *ui;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr *cloud_smoothed;
+  pcl::PolygonMesh *mesh;
+
+  void
+  setUiEnabled (bool enabled);
 };
 
 #endif // PCLVIEWER_H
