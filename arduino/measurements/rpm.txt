@@ -1,0 +1,44 @@
+Finding magnet for the first time...
+Found!
+0 magnet detected --> 191 ms per rotation <=> 314.14 RPM
+1 magnet detected --> 2715 ms per rotation <=> 22.10 RPM
+2 magnet detected --> 2624 ms per rotation <=> 22.87 RPM
+3 magnet detected --> 2614 ms per rotation <=> 22.95 RPM
+4 magnet detected --> 2685 ms per rotation <=> 22.35 RPM
+5 magnet detected --> 2684 ms per rotation <=> 22.35 RPM
+6 magnet detected --> 2605 ms per rotation <=> 23.03 RPM
+7 magnet detected --> 2725 ms per rotation <=> 22.02 RPM
+8 magnet detected --> 7872 ms per rotation <=> 7.62 RPM
+9 magnet detected --> 2623 ms per rotation <=> 22.87 RPM
+10 magnet detected --> 5189 ms per rotation <=> 11.56 RPM
+11 magnet detected --> 2593 ms per rotation <=> 23.14 RPM
+12 magnet detected --> 2736 ms per rotation <=> 21.93 RPM
+13 magnet detected --> 2735 ms per rotation <=> 21.94 RPM
+14 magnet detected --> 2654 ms per rotation <=> 22.61 RPM
+15 magnet detected --> 2704 ms per rotation <=> 22.19 RPM
+16 magnet detected --> 2705 ms per rotation <=> 22.18 RPM
+17 magnet detected --> 2725 ms per rotation <=> 22.02 RPM
+18 magnet detected --> 2674 ms per rotation <=> 22.44 RPM
+19 magnet detected --> 2665 ms per rotation <=> 22.51 RPM
+20 magnet detected --> 2674 ms per rotation <=> 22.44 RPM
+21 magnet detected --> 2665 ms per rotation <=> 22.51 RPM
+22 magnet detected --> 2745 ms per rotation <=> 21.86 RPM
+23 magnet detected --> 2774 ms per rotation <=> 21.63 RPM
+24 magnet detected --> 2755 ms per rotation <=> 21.78 RPM
+25 magnet detected --> 2754 ms per rotation <=> 21.79 RPM
+26 magnet detected --> 2775 ms per rotation <=> 21.62 RPM
+27 magnet detected --> 2755 ms per rotation <=> 21.78 RPM
+28 magnet detected --> 2725 ms per rotation <=> 22.02 RPM
+29 magnet detected --> 2744 ms per rotation <=> 21.87 RPM
+30 magnet detected --> 2765 ms per rotation <=> 21.70 RPM
+31 magnet detected --> 2745 ms per rotation <=> 21.86 RPM
+32 magnet detected --> 2805 ms per rotation <=> 21.39 RPM
+33 magnet detected --> 2805 ms per rotation <=> 21.39 RPM
+34 magnet detected --> 2784 ms per rotation <=> 21.55 RPM
+35 magnet detected --> 2794 ms per rotation <=> 21.47 RPM
+36 magnet detected --> 2815 ms per rotation <=> 21.31 RPM
+37 magnet detected --> 2705 ms per rotation <=> 22.18 RPM
+38 magnet detected --> 2705 ms per rotation <=> 22.18 RPM
+39 magnet detected --> 2734 ms per rotation <=> 21.95 RPM
+40 magnet detected --> 2645 ms per rotation <=> 22.68 RPM
+
