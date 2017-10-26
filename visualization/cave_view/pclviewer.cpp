@@ -9,7 +9,7 @@
 #include <pcl/surface/poisson.h>
 #include <pcl/features/normal_3d_omp.h>
 
-
+#include <QApplication>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QProgressDialog>
@@ -212,10 +212,11 @@ PCLViewer::setUiEnabled(bool enabled)
 bool
 PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
 {
+    std::cout << "Progress (" << step << "): " << message.toAscii().constData() << std::endl;
     if (dialog->wasCanceled()) return false;
     dialog->setValue(step);
     dialog->setLabelText(message);
-    std::cout << "Progress (" << step << "): " << message.toAscii().constData() << std::endl;
+    QApplication::processEvents();
     return true;
 }
 

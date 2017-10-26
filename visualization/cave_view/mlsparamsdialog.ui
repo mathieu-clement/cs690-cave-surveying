@@ -223,6 +223,16 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>okButton</tabstop>
+  <tabstop>mlsEnableCheckBox</tabstop>
+  <tabstop>mlsSearchRadiusSpinBox</tabstop>
+  <tabstop>mlsUpsamplingRadiusSpinBox</tabstop>
+  <tabstop>mlsUpsamplingStepSizeSpinBox</tabstop>
+  <tabstop>normalsSearchRadiusSpinBox</tabstop>
+  <tabstop>normalsThreadsSpinBox</tabstop>
+  <tabstop>poissonDepthSpinBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -238,6 +248,54 @@
     <hint type="destinationlabel">
      <x>199</x>
      <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsSearchRadiusSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>82</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsUpsamplingRadiusSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>116</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsUpsamplingStepSizeSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>150</y>
     </hint>
    </hints>
   </connection>
