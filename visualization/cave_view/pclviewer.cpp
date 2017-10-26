@@ -13,6 +13,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QProgressDialog>
+#include <QSound>
 
 PCLViewer::PCLViewer (QWidget *parent) :
   QMainWindow (parent),
@@ -76,7 +77,7 @@ PCLViewer::loadPcdFile (std::string filename)
     // Progress: 0
 
     progress.setValue(0);
-    if (progress.wasCanceled()) return;
+    if (progress.wasCanceled()) { return; }
 
     // Copied / inspired from:
     // http://www.pointclouds.org/assets/icra2012/surface.pdf
@@ -85,9 +86,13 @@ PCLViewer::loadPcdFile (std::string filename)
 
     // Progress: 1
 
-    if(!updateProgress(1, "Smoothing...", &progress)) return;
+    if(!updateProgress(1, "Smoothing...", &progress)) { return; }
 
     MLSParams mlsParams = getMlsParams();
+
+    QSound sound("/Users/mathieuclement/Downloads/jeopardy_think.wav");
+    sound.play();
+
     pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
 
     if (mlsParams.mlsEnabled) {
@@ -111,7 +116,7 @@ PCLViewer::loadPcdFile (std::string filename)
 
     // Progress: 2
 
-    if(!updateProgress(2, "Estimating normals...", &progress)) return;
+    if(!updateProgress(2, "Estimating normals...", &progress)) { sound.stop(); return; }
 
     pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
     ne.setNumberOfThreads(mlsParams.normalsThreads);
@@ -132,14 +137,14 @@ PCLViewer::loadPcdFile (std::string filename)
 
     // Progress: 3
 
-    if(!updateProgress(3, "Concatenating points and normals...", &progress)) return;
+    if(!updateProgress(3, "Concatenating points and normals...", &progress)) { sound.stop(); return; }
 
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
     pcl::concatenateFields(**pCloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
 
     // Progress: 4
 
-    if(!updateProgress(4, "Computing mesh using Poisson...", &progress)) return;
+    if(!updateProgress(4, "Computing mesh using Poisson...", &progress)) { sound.stop(); return; }
 
     pcl::Poisson<pcl::PointNormal> poisson;
     poisson.setDepth(mlsParams.poissonDepth);
@@ -163,6 +168,8 @@ PCLViewer::loadPcdFile (std::string filename)
 
     QFileInfo fi(QString::fromStdString(filename));
     ui->filenameLabel->setText(fi.fileName());
+
+    sound.stop();
 
     this->raise();
     this->activateWindow();
