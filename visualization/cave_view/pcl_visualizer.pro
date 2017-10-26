@@ -8,9 +8,9 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = pcl_visualizer
+TARGET = "Cave Viewer"
 TEMPLATE = app
-
+ICON = duck.icns
 
 SOURCES += main.cpp\
         pclviewer.cpp \
@@ -22,3 +22,6 @@ HEADERS  += pclviewer.h \
 
 FORMS    += pclviewer.ui \
     mlsparamsdialog.ui
+
+RESOURCES += \
+    icons.qrc

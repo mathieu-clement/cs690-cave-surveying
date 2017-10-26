@@ -12,6 +12,7 @@
 #include <QApplication>
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QIcon>
 #include <QProgressDialog>
 #include <QSound>
 
@@ -21,6 +22,7 @@ PCLViewer::PCLViewer (QWidget *parent) :
 {
   ui->setupUi (this);
   this->setWindowTitle ("Cave Viewer");
+  this->setWindowIcon(QIcon(":/duck.ico"));
 
   // Setup the cloud pointer
   cloud.reset (new PointCloudT);
