@@ -6,15 +6,24 @@ MLSParamsDialog::MLSParamsDialog(QWidget *parent) :
     ui(new Ui::MLSParamsDialog)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Mesh Parameters");
 }
 
 MLSParams
 MLSParamsDialog::getMlsParams()
 {
-    unsigned int searchRadius = ui->searchRadiusSpinBox->value();
-    unsigned int upsamplingRadius = ui->upsamplingRadiusSpinBox->value();
-    unsigned int upsamplingStepSize = ui->upsamplingStepSizeSpinBox->value();
-    MLSParams params = {searchRadius, upsamplingRadius, upsamplingStepSize};
+    bool mlsEnabled = ui->mlsEnableCheckBox->isChecked();
+    double mlsSearchRadius = ui->mlsSearchRadiusSpinBox->value();
+    double mlsUpsamplingRadius = ui->mlsUpsamplingRadiusSpinBox->value();
+    double mlsUpsamplingStepSize = ui->mlsUpsamplingStepSizeSpinBox->value();
+    double normalsSearchRadius = ui->normalsSearchRadiusSpinBox->value();
+    unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
+    unsigned int poissonDepth = ui->poissonDepthSpinBox->value();
+    MLSParams params = {
+                        mlsEnabled, mlsSearchRadius, mlsUpsamplingRadius, mlsUpsamplingStepSize,
+                        normalsSearchRadius, normalsThreads,
+                        poissonDepth
+                       };
     return params;
 }
 

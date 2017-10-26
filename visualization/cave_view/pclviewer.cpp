@@ -85,36 +85,38 @@ PCLViewer::loadPcdFile (std::string filename)
 
     // Progress: 1
 
-    progress.setValue(1);
-    progress.setLabelText("Smoothing...");
-    if (progress.wasCanceled()) return;
+    if(!updateProgress(1, "Smoothing...", &progress)) return;
 
     MLSParams mlsParams = getMlsParams();
+    pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
 
-    pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ> mls;
-    mls.setInputCloud(cloud);
-    mls.setSearchRadius(mlsParams.searchRadius);
-    mls.setPolynomialFit(true);
-    mls.setPolynomialOrder(2);
-    mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
-    mls.setUpsamplingRadius(mlsParams.upsamplingRadius);
-    mls.setUpsamplingStepSize(mlsParams.upsamplingStepSize);
+    if (mlsParams.mlsEnabled) {
+        pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ> mls;
+        mls.setInputCloud(cloud);
+        mls.setSearchRadius(mlsParams.mlsSearchRadius);
+        mls.setPolynomialFit(true);
+        mls.setPolynomialOrder(2);
+        mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
+        mls.setUpsamplingRadius(mlsParams.mlsUpsamplingRadius);
+        mls.setUpsamplingStepSize(mlsParams.mlsUpsamplingStepSize);
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed =
-            new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
+        pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
+        this->cloud_smoothed = pCloud_smoothed;
+        mls.process(**pCloud_smoothed);
+    } else {
+        pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(cloud);
+    }
+
     this->cloud_smoothed = pCloud_smoothed;
-    mls.process(**pCloud_smoothed);
 
     // Progress: 2
 
-    progress.setValue(2);
-    progress.setLabelText("Computing normals...");
-    if (progress.wasCanceled()) return;
+    if(!updateProgress(2, "Estimating normals...", &progress)) return;
 
     pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
-    ne.setNumberOfThreads(8);
+    ne.setNumberOfThreads(mlsParams.normalsThreads);
     ne.setInputCloud(*pCloud_smoothed);
-    ne.setRadiusSearch(10);
+    ne.setRadiusSearch(mlsParams.normalsSearchRadius);
     Eigen::Vector4f centroid;
     pcl::compute3DCentroid(**pCloud_smoothed, centroid);
     ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
@@ -130,21 +132,17 @@ PCLViewer::loadPcdFile (std::string filename)
 
     // Progress: 3
 
-    progress.setValue(3);
-    progress.setLabelText("Concatenating points and normals...");
-    if (progress.wasCanceled()) return;
+    if(!updateProgress(3, "Concatenating points and normals...", &progress)) return;
 
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
     pcl::concatenateFields(**pCloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
 
     // Progress: 4
 
-    progress.setValue(4);
-    progress.setLabelText("Computing mesh using Poisson...");
-    if (progress.wasCanceled()) return;
+    if(!updateProgress(4, "Computing mesh using Poisson...", &progress)) return;
 
     pcl::Poisson<pcl::PointNormal> poisson;
-    poisson.setDepth(9);
+    poisson.setDepth(mlsParams.poissonDepth);
     poisson.setInputCloud(cloud_smoothed_normals);
     pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
     this->mesh = pMesh;
@@ -209,6 +207,16 @@ PCLViewer::setUiEnabled(bool enabled)
 {
     ui->showPointsCheckbox->setEnabled(enabled);
     ui->showMeshCheckbox->setEnabled(enabled);
+}
+  
+bool
+PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
+{
+    if (dialog->wasCanceled()) return false;
+    dialog->setValue(step);
+    dialog->setLabelText(message);
+    std::cout << "Progress (" << step << "): " << message.toAscii().constData() << std::endl;
+    return true;
 }
 
 MLSParams

@@ -5,6 +5,7 @@
 
 // Qt
 #include <QMainWindow>
+#include <QProgressDialog>
 
 // Point Cloud Library
 #include <pcl/point_cloud.h>
@@ -66,6 +67,10 @@ private:
 
   void
   setUiEnabled (bool enabled);
+
+  // Returns false if progress dialog cancelled
+  bool
+  updateProgress (int step, QString message, QProgressDialog *dialog);
 };
 
 #endif // PCLVIEWER_H

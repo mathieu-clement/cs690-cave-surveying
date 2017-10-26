@@ -2,9 +2,13 @@
 #define MLSPARAMS_H
 
 typedef struct {
-    unsigned int searchRadius;
-    unsigned int upsamplingRadius;
-    unsigned int upsamplingStepSize;
+    bool mlsEnabled;
+    double mlsSearchRadius;
+    double mlsUpsamplingRadius;
+    double mlsUpsamplingStepSize;
+    double normalsSearchRadius;
+    unsigned int normalsThreads;
+    unsigned int poissonDepth;
 } MLSParams;
 
 #endif // MLSPARAMS_H
