@@ -36,10 +36,17 @@
    stateA = !stateA;
 
   if (stateA == HIGH && stateB == HIGH) {
-      counter++; // clockwise
+      counter++;
+      if (counter == 1000) {
+        counter = 0;
+      }
+      
    }   
    if (stateA == HIGH && stateB == LOW) {
-      counter--; // clockwise
+      counter--;
+      if (counter == -1) {
+        counter = 999;
+      }
    }
  }
 
