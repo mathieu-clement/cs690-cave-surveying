@@ -7,7 +7,7 @@ PoissonParamsDialog::PoissonParamsDialog(QWidget *parent) :
     ui(new Ui::PoissonParamsDialog)
 {
     ui->setupUi(this);
-    setWindowTitle("Poisson Parameters");
+    setWindowTitle("Poisson");
 }
 
 PoissonParams

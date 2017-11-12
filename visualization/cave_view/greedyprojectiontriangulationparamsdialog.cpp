@@ -7,7 +7,7 @@ GreedyProjectionTriangulationParamsDialog::GreedyProjectionTriangulationParamsDi
     ui(new Ui::GreedyProjectionTriangulationParamsDialog)
 {
     ui->setupUi(this);
-    setWindowTitle("Greedy Projection Triangulation Parameters");
+    setWindowTitle("Greedy Projection Triangulation");
 }
 
 GreedyProjectionTriangulationParams

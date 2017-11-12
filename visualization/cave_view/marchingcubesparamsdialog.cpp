@@ -7,6 +7,7 @@ MarchingCubesParamsDialog::MarchingCubesParamsDialog(QWidget *parent) :
     ui(new Ui::MarchingCubesParamsDialog)
 {
     ui->setupUi(this);
+    setWindowTitle("Marching Cubes");
 }
 
 MarchingCubesParams
