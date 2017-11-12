@@ -11,7 +11,9 @@ typedef struct {
 } PoissonParams;
 
 typedef struct {
-    unsigned int a;
+    unsigned int maxNearestNeighbors;
+    double searchRadius;
+    double mu;
 } GreedyProjectionTriangulationParams;
 
 typedef struct {

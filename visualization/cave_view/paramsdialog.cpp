@@ -1,6 +1,7 @@
 #include "paramsdialog.h"
 #include "poissonparamsdialog.h"
 #include "build/ui_paramsdialog.h"
+#include "greedyprojectiontriangulationparamsdialog.h"
 
 ParamsDialog::ParamsDialog(QWidget *parent) :
     QDialog(parent),
@@ -49,7 +50,7 @@ ParamsDialog::activateMeshAlgorithm(int index)
         case greedyProjectionTriangulation:
             {
             meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
-                    0
+                    200, 15.0, 3.0
             };
             break;
             }
@@ -65,12 +66,16 @@ ParamsDialog::configureMesh()
             {
                 PoissonParamsDialog dialog(this);
                 dialog.exec();
-                meshParams = (MeshParams) { dialog.getParams() };
+                meshParams.poissonParams = dialog.getParams();
                 break;
             }
         case greedyProjectionTriangulation:
-            int a = 1;
-            break;
+            {
+                GreedyProjectionTriangulationParamsDialog dialog(this);
+                dialog.exec();
+                meshParams.greedyProjectionTriangulationParams = dialog.getParams();
+                break;
+            }
     }
 }
 

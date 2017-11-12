@@ -243,9 +243,9 @@ PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParam
     std::cout << "Computing mesh using GreedyProjectionTriangulation" << std::endl;
 
     pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
-    gp3.setMaximumNearestNeighbors(200);
-    gp3.setSearchRadius(15.0);
-    gp3.setMu(3.0);
+    gp3.setMaximumNearestNeighbors(params.maxNearestNeighbors);
+    gp3.setSearchRadius(params.searchRadius);
+    gp3.setMu(params.mu);
     gp3.setInputCloud(*cloud_smoothed_normals);
     gp3.reconstruct(*mesh);
 }
