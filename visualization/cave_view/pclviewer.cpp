@@ -74,11 +74,10 @@ PCLViewer::loadPcdFile (std::string filename)
     QProgressDialog progress("Loading file...", "Cancel", 0, 5, this);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(0);
+    progress.setRange(0, 0);
     progress.show();
 
-    // Progress: 0
-
-    progress.setValue(0);
+    //progress.setValue(0);
     if (progress.wasCanceled()) { return; }
 
     // Copied / inspired from:
@@ -86,9 +85,7 @@ PCLViewer::loadPcdFile (std::string filename)
 
     pcl::io::loadPCDFile(filename.c_str(), *cloud);
 
-    // Progress: 1
-
-    if(!updateProgress(1, "Smoothing...", &progress)) { return; }
+    std::cout << "Smoothing" << std::endl;
 
     Params params = getParams();
 
@@ -116,65 +113,27 @@ PCLViewer::loadPcdFile (std::string filename)
 
     this->cloud_smoothed = pCloud_smoothed;
 
-    // Progress: 2
+    std::cout << "Mesh reconstruction" << std::endl;
 
     pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
     this->mesh = pMesh;
 
-    /*
     switch (params.meshAlgorithm) {
         case poisson:
-            applyPoisson();
+            applyPoisson(params.meshParams.poissonParams);
             break;
     }
-    */
-
-    if(!updateProgress(2, "Estimating normals...", &progress)) { sound.stop(); return; }
-
-    pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
-    ne.setNumberOfThreads(params.meshParams.poissonParams.normalsThreads);
-    ne.setInputCloud(*cloud_smoothed);
-    ne.setRadiusSearch(params.meshParams.poissonParams.normalsSearchRadius);
-    Eigen::Vector4f centroid;
-    pcl::compute3DCentroid(**cloud_smoothed, centroid);
-    ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
-
-    pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
-    ne.compute(*cloud_normals);
-
-    for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
-        cloud_normals->points[i].normal_x *= -1;
-        cloud_normals->points[i].normal_y *= -1;
-        cloud_normals->points[i].normal_z *= -1;
-    }
-
-    // Progress: 3
-
-    if(!updateProgress(3, "Concatenating points and normals...", &progress)) { sound.stop(); return; }
-
-    pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
-    pcl::concatenateFields(**cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
-
-    // Progress: 4
-
-    if(!updateProgress(4, "Computing mesh using Poisson...", &progress)) { sound.stop(); return; }
-
-    pcl::Poisson<pcl::PointNormal> poisson;
-    poisson.setDepth(params.meshParams.poissonParams.poissonDepth);
-    poisson.setInputCloud(cloud_smoothed_normals);
-    poisson.reconstruct(*mesh);
-
     // Progress: END
     progress.setValue(5);
 
     viewer->removeAllPointClouds();
-    viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
+    //viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
     viewer->addPolygonMesh(*pMesh, "mesh");
     viewer->resetCamera();
     ui->qvtkWidget->update();
 
     enableUi();
-    ui->showPointsCheckbox->setChecked(true);
+    ui->showPointsCheckbox->setChecked(false);
     ui->showMeshCheckbox->setChecked(true);
 
     QFileInfo fi(QString::fromStdString(filename));
@@ -236,6 +195,41 @@ PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
     dialog->setLabelText(message);
     QApplication::processEvents();
     return true;
+}
+
+void
+PCLViewer::applyPoisson(PoissonParams poissonParams)
+{
+    std::cout << "Estimating normals" << std::endl;
+
+    pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
+    ne.setNumberOfThreads(poissonParams.normalsThreads);
+    ne.setInputCloud(*cloud_smoothed);
+    ne.setRadiusSearch(poissonParams.normalsSearchRadius);
+    Eigen::Vector4f centroid;
+    pcl::compute3DCentroid(**cloud_smoothed, centroid);
+    ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
+
+    pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
+    ne.compute(*cloud_normals);
+
+    for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
+        cloud_normals->points[i].normal_x *= -1;
+        cloud_normals->points[i].normal_y *= -1;
+        cloud_normals->points[i].normal_z *= -1;
+    }
+
+    std::cout << "Concatenating points and normals" << std::endl;
+
+    pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
+    pcl::concatenateFields(**cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
+
+    std::cout << "Computing mesh using Poisson" << std::endl;
+
+    pcl::Poisson<pcl::PointNormal> poisson;
+    poisson.setDepth(poissonParams.poissonDepth);
+    poisson.setInputCloud(cloud_smoothed_normals);
+    poisson.reconstruct(*mesh);
 }
 
 Params

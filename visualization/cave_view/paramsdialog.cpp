@@ -36,12 +36,12 @@ ParamsDialog::activateMeshAlgorithm(int index)
 
     // Default values
 
-    MeshAlgorithm algo = getSelectedMeshAlgorithm();
-    switch (algo) {
+    meshAlgorithm = getSelectedMeshAlgorithm();
+    switch (meshAlgorithm) {
         case poisson:
-        meshParams = (MeshParams) {
-            (PoissonParams) { 10, 8, 9 }
-        };
+            meshParams = (MeshParams) {
+                (PoissonParams) { 10, 8, 9 }
+            };
     }
 }
 

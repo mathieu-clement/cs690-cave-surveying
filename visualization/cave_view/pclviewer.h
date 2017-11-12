@@ -71,6 +71,9 @@ private:
   // Returns false if progress dialog cancelled
   bool
   updateProgress (int step, QString message, QProgressDialog *dialog);
+
+  void
+  applyPoisson(PoissonParams poissonParams);
 };
 
 #endif // PCLVIEWER_H
