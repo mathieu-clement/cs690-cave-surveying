@@ -3,7 +3,8 @@
 
 enum MeshAlgorithm {
     poisson,
-    greedyProjectionTriangulation
+    greedyProjectionTriangulation,
+    marchingCubes
 };
 
 typedef struct {
@@ -17,15 +18,21 @@ typedef struct {
 } GreedyProjectionTriangulationParams;
 
 typedef struct {
+    unsigned int a;
+} MarchingCubesParams;
+
+typedef struct {
     union {
         PoissonParams poissonParams;
         GreedyProjectionTriangulationParams greedyProjectionTriangulationParams;
+        MarchingCubesParams marchingCubesParams;
     };
 } MeshParams;
 
 typedef struct {
     bool mlsEnabled;
     double mlsSearchRadius;
+    unsigned int mlsPolynomialOrder;
     double mlsUpsamplingRadius;
     double mlsUpsamplingStepSize;
     double normalsSearchRadius;

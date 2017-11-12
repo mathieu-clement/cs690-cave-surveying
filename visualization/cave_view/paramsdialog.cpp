@@ -20,13 +20,15 @@ ParamsDialog::getParams()
 {
     bool mlsEnabled = ui->mlsEnableCheckBox->isChecked();
     double mlsSearchRadius = ui->mlsSearchRadiusSpinBox->value();
+    unsigned int mlsPolynomialOrder = ui->mlsPolynomialOrderSpinBox->value();
     double mlsUpsamplingRadius = ui->mlsUpsamplingRadiusSpinBox->value();
     double mlsUpsamplingStepSize = ui->mlsUpsamplingStepSizeSpinBox->value();
     double normalsSearchRadius = ui->normalsSearchRadiusSpinBox->value();
     unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
 
     Params params = {
-                        mlsEnabled, mlsSearchRadius, mlsUpsamplingRadius, mlsUpsamplingStepSize,
+                        mlsEnabled, mlsSearchRadius, mlsPolynomialOrder,
+                        mlsUpsamplingRadius, mlsUpsamplingStepSize,
                         normalsSearchRadius, normalsThreads,
                         meshAlgorithm, meshParams
                     };
@@ -44,15 +46,20 @@ ParamsDialog::activateMeshAlgorithm(int index)
     switch (meshAlgorithm) {
         case poisson:
             {
-            meshParams.poissonParams = (PoissonParams) { 9 };
-            break;
+                meshParams.poissonParams = (PoissonParams) { 9 };
+                break;
             }
         case greedyProjectionTriangulation:
             {
-            meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
-                    200, 15.0, 3.0
-            };
-            break;
+                meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
+                        200, 15.0, 3.0
+                };
+                break;
+            }
+        case marchingCubes:
+            {
+                meshParams.marchingCubesParams = (MarchingCubesParams) { 0 };
+                break;
             }
     }
 }
@@ -76,6 +83,11 @@ ParamsDialog::configureMesh()
                 meshParams.greedyProjectionTriangulationParams = dialog.getParams();
                 break;
             }
+            case marchingCubes:
+            {
+                int a = 1;
+                break;
+            }
     }
 }
 
@@ -87,6 +99,8 @@ ParamsDialog::getSelectedMeshAlgorithm()
             return poisson;
         case 1:
             return greedyProjectionTriangulation;
+        case 2:
+            return marchingCubes;
     }
     throw activeMeshAlgorithmIndex;
 }

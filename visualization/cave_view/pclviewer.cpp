@@ -5,10 +5,12 @@
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
+#include <pcl/search/kdtree.h>
 #include <pcl/surface/mls.h>
 #include <pcl/surface/poisson.h>
 #include <pcl/features/normal_3d_omp.h>
 #include <pcl/surface/gp3.h>
+#include <pcl/surface/marching_cubes_hoppe.h>
 
 #include <QApplication>
 #include <QColorDialog>
@@ -100,7 +102,7 @@ PCLViewer::loadPcdFile (std::string filename)
         mls.setInputCloud(cloud);
         mls.setSearchRadius(params.mlsSearchRadius);
         mls.setPolynomialFit(true);
-        mls.setPolynomialOrder(2);
+        mls.setPolynomialOrder(params.mlsPolynomialOrder);
         mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
         mls.setUpsamplingRadius(params.mlsUpsamplingRadius);
         mls.setUpsamplingStepSize(params.mlsUpsamplingStepSize);
@@ -150,6 +152,10 @@ PCLViewer::loadPcdFile (std::string filename)
 
         case greedyProjectionTriangulation:
             applyGreedyProjectionTriangulation(params.meshParams.greedyProjectionTriangulationParams);
+            break;
+
+        case marchingCubes:
+            applyMarchingCubes(params.meshParams.marchingCubesParams);
             break;
     }
     // Progress: END
@@ -248,6 +254,26 @@ PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParam
     gp3.setMu(params.mu);
     gp3.setInputCloud(*cloud_smoothed_normals);
     gp3.reconstruct(*mesh);
+}
+
+void
+PCLViewer::applyMarchingCubes(MarchingCubesParams params)
+{
+    std::cout << "Computing mesh using Marching Cubes" << std::endl;
+
+    pcl::MarchingCubesHoppe<pcl::PointNormal> mc;
+
+    mc.setIsoLevel(0.0f);
+    mc.setGridResolution(100, 100, 100);
+    mc.setPercentageExtendGrid(0.2f);
+
+    /*
+    pcl::search::KdTree<pcl::PointNormal>::Ptr tree (new pcl::search::KdTree<pcl::PointNormal>);
+    tree->setInputCloud (*cloud_smoothed_normals);
+    mc.setSearchMethod(tree);
+    */
+    mc.setInputCloud(*cloud_smoothed_normals);
+    mc.reconstruct(*mesh);
 }
 
 Params

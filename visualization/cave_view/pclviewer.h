@@ -78,6 +78,9 @@ private:
 
   void
   applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params);
+
+  void
+  applyMarchingCubes(MarchingCubesParams params);
 };
 
 #endif // PCLVIEWER_H
