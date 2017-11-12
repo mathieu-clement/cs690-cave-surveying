@@ -118,14 +118,25 @@ PCLViewer::loadPcdFile (std::string filename)
 
     // Progress: 2
 
+    pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
+    this->mesh = pMesh;
+
+    /*
+    switch (params.meshAlgorithm) {
+        case poisson:
+            applyPoisson();
+            break;
+    }
+    */
+
     if(!updateProgress(2, "Estimating normals...", &progress)) { sound.stop(); return; }
 
     pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
-    ne.setNumberOfThreads(params.normalsThreads);
-    ne.setInputCloud(*pCloud_smoothed);
-    ne.setRadiusSearch(params.normalsSearchRadius);
+    ne.setNumberOfThreads(params.meshParams.poissonParams.normalsThreads);
+    ne.setInputCloud(*cloud_smoothed);
+    ne.setRadiusSearch(params.meshParams.poissonParams.normalsSearchRadius);
     Eigen::Vector4f centroid;
-    pcl::compute3DCentroid(**pCloud_smoothed, centroid);
+    pcl::compute3DCentroid(**cloud_smoothed, centroid);
     ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
 
     pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
@@ -142,18 +153,16 @@ PCLViewer::loadPcdFile (std::string filename)
     if(!updateProgress(3, "Concatenating points and normals...", &progress)) { sound.stop(); return; }
 
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
-    pcl::concatenateFields(**pCloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
+    pcl::concatenateFields(**cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
 
     // Progress: 4
 
     if(!updateProgress(4, "Computing mesh using Poisson...", &progress)) { sound.stop(); return; }
 
     pcl::Poisson<pcl::PointNormal> poisson;
-    poisson.setDepth(params.poissonDepth);
+    poisson.setDepth(params.meshParams.poissonParams.poissonDepth);
     poisson.setInputCloud(cloud_smoothed_normals);
-    pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
-    this->mesh = pMesh;
-    poisson.reconstruct(*pMesh);
+    poisson.reconstruct(*mesh);
 
     // Progress: END
     progress.setValue(5);

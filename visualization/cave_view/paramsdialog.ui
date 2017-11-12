@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>440</height>
+    <height>507</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <rect>
      <x>20</x>
      <y>20</y>
-     <width>361</width>
+     <width>371</width>
      <height>16</height>
     </rect>
    </property>
@@ -29,7 +29,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Moving Least Squares (smoothing)</string>
+    <string>Moving Least Squares (smoothing + improve normals est.)</string>
    </property>
   </widget>
   <widget class="QWidget" name="formLayoutWidget">

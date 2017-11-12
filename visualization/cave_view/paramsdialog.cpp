@@ -19,11 +19,14 @@ ParamsDialog::getParams()
     double normalsSearchRadius = ui->normalsSearchRadiusSpinBox->value();
     unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
     unsigned int poissonDepth = ui->poissonDepthSpinBox->value();
+    MeshAlgorithm meshAlgorithm = poisson;
+    PoissonParams poissonParams = {
+        normalsSearchRadius, normalsThreads, poissonDepth
+    };
     Params params = {
                         mlsEnabled, mlsSearchRadius, mlsUpsamplingRadius, mlsUpsamplingStepSize,
-                        normalsSearchRadius, normalsThreads,
-                        poissonDepth
-                       };
+                        meshAlgorithm, poissonParams = poissonParams
+                    };
     return params;
 }
 
