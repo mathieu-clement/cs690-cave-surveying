@@ -1,4 +1,5 @@
 #include "paramsdialog.h"
+#include "poissonparamsdialog.h"
 #include "build/ui_paramsdialog.h"
 
 ParamsDialog::ParamsDialog(QWidget *parent) :
@@ -7,6 +8,10 @@ ParamsDialog::ParamsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Mesh Parameters");
+    connect (ui->configureMeshButton, SIGNAL(clicked()), this, SLOT(configureMesh()));
+    connect (ui->meshAlgorithmComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(activateMeshAlgorithm(int)));
+
+    activateMeshAlgorithm(0);
 }
 
 Params
@@ -16,18 +21,50 @@ ParamsDialog::getParams()
     double mlsSearchRadius = ui->mlsSearchRadiusSpinBox->value();
     double mlsUpsamplingRadius = ui->mlsUpsamplingRadiusSpinBox->value();
     double mlsUpsamplingStepSize = ui->mlsUpsamplingStepSizeSpinBox->value();
-    double normalsSearchRadius = ui->normalsSearchRadiusSpinBox->value();
-    unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
-    unsigned int poissonDepth = ui->poissonDepthSpinBox->value();
-    MeshAlgorithm meshAlgorithm = poisson;
-    PoissonParams poissonParams = {
-        normalsSearchRadius, normalsThreads, poissonDepth
-    };
+
     Params params = {
                         mlsEnabled, mlsSearchRadius, mlsUpsamplingRadius, mlsUpsamplingStepSize,
-                        meshAlgorithm, poissonParams = poissonParams
+                        meshAlgorithm, meshParams
                     };
     return params;
+}
+
+void
+ParamsDialog::activateMeshAlgorithm(int index)
+{
+    activeMeshAlgorithmIndex = index;
+
+    // Default values
+
+    MeshAlgorithm algo = getSelectedMeshAlgorithm();
+    switch (algo) {
+        case poisson:
+        meshParams = (MeshParams) {
+            (PoissonParams) { 10, 8, 9 }
+        };
+    }
+}
+
+void
+ParamsDialog::configureMesh()
+{
+    MeshAlgorithm algo = getSelectedMeshAlgorithm();
+    switch (algo) {
+        case poisson:
+            PoissonParamsDialog dialog(this);
+            dialog.exec();
+            meshParams = (MeshParams) { dialog.getParams() };
+            break;
+    }
+}
+
+MeshAlgorithm
+ParamsDialog::getSelectedMeshAlgorithm()
+{
+    switch(activeMeshAlgorithmIndex) {
+        case 0:
+            return poisson;
+    }
 }
 
 ParamsDialog::~ParamsDialog()

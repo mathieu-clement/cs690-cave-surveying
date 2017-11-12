@@ -242,7 +242,6 @@ Params
 PCLViewer::getParams()
 {
     ParamsDialog dialog(this);
-    dialog.setModal(true);
     dialog.exec();
     return dialog.getParams();
 }

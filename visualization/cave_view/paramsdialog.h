@@ -17,8 +17,18 @@ public:
     explicit ParamsDialog(QWidget *parent = 0);
     ~ParamsDialog();
 
-    Params
-    getParams();
+    Params getParams();
+
+public Q_SLOTS:
+    void activateMeshAlgorithm(int index);
+    void configureMesh();
+
+protected:
+    MeshAlgorithm meshAlgorithm;
+    MeshParams meshParams;
+    int activeMeshAlgorithmIndex;
+
+    MeshAlgorithm getSelectedMeshAlgorithm();
 
 private:
     Ui::ParamsDialog *ui;

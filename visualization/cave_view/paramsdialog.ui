@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>507</height>
+    <width>411</width>
+    <height>318</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -90,7 +93,7 @@
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>400</y>
+     <y>270</y>
      <width>81</width>
      <height>32</height>
     </rect>
@@ -120,7 +123,7 @@
     <rect>
      <x>20</x>
      <y>190</y>
-     <width>361</width>
+     <width>371</width>
      <height>16</height>
     </rect>
    </property>
@@ -131,92 +134,39 @@
     </font>
    </property>
    <property name="text">
-    <string>Normals estimation</string>
+    <string>Mesh / surface reconstruction</string>
    </property>
   </widget>
-  <widget class="QWidget" name="formLayoutWidget_2">
+  <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>220</y>
      <width>361</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout_2">
-    <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-    </property>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_6">
-      <property name="text">
-       <string>Threads:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QSpinBox" name="normalsThreadsSpinBox">
-      <property name="value">
-       <number>8</number>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_7">
-      <property name="text">
-       <string>Search radius:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QDoubleSpinBox" name="normalsSearchRadiusSpinBox">
-      <property name="value">
-       <double>10.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QLabel" name="label_8">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>330</y>
-     <width>361</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Poisson (mesh reconstruction)</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="formLayoutWidget_3">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>350</y>
-     <width>361</width>
      <height>31</height>
     </rect>
    </property>
-   <layout class="QFormLayout" name="formLayout_3">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_9">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Depth:</string>
+       <string>Algorithm:</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QSpinBox" name="poissonDepthSpinBox">
-      <property name="value">
-       <number>9</number>
+    <item>
+     <widget class="QComboBox" name="meshAlgorithmComboBox">
+      <item>
+       <property name="text">
+        <string>Normals + Poisson</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="configureMeshButton">
+      <property name="text">
+       <string>...</string>
       </property>
      </widget>
     </item>
@@ -229,9 +179,6 @@
   <tabstop>mlsSearchRadiusSpinBox</tabstop>
   <tabstop>mlsUpsamplingRadiusSpinBox</tabstop>
   <tabstop>mlsUpsamplingStepSizeSpinBox</tabstop>
-  <tabstop>normalsSearchRadiusSpinBox</tabstop>
-  <tabstop>normalsThreadsSpinBox</tabstop>
-  <tabstop>poissonDepthSpinBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

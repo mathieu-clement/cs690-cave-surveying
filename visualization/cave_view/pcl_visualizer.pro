@@ -14,14 +14,17 @@ ICON = duck.icns
 
 SOURCES += main.cpp\
         pclviewer.cpp \
-    paramsdialog.cpp
+    paramsdialog.cpp \
+    poissonparamsdialog.cpp
 
 HEADERS  += pclviewer.h \
     params.h \
-    paramsdialog.h
+    paramsdialog.h \
+    poissonparamsdialog.h
 
 FORMS    += pclviewer.ui \
-    paramsdialog.ui
+    paramsdialog.ui \
+    poissonparamsdialog.ui
 
 RESOURCES += \
     icons.qrc
