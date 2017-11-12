@@ -1,5 +1,5 @@
-#ifndef MLSPARAMS_H
-#define MLSPARAMS_H
+#ifndef PARAMS_H
+#define PARAMS_H
 
 typedef struct {
     bool mlsEnabled;
@@ -9,6 +9,6 @@ typedef struct {
     double normalsSearchRadius;
     unsigned int normalsThreads;
     unsigned int poissonDepth;
-} MLSParams;
+} Params;
 
-#endif // MLSPARAMS_H
+#endif // PARAMS_H

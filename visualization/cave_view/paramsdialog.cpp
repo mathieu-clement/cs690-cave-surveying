@@ -1,16 +1,16 @@
-#include "mlsparamsdialog.h"
-#include "build/ui_mlsparamsdialog.h"
+#include "paramsdialog.h"
+#include "build/ui_paramsdialog.h"
 
-MLSParamsDialog::MLSParamsDialog(QWidget *parent) :
+ParamsDialog::ParamsDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::MLSParamsDialog)
+    ui(new Ui::ParamsDialog)
 {
     ui->setupUi(this);
     this->setWindowTitle("Mesh Parameters");
 }
 
-MLSParams
-MLSParamsDialog::getMlsParams()
+Params
+ParamsDialog::getParams()
 {
     bool mlsEnabled = ui->mlsEnableCheckBox->isChecked();
     double mlsSearchRadius = ui->mlsSearchRadiusSpinBox->value();
@@ -19,7 +19,7 @@ MLSParamsDialog::getMlsParams()
     double normalsSearchRadius = ui->normalsSearchRadiusSpinBox->value();
     unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
     unsigned int poissonDepth = ui->poissonDepthSpinBox->value();
-    MLSParams params = {
+    Params params = {
                         mlsEnabled, mlsSearchRadius, mlsUpsamplingRadius, mlsUpsamplingStepSize,
                         normalsSearchRadius, normalsThreads,
                         poissonDepth
@@ -27,7 +27,7 @@ MLSParamsDialog::getMlsParams()
     return params;
 }
 
-MLSParamsDialog::~MLSParamsDialog()
+ParamsDialog::~ParamsDialog()
 {
     delete ui;
 }

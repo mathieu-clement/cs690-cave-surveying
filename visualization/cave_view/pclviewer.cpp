@@ -1,7 +1,7 @@
 #include "pclviewer.h"
 #include "build/ui_pclviewer.h"
-#include "mlsparams.h"
-#include "mlsparamsdialog.h"
+#include "params.h"
+#include "paramsdialog.h"
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
@@ -90,22 +90,22 @@ PCLViewer::loadPcdFile (std::string filename)
 
     if(!updateProgress(1, "Smoothing...", &progress)) { return; }
 
-    MLSParams mlsParams = getMlsParams();
+    Params params = getParams();
 
     QSound sound("/Users/mathieuclement/Downloads/jeopardy_think.wav");
     sound.play();
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
 
-    if (mlsParams.mlsEnabled) {
+    if (params.mlsEnabled) {
         pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ> mls;
         mls.setInputCloud(cloud);
-        mls.setSearchRadius(mlsParams.mlsSearchRadius);
+        mls.setSearchRadius(params.mlsSearchRadius);
         mls.setPolynomialFit(true);
         mls.setPolynomialOrder(2);
         mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
-        mls.setUpsamplingRadius(mlsParams.mlsUpsamplingRadius);
-        mls.setUpsamplingStepSize(mlsParams.mlsUpsamplingStepSize);
+        mls.setUpsamplingRadius(params.mlsUpsamplingRadius);
+        mls.setUpsamplingStepSize(params.mlsUpsamplingStepSize);
 
         pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
         this->cloud_smoothed = pCloud_smoothed;
@@ -121,9 +121,9 @@ PCLViewer::loadPcdFile (std::string filename)
     if(!updateProgress(2, "Estimating normals...", &progress)) { sound.stop(); return; }
 
     pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
-    ne.setNumberOfThreads(mlsParams.normalsThreads);
+    ne.setNumberOfThreads(params.normalsThreads);
     ne.setInputCloud(*pCloud_smoothed);
-    ne.setRadiusSearch(mlsParams.normalsSearchRadius);
+    ne.setRadiusSearch(params.normalsSearchRadius);
     Eigen::Vector4f centroid;
     pcl::compute3DCentroid(**pCloud_smoothed, centroid);
     ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
@@ -149,7 +149,7 @@ PCLViewer::loadPcdFile (std::string filename)
     if(!updateProgress(4, "Computing mesh using Poisson...", &progress)) { sound.stop(); return; }
 
     pcl::Poisson<pcl::PointNormal> poisson;
-    poisson.setDepth(mlsParams.poissonDepth);
+    poisson.setDepth(params.poissonDepth);
     poisson.setInputCloud(cloud_smoothed_normals);
     pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
     this->mesh = pMesh;
@@ -229,13 +229,13 @@ PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
     return true;
 }
 
-MLSParams
-PCLViewer::getMlsParams()
+Params
+PCLViewer::getParams()
 {
-    MLSParamsDialog dialog(this);
+    ParamsDialog dialog(this);
     dialog.setModal(true);
     dialog.exec();
-    return dialog.getMlsParams();
+    return dialog.getParams();
 }
 
 PCLViewer::~PCLViewer ()
