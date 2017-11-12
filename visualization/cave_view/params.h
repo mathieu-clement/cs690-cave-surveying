@@ -10,9 +10,9 @@ typedef struct {
 } PoissonParams;
 
 typedef struct {
-    //union {
+    union {
         PoissonParams poissonParams;
-    //}
+    };
 } MeshParams;
 
 typedef struct {
