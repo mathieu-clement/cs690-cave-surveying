@@ -161,6 +161,11 @@
         <string>Normals + Poisson</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Greedy Projection Triangulation</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item>

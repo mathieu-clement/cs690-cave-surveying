@@ -122,6 +122,10 @@ PCLViewer::loadPcdFile (std::string filename)
         case poisson:
             applyPoisson(params.meshParams.poissonParams);
             break;
+
+        case greedyProjectionTriangulation:
+            applyGreedyProjectionTriangulation(params.meshParams.greedyProjectionTriangulationParams);
+            break;
     }
     // Progress: END
     progress.setValue(5);
@@ -230,6 +234,11 @@ PCLViewer::applyPoisson(PoissonParams poissonParams)
     poisson.setDepth(poissonParams.poissonDepth);
     poisson.setInputCloud(cloud_smoothed_normals);
     poisson.reconstruct(*mesh);
+}
+
+void
+PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params)
+{
 }
 
 Params

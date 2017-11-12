@@ -1,7 +1,10 @@
 #ifndef PARAMS_H
 #define PARAMS_H
 
-enum MeshAlgorithm { poisson };
+enum MeshAlgorithm {
+    poisson,
+    greedyProjectionTriangulation
+};
 
 typedef struct {
     double normalsSearchRadius;
@@ -10,8 +13,13 @@ typedef struct {
 } PoissonParams;
 
 typedef struct {
+    unsigned int a;
+} GreedyProjectionTriangulationParams;
+
+typedef struct {
     union {
         PoissonParams poissonParams;
+        GreedyProjectionTriangulationParams greedyProjectionTriangulationParams;
     };
 } MeshParams;
 

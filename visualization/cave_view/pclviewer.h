@@ -74,6 +74,9 @@ private:
 
   void
   applyPoisson(PoissonParams poissonParams);
+
+  void
+  applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params);
 };
 
 #endif // PCLVIEWER_H

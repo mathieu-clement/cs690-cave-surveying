@@ -39,9 +39,17 @@ ParamsDialog::activateMeshAlgorithm(int index)
     meshAlgorithm = getSelectedMeshAlgorithm();
     switch (meshAlgorithm) {
         case poisson:
-            meshParams = (MeshParams) {
-                (PoissonParams) { 10, 8, 9 }
+            {
+            meshParams.poissonParams = (PoissonParams) { 10, 8, 9 };
+            break;
+            }
+        case greedyProjectionTriangulation:
+            {
+            meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
+                    0
             };
+            break;
+            }
     }
 }
 
@@ -51,9 +59,14 @@ ParamsDialog::configureMesh()
     MeshAlgorithm algo = getSelectedMeshAlgorithm();
     switch (algo) {
         case poisson:
-            PoissonParamsDialog dialog(this);
-            dialog.exec();
-            meshParams = (MeshParams) { dialog.getParams() };
+            {
+                PoissonParamsDialog dialog(this);
+                dialog.exec();
+                meshParams = (MeshParams) { dialog.getParams() };
+                break;
+            }
+        case greedyProjectionTriangulation:
+            int a = 1;
             break;
     }
 }
@@ -64,6 +77,8 @@ ParamsDialog::getSelectedMeshAlgorithm()
     switch(activeMeshAlgorithmIndex) {
         case 0:
             return poisson;
+        case 1:
+            return greedyProjectionTriangulation;
     }
     throw activeMeshAlgorithmIndex;
 }
