@@ -114,6 +114,30 @@ PCLViewer::loadPcdFile (std::string filename)
 
     this->cloud_smoothed = pCloud_smoothed;
 
+    std::cout << "Estimating normals" << std::endl;
+
+    pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
+    ne.setNumberOfThreads(params.normalsThreads);
+    ne.setInputCloud(*cloud_smoothed);
+    ne.setRadiusSearch(params.normalsSearchRadius);
+    Eigen::Vector4f centroid;
+    pcl::compute3DCentroid(**cloud_smoothed, centroid);
+    ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
+
+    pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
+    ne.compute(*cloud_normals);
+
+    for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
+        cloud_normals->points[i].normal_x *= -1;
+        cloud_normals->points[i].normal_y *= -1;
+        cloud_normals->points[i].normal_z *= -1;
+    }
+
+    std::cout << "Concatenating points and normals" << std::endl;
+
+    cloud_smoothed_normals = new pcl::PointCloud<pcl::PointNormal>::Ptr(new pcl::PointCloud<pcl::PointNormal>());
+    pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
+
     std::cout << "Mesh reconstruction" << std::endl;
 
     pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
@@ -205,71 +229,24 @@ PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
 void
 PCLViewer::applyPoisson(PoissonParams poissonParams)
 {
-    std::cout << "Estimating normals" << std::endl;
-
-    pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
-    ne.setNumberOfThreads(poissonParams.normalsThreads);
-    ne.setInputCloud(*cloud_smoothed);
-    ne.setRadiusSearch(poissonParams.normalsSearchRadius);
-    Eigen::Vector4f centroid;
-    pcl::compute3DCentroid(**cloud_smoothed, centroid);
-    ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
-
-    pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
-    ne.compute(*cloud_normals);
-
-    for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
-        cloud_normals->points[i].normal_x *= -1;
-        cloud_normals->points[i].normal_y *= -1;
-        cloud_normals->points[i].normal_z *= -1;
-    }
-
-    std::cout << "Concatenating points and normals" << std::endl;
-
-    pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
-    pcl::concatenateFields(**cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
-
     std::cout << "Computing mesh using Poisson" << std::endl;
 
     pcl::Poisson<pcl::PointNormal> poisson;
     poisson.setDepth(poissonParams.poissonDepth);
-    poisson.setInputCloud(cloud_smoothed_normals);
+    poisson.setInputCloud(*cloud_smoothed_normals);
     poisson.reconstruct(*mesh);
 }
 
 void
 PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params)
 {
-    std::cout << "Estimating normals" << std::endl;
-
-    pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
-    ne.setNumberOfThreads(8);
-    ne.setInputCloud(*cloud_smoothed);
-    ne.setRadiusSearch(10.0);
-    Eigen::Vector4f centroid;
-    pcl::compute3DCentroid(**cloud_smoothed, centroid);
-    ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
-
-    pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
-    ne.compute(*cloud_normals);
-
-    for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
-        cloud_normals->points[i].normal_x *= -1;
-        cloud_normals->points[i].normal_y *= -1;
-        cloud_normals->points[i].normal_z *= -1;
-    }
-
-    std::cout << "Concatenating points and normals" << std::endl;
-
-    pcl::PointCloud<pcl::PointNormal>::Ptr cloud_smoothed_normals (new pcl::PointCloud<pcl::PointNormal>());
-    pcl::concatenateFields(**cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
-
+    std::cout << "Computing mesh using GreedyProjectionTriangulation" << std::endl;
 
     pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
     gp3.setMaximumNearestNeighbors(200);
     gp3.setSearchRadius(15.0);
     gp3.setMu(3.0);
-    gp3.setInputCloud(cloud_smoothed_normals);
+    gp3.setInputCloud(*cloud_smoothed_normals);
     gp3.reconstruct(*mesh);
 }
 

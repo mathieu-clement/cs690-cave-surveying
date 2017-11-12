@@ -7,16 +7,14 @@ PoissonParamsDialog::PoissonParamsDialog(QWidget *parent) :
     ui(new Ui::PoissonParamsDialog)
 {
     ui->setupUi(this);
-    setWindowTitle("Normals Estimation and Poisson Parameters");
+    setWindowTitle("Poisson Parameters");
 }
 
 PoissonParams
 PoissonParamsDialog::getParams()
 {
-    double normalsSearchRadius = ui->normalsSearchRadiusSpinBox->value();
-    unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
     unsigned int poissonDepth = ui->poissonDepthSpinBox->value();
-    return (PoissonParams) { normalsSearchRadius, normalsThreads, poissonDepth };
+    return (PoissonParams) { poissonDepth };
 }
 
 PoissonParamsDialog::~PoissonParamsDialog()

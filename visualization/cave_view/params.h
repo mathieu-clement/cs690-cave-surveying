@@ -7,8 +7,6 @@ enum MeshAlgorithm {
 };
 
 typedef struct {
-    double normalsSearchRadius;
-    unsigned int normalsThreads;
     unsigned int poissonDepth;
 } PoissonParams;
 
@@ -28,6 +26,8 @@ typedef struct {
     double mlsSearchRadius;
     double mlsUpsamplingRadius;
     double mlsUpsamplingStepSize;
+    double normalsSearchRadius;
+    unsigned int normalsThreads;
     MeshAlgorithm meshAlgorithm;
     MeshParams meshParams;
 } Params;

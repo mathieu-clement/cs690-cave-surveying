@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>411</width>
-    <height>318</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -93,7 +93,7 @@
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>270</y>
+     <y>390</y>
      <width>81</width>
      <height>32</height>
     </rect>
@@ -122,7 +122,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>190</y>
+     <y>310</y>
      <width>371</width>
      <height>16</height>
     </rect>
@@ -141,7 +141,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>220</y>
+     <y>340</y>
      <width>361</width>
      <height>31</height>
     </rect>
@@ -158,7 +158,7 @@
      <widget class="QComboBox" name="meshAlgorithmComboBox">
       <item>
        <property name="text">
-        <string>Normals + Poisson</string>
+        <string>Poisson</string>
        </property>
       </item>
       <item>
@@ -176,6 +176,68 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QWidget" name="formLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>210</y>
+     <width>361</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout_2">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+    </property>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Threads:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QSpinBox" name="normalsThreadsSpinBox">
+      <property name="value">
+       <number>8</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Search radius:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QDoubleSpinBox" name="normalsSearchRadiusSpinBox">
+      <property name="value">
+       <double>10.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>180</y>
+     <width>361</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Normals estimation</string>
+   </property>
   </widget>
  </widget>
  <tabstops>

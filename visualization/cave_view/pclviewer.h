@@ -63,6 +63,7 @@ private:
   Ui::PCLViewer *ui;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr *cloud_smoothed;
+  pcl::PointCloud<pcl::PointNormal>::Ptr *cloud_smoothed_normals;
   pcl::PolygonMesh *mesh;
 
   void

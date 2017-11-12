@@ -21,9 +21,12 @@ ParamsDialog::getParams()
     double mlsSearchRadius = ui->mlsSearchRadiusSpinBox->value();
     double mlsUpsamplingRadius = ui->mlsUpsamplingRadiusSpinBox->value();
     double mlsUpsamplingStepSize = ui->mlsUpsamplingStepSizeSpinBox->value();
+    double normalsSearchRadius = ui->normalsSearchRadiusSpinBox->value();
+    unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
 
     Params params = {
                         mlsEnabled, mlsSearchRadius, mlsUpsamplingRadius, mlsUpsamplingStepSize,
+                        normalsSearchRadius, normalsThreads,
                         meshAlgorithm, meshParams
                     };
     return params;
@@ -40,7 +43,7 @@ ParamsDialog::activateMeshAlgorithm(int index)
     switch (meshAlgorithm) {
         case poisson:
             {
-            meshParams.poissonParams = (PoissonParams) { 10, 8, 9 };
+            meshParams.poissonParams = (PoissonParams) { 9 };
             break;
             }
         case greedyProjectionTriangulation:
