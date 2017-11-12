@@ -65,6 +65,7 @@ ParamsDialog::getSelectedMeshAlgorithm()
         case 0:
             return poisson;
     }
+    throw activeMeshAlgorithmIndex;
 }
 
 ParamsDialog::~ParamsDialog()
