@@ -18,7 +18,11 @@ typedef struct {
 } GreedyProjectionTriangulationParams;
 
 typedef struct {
-    unsigned int a;
+    float isoLevel;
+    unsigned int gridResolutionX;
+    unsigned int gridResolutionY;
+    unsigned int gridResolutionZ;
+    float gridExtensionPercentage;
 } MarchingCubesParams;
 
 typedef struct {

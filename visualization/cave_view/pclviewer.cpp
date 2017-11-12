@@ -88,9 +88,9 @@ PCLViewer::loadPcdFile (std::string filename)
 
     pcl::io::loadPCDFile(filename.c_str(), *cloud);
 
-    std::cout << "Smoothing" << std::endl;
-
     Params params = getParams();
+
+    std::cout << "Smoothing" << std::endl;
 
     QSound sound("/Users/mathieuclement/Downloads/jeopardy_think.wav");
     sound.play();

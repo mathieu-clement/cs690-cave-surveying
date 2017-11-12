@@ -11,9 +11,9 @@ include_directories (${PCL_INCLUDE_DIRS})
 link_directories    (${PCL_LIBRARY_DIRS})
 add_definitions     (${PCL_DEFINITIONS})
 
-set  (project_SOURCES   main.cpp pclviewer.cpp paramsdialog.cpp poissonparamsdialog.cpp greedyprojectiontriangulationparamsdialog.cpp)
-set  (project_HEADERS   pclviewer.h params.h paramsdialog.h poissonparamsdialog.h greedyprojectiontriangulationparamsdialog.h)
-set  (project_FORMS     pclviewer.ui paramsdialog.ui poissonparamsdialog.ui greedyprojectiontriangulationparamsdialog.ui)
+set  (project_SOURCES   main.cpp pclviewer.cpp paramsdialog.cpp poissonparamsdialog.cpp greedyprojectiontriangulationparamsdialog.cpp marchingcubesparamsdialog.cpp)
+set  (project_HEADERS   pclviewer.h params.h paramsdialog.h poissonparamsdialog.h greedyprojectiontriangulationparamsdialog.h marchingcubesparamsdialog.h)
+set  (project_FORMS     pclviewer.ui paramsdialog.ui poissonparamsdialog.ui greedyprojectiontriangulationparamsdialog.ui marchingcubesparamsdialog.ui)
 set  (project_RESOURCES icons.qrc)
 set  (VTK_LIBRARIES     vtkRendering vtkGraphics vtkHybrid QVTK)
 

@@ -2,6 +2,7 @@
 #include "poissonparamsdialog.h"
 #include "build/ui_paramsdialog.h"
 #include "greedyprojectiontriangulationparamsdialog.h"
+#include "marchingcubesparamsdialog.h"
 
 ParamsDialog::ParamsDialog(QWidget *parent) :
     QDialog(parent),
@@ -58,7 +59,9 @@ ParamsDialog::activateMeshAlgorithm(int index)
             }
         case marchingCubes:
             {
-                meshParams.marchingCubesParams = (MarchingCubesParams) { 0 };
+                meshParams.marchingCubesParams = (MarchingCubesParams) {
+                        0.0f, 100, 100, 100, 0.2f
+                };
                 break;
             }
     }
@@ -85,7 +88,9 @@ ParamsDialog::configureMesh()
             }
             case marchingCubes:
             {
-                int a = 1;
+                MarchingCubesParamsDialog dialog(this);
+                dialog.exec();
+                meshParams.marchingCubesParams = dialog.getParams();
                 break;
             }
     }

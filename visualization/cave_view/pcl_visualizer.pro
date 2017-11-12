@@ -16,18 +16,21 @@ SOURCES += main.cpp\
         pclviewer.cpp \
     paramsdialog.cpp \
     poissonparamsdialog.cpp \
-    greedyprojectiontriangulationparamsdialog.cpp
+    greedyprojectiontriangulationparamsdialog.cpp \
+    marchingcubesparamsdialog.cpp
 
 HEADERS  += pclviewer.h \
     params.h \
     paramsdialog.h \
     poissonparamsdialog.h \
-    greedyprojectiontriangulationparamsdialog.h
+    greedyprojectiontriangulationparamsdialog.h \
+    marchingcubesparamsdialog.h
 
 FORMS    += pclviewer.ui \
     paramsdialog.ui \
     poissonparamsdialog.ui \
-    greedyprojectiontriangulationparamsdialog.ui
+    greedyprojectiontriangulationparamsdialog.ui \
+    marchingcubesparamsdialog.ui
 
 RESOURCES += \
     icons.qrc
