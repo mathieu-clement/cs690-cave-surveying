@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 2.6 FATAL_ERROR)
 
+set (CMAKE_CXX_STANDARD 11)
 set (QT_QMAKE_EXECUTABLE "/opt/local/libexec/qt4/bin/qmake")
 
 project      (pcl-visualizer)
@@ -11,8 +12,8 @@ include_directories (${PCL_INCLUDE_DIRS})
 link_directories    (${PCL_LIBRARY_DIRS})
 add_definitions     (${PCL_DEFINITIONS})
 
-set  (project_SOURCES   main.cpp pclviewer.cpp paramsdialog.cpp poissonparamsdialog.cpp greedyprojectiontriangulationparamsdialog.cpp marchingcubesparamsdialog.cpp)
-set  (project_HEADERS   pclviewer.h params.h paramsdialog.h poissonparamsdialog.h greedyprojectiontriangulationparamsdialog.h marchingcubesparamsdialog.h)
+set  (project_SOURCES   main.cpp pclviewer.cpp paramsdialog.cpp poissonparamsdialog.cpp greedyprojectiontriangulationparamsdialog.cpp marchingcubesparamsdialog.cpp paramsloader.cpp)
+set  (project_HEADERS   pclviewer.h params.h paramsdialog.h poissonparamsdialog.h greedyprojectiontriangulationparamsdialog.h marchingcubesparamsdialog.h paramsloader.h json.hpp)
 set  (project_FORMS     pclviewer.ui paramsdialog.ui poissonparamsdialog.ui greedyprojectiontriangulationparamsdialog.ui marchingcubesparamsdialog.ui)
 set  (project_RESOURCES icons.qrc)
 set  (VTK_LIBRARIES     vtkRendering vtkGraphics vtkHybrid QVTK)

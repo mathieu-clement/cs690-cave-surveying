@@ -2,6 +2,7 @@
 #include "build/ui_pclviewer.h"
 #include "params.h"
 #include "paramsdialog.h"
+#include "paramsloader.h"
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
@@ -87,6 +88,9 @@ PCLViewer::loadPcdFile (std::string filename)
     // http://www.pointclouds.org/assets/icra2012/surface.pdf
 
     pcl::io::loadPCDFile(filename.c_str(), *cloud);
+
+    ParamsLoader paramsLoader = filename;
+    std::cout << paramsLoader.exists();
 
     Params params = getParams();
 

@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     paramsdialog.cpp \
     poissonparamsdialog.cpp \
     greedyprojectiontriangulationparamsdialog.cpp \
-    marchingcubesparamsdialog.cpp
+    marchingcubesparamsdialog.cpp \
+    paramsloader.cpp
 
 HEADERS  += pclviewer.h \
     params.h \
     paramsdialog.h \
     poissonparamsdialog.h \
     greedyprojectiontriangulationparamsdialog.h \
-    marchingcubesparamsdialog.h
+    marchingcubesparamsdialog.h \
+    paramsloader.h
 
 FORMS    += pclviewer.ui \
     paramsdialog.ui \
