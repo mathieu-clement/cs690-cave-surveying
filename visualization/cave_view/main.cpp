@@ -18,7 +18,7 @@ int main (int argc, char *argv[])
 
     ParamsLoader loader = "/tmp/test.pcd";
     MeshParams meshParams;
-    meshParams.poissonParams = (PoissonParams) { 7 };
+    meshParams.marchingCubesParams = (MarchingCubesParams) { 1.0f, 2, 3, 4, 5.0f };
     Params params = (Params) {
             true,
             1.0,
@@ -27,7 +27,7 @@ int main (int argc, char *argv[])
             4.0,
             5.0,
             6,
-            poisson,
+            marchingCubes,
             meshParams
     };
     loader.write(params);

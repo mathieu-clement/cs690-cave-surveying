@@ -7,6 +7,8 @@ enum MeshAlgorithm {
     marchingCubes
 };
 
+const char* MeshAlgorithmCString(MeshAlgorithm e);
+
 typedef struct {
     unsigned int poissonDepth;
 } PoissonParams;

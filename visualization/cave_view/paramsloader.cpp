@@ -6,6 +6,10 @@
 #include <QFileInfo>
 #include <QString>
 
+#ifndef JADD
+#define JADD(js, para, name) js[#name] = para.name
+#endif
+
 using json = nlohmann::json;
 
 ParamsLoader::ParamsLoader(std::string pcdFilepath)
@@ -34,7 +38,34 @@ void
 ParamsLoader::write(Params params)
 {
     json j;
-    j["mls_enabled"] = params.mlsEnabled;
+    JADD(j, params, mlsEnabled);
+    JADD(j, params, mlsSearchRadius);
+    JADD(j, params, mlsPolynomialOrder);
+    JADD(j, params, mlsUpsamplingRadius);
+    JADD(j, params, mlsUpsamplingStepSize);
+    JADD(j, params, normalsSearchRadius);
+    JADD(j, params, normalsThreads);
+    j["meshAlgorithm"] = MeshAlgorithmCString(params.meshAlgorithm);
+
+    switch (params.meshAlgorithm) {
+        case poisson:
+            JADD(j["meshParams"], params.meshParams.poissonParams, poissonDepth);
+            break;
+
+        case greedyProjectionTriangulation:
+            JADD(j["meshParams"], params.meshParams.greedyProjectionTriangulationParams, maxNearestNeighbors);
+            JADD(j["meshParams"], params.meshParams.greedyProjectionTriangulationParams, searchRadius);
+            JADD(j["meshParams"], params.meshParams.greedyProjectionTriangulationParams, mu);
+            break;
+
+        case marchingCubes:
+            JADD(j["meshParams"], params.meshParams.marchingCubesParams, isoLevel);
+            JADD(j["meshParams"], params.meshParams.marchingCubesParams, gridResolutionX);
+            JADD(j["meshParams"], params.meshParams.marchingCubesParams, gridResolutionY);
+            JADD(j["meshParams"], params.meshParams.marchingCubesParams, gridResolutionZ);
+            JADD(j["meshParams"], params.meshParams.marchingCubesParams, gridExtensionPercentage);
+            break;
+    }
 
     std::ofstream o(jsonFilepath.toUtf8().constData());
     o << std::setw(4) << j << std::endl;

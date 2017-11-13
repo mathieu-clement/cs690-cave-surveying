@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     poissonparamsdialog.cpp \
     greedyprojectiontriangulationparamsdialog.cpp \
     marchingcubesparamsdialog.cpp \
-    paramsloader.cpp
+    paramsloader.cpp \
+    params.cpp
 
 HEADERS  += pclviewer.h \
     params.h \
