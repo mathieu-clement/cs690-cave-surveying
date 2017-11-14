@@ -13,7 +13,7 @@ class MarchingCubesParamsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit MarchingCubesParamsDialog(QWidget *parent = 0);
+    explicit MarchingCubesParamsDialog(QWidget *parent = 0, MarchingCubesParams* previousParams = nullptr);
 
     MarchingCubesParams getParams();
 

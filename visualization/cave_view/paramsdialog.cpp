@@ -14,7 +14,6 @@ ParamsDialog::ParamsDialog(QWidget *parent, Params* previousParams) :
     connect (ui->meshAlgorithmComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(activateMeshAlgorithm(int)));
 
     if (previousParams != nullptr) {
-        hasPrevious = true;
         loadParams(previousParams);
     } else {
         activateMeshAlgorithm(0);
@@ -44,7 +43,6 @@ ParamsDialog::getParams()
 void
 ParamsDialog::activateMeshAlgorithm(int index)
 {
-    hasPrevious = false;
     activeMeshAlgorithmIndex = index;
 
     // Default values
@@ -97,7 +95,7 @@ ParamsDialog::configureMesh()
 
         case marchingCubes:
         {
-            MarchingCubesParamsDialog dialog(this);
+            MarchingCubesParamsDialog dialog(this, &(meshParams.marchingCubesParams));
             dialog.exec();
             meshParams.marchingCubesParams = dialog.getParams();
             break;

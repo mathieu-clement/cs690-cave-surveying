@@ -76,8 +76,8 @@ PCLViewer::loadPcdFile (std::string filename)
 
     QProgressDialog progress("Loading file...", "Cancel", 0, 5, this);
     progress.setWindowModality(Qt::WindowModal);
-    //progress.setMinimumDuration(0);
-    progress.setRange(0, 0);
+    progress.setMinimumDuration(0);
+    //progress.setRange(0, 0);
     progress.show();
 
     progress.setValue(0);

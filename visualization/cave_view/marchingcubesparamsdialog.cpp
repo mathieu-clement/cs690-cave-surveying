@@ -2,12 +2,20 @@
 #include "build/ui_marchingcubesparamsdialog.h"
 #include "params.h"
 
-MarchingCubesParamsDialog::MarchingCubesParamsDialog(QWidget *parent) :
+MarchingCubesParamsDialog::MarchingCubesParamsDialog(QWidget *parent, MarchingCubesParams* previousParams) :
     QDialog(parent),
     ui(new Ui::MarchingCubesParamsDialog)
 {
     ui->setupUi(this);
     setWindowTitle("Marching Cubes");
+
+    if (previousParams != nullptr) {
+        ui->isoLevelSpinBox->setValue(previousParams->isoLevel);
+        ui->gridResolutionXSpinBox->setValue(previousParams->gridResolutionX);
+        ui->gridResolutionYSpinBox->setValue(previousParams->gridResolutionY);
+        ui->gridResolutionZSpinBox->setValue(previousParams->gridResolutionZ);
+        ui->gridExtensionPercentageSpinBox->setValue(previousParams->gridExtensionPercentage);
+    }
 }
 
 MarchingCubesParams
