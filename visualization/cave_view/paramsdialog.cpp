@@ -124,7 +124,7 @@ ParamsDialog::getSelectedMeshAlgorithm()
 void
 ParamsDialog::loadParams(Params *params)
 {
-    ui->mlsEnableCheckBox->setEnabled(params->mlsEnabled);
+    ui->mlsEnableCheckBox->setChecked(params->mlsEnabled);
     ui->mlsSearchRadiusSpinBox->setValue(params->mlsSearchRadius);
     ui->mlsUpsamplingStepSizeSpinBox->setValue(params->mlsUpsamplingStepSize);
     ui->mlsUpsamplingRadiusSpinBox->setValue(params->mlsUpsamplingRadius);
