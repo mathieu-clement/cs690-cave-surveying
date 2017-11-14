@@ -170,6 +170,7 @@ PCLViewer::loadPcdFile (std::string filename)
     progress.setValue(5);
 
     viewer->removeAllPointClouds();
+    viewer->removeAllShapes();
     //viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
     viewer->addPolygonMesh(*pMesh, "mesh");
     viewer->resetCamera();
@@ -189,9 +190,9 @@ PCLViewer::loadPcdFile (std::string filename)
 void
 PCLViewer::showPointsCheckBoxToggled(bool checked)
 {
-    if(checked) {
+    if(checked && !viewer->contains("cloud_smoothed")) {
         viewer->addPointCloud(*this->cloud_smoothed, "cloud_smoothed");
-    } else {
+    } else if (viewer->contains("cloud_smoothed")) {
         viewer->removePointCloud("cloud_smoothed");
     }
     ui->qvtkWidget->update();
@@ -200,9 +201,9 @@ PCLViewer::showPointsCheckBoxToggled(bool checked)
 void
 PCLViewer::showMeshCheckBoxToggled(bool checked)
 {
-    if(checked) {
+    if(checked && !viewer->contains("mesh")) {
         viewer->addPolygonMesh(*this->mesh, "mesh");
-    } else {
+    } else if (viewer->contains("mesh")){
         viewer->removePolygonMesh("mesh");
     }
     ui->qvtkWidget->update();
