@@ -13,7 +13,8 @@ class GreedyProjectionTriangulationParamsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit GreedyProjectionTriangulationParamsDialog(QWidget *parent = 0);
+    explicit GreedyProjectionTriangulationParamsDialog(
+            QWidget *parent = 0, GreedyProjectionTriangulationParams* previousParams = nullptr);
 
     GreedyProjectionTriangulationParams getParams();
 

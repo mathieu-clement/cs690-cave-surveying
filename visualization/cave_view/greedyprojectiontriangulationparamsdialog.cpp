@@ -2,12 +2,19 @@
 #include "build/ui_greedyprojectiontriangulationparamsdialog.h"
 #include "params.h"
 
-GreedyProjectionTriangulationParamsDialog::GreedyProjectionTriangulationParamsDialog(QWidget *parent) :
+GreedyProjectionTriangulationParamsDialog::GreedyProjectionTriangulationParamsDialog(
+        QWidget *parent, GreedyProjectionTriangulationParams* previousParams) :
     QDialog(parent),
     ui(new Ui::GreedyProjectionTriangulationParamsDialog)
 {
     ui->setupUi(this);
     setWindowTitle("Greedy Projection Triangulation");
+
+    if(previousParams != nullptr) {
+        ui->maxNearestNeighborsSpinBox->setValue(previousParams->maxNearestNeighbors);
+        ui->searchRadiusSpinBox->setValue(previousParams->searchRadius);
+        ui->muSpinBox->setValue(previousParams->mu);
+    }
 }
 
 GreedyProjectionTriangulationParams
