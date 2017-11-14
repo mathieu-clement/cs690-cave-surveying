@@ -2,6 +2,7 @@
 
 #include "json.hpp"
 #include <fstream>
+#include <iostream>
 #include <QDir>
 #include <QFileInfo>
 #include <QString>
@@ -52,26 +53,28 @@ ParamsLoader::read()
 
     switch (params.meshAlgorithm) {
         case poisson:
-            params.meshParams.poissonParams.poissonDepth = j["meshParams"]["poissonDepth"];
+            params.meshParams.poissonParams = (PoissonParams) { j["meshParams"]["poissonDepth"] };
             break;
 
         case greedyProjectionTriangulation:
         {
-            GreedyProjectionTriangulationParams p = params.meshParams.greedyProjectionTriangulationParams;
-            p.maxNearestNeighbors = j["meshParams"]["maxNearestNeighbors"];
-            p.searchRadius = j["meshParams"]["searchRadius"];
-            p.mu = j["meshParams"]["mu"];
+            params.meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
+                j["meshParams"]["maxNearestNeighbors"],
+                j["meshParams"]["searchRadius"],
+                j["meshParams"]["mu"]
+            };
             break;
         }
 
         case marchingCubes:
         {
-            MarchingCubesParams p = params.meshParams.marchingCubesParams;
-            p.isoLevel = j["meshParams"]["isoLevel"];
-            p.gridResolutionX = j["meshParams"]["gridResolutionX"];
-            p.gridResolutionY = j["meshParams"]["gridResolutionY"];
-            p.gridResolutionZ = j["meshParams"]["gridResolutionZ"];
-            p.gridExtensionPercentage = j["meshParams"]["gridExtensionPercentage"];
+            params.meshParams.marchingCubesParams = (MarchingCubesParams) {
+                (float) j["meshParams"]["isoLevel"],
+                j["meshParams"]["gridResolutionX"],
+                j["meshParams"]["gridResolutionY"],
+                j["meshParams"]["gridResolutionZ"],
+                (float) j["meshParams"]["gridExtensionPercentage"]
+            };
             break;
         }
 

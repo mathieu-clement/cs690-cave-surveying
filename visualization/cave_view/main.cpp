@@ -1,8 +1,10 @@
+#include <iostream>
 #include "pclviewer.h"
 #include "params.h"
 #include "paramsloader.h"
 #include <QApplication>
 #include <QMainWindow>
+
 
 int pclviewer_app(int argc, char *argv[])
 {
@@ -17,8 +19,10 @@ int main (int argc, char *argv[])
     //return pclviewer_app(argc, argv);
 
     ParamsLoader loader = "/tmp/test.pcd";
-    /*MeshParams meshParams;
-    meshParams.marchingCubesParams = (MarchingCubesParams) { 1.0f, 2, 3, 4, 5.0f };
+    MeshParams meshParams;
+    meshParams.poissonParams = (PoissonParams) {
+            9
+    };
     Params params = (Params) {
             true,
             1.0,
@@ -27,16 +31,15 @@ int main (int argc, char *argv[])
             4.0,
             5.0,
             6,
-            marchingCubes,
+            poisson,
             meshParams
     };
     loader.write(params);
-    */
 
-    Params params = loader.read();
+    Params params2 = loader.read();
 
     ParamsLoader loader2 = "/tmp/test2.pcd";
-    loader2.write(params);
+    loader2.write(params2);
 
     return 0;
 }
