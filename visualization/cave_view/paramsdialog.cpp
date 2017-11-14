@@ -80,7 +80,7 @@ ParamsDialog::configureMesh()
     switch (algo) {
         case poisson:
         {
-            PoissonParamsDialog dialog(this);
+            PoissonParamsDialog dialog(this, &(meshParams.poissonParams));
             dialog.exec();
             meshParams.poissonParams = dialog.getParams();
             break;

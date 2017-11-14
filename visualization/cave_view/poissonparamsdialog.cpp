@@ -2,12 +2,16 @@
 #include "build/ui_poissonparamsdialog.h"
 #include "params.h"
 
-PoissonParamsDialog::PoissonParamsDialog(QWidget *parent) :
+PoissonParamsDialog::PoissonParamsDialog(QWidget *parent, PoissonParams* previousParams) :
     QDialog(parent),
     ui(new Ui::PoissonParamsDialog)
 {
     ui->setupUi(this);
     setWindowTitle("Poisson");
+
+    if (previousParams != nullptr) {
+        ui->poissonDepthSpinBox->setValue(previousParams->poissonDepth);
+    }
 }
 
 PoissonParams

@@ -76,11 +76,11 @@ PCLViewer::loadPcdFile (std::string filename)
 
     QProgressDialog progress("Loading file...", "Cancel", 0, 5, this);
     progress.setWindowModality(Qt::WindowModal);
-    progress.setMinimumDuration(0);
+    //progress.setMinimumDuration(0);
     progress.setRange(0, 0);
     progress.show();
 
-    //progress.setValue(0);
+    progress.setValue(0);
     if (progress.wasCanceled()) { return; }
 
     // Copied / inspired from:
@@ -97,7 +97,7 @@ PCLViewer::loadPcdFile (std::string filename)
     Params params = showParamsDialog(&previousParams);
     paramsLoader.write(params);
 
-    std::cout << "Smoothing" << std::endl;
+    if(!updateProgress(1, "Smoothing", &progress)) return;
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
 
@@ -120,7 +120,7 @@ PCLViewer::loadPcdFile (std::string filename)
 
     this->cloud_smoothed = pCloud_smoothed;
 
-    std::cout << "Estimating normals" << std::endl;
+    if(!updateProgress(2, "Estimating normals", &progress)) return;
 
     pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
     ne.setNumberOfThreads(params.normalsThreads);
@@ -139,12 +139,12 @@ PCLViewer::loadPcdFile (std::string filename)
         cloud_normals->points[i].normal_z *= -1;
     }
 
-    std::cout << "Concatenating points and normals" << std::endl;
+    if(!updateProgress(3, "Concatenating points and normals", &progress)) return;
 
     cloud_smoothed_normals = new pcl::PointCloud<pcl::PointNormal>::Ptr(new pcl::PointCloud<pcl::PointNormal>());
     pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
 
-    std::cout << "Mesh reconstruction" << std::endl;
+    if(!updateProgress(4, "Mesh reconstruction", &progress)) return;
 
     pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
     this->mesh = pMesh;
@@ -162,7 +162,8 @@ PCLViewer::loadPcdFile (std::string filename)
             applyMarchingCubes(params.meshParams.marchingCubesParams);
             break;
     }
-    // Progress: END
+
+    // Set progress to 100 % and close progress dialog
     progress.setValue(5);
 
     viewer->removeAllPointClouds();
