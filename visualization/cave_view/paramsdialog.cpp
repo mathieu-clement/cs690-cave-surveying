@@ -4,7 +4,7 @@
 #include "greedyprojectiontriangulationparamsdialog.h"
 #include "marchingcubesparamsdialog.h"
 
-ParamsDialog::ParamsDialog(QWidget *parent) :
+ParamsDialog::ParamsDialog(QWidget *parent, Params* previousParams) :
     QDialog(parent),
     ui(new Ui::ParamsDialog)
 {
@@ -13,7 +13,12 @@ ParamsDialog::ParamsDialog(QWidget *parent) :
     connect (ui->configureMeshButton, SIGNAL(clicked()), this, SLOT(configureMesh()));
     connect (ui->meshAlgorithmComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(activateMeshAlgorithm(int)));
 
-    activateMeshAlgorithm(0);
+    if (previousParams != nullptr) {
+        hasPrevious = true;
+        loadParams(previousParams);
+    } else {
+        activateMeshAlgorithm(0);
+    }
 }
 
 Params
@@ -39,6 +44,7 @@ ParamsDialog::getParams()
 void
 ParamsDialog::activateMeshAlgorithm(int index)
 {
+    hasPrevious = false;
     activeMeshAlgorithmIndex = index;
 
     // Default values
@@ -73,26 +79,31 @@ ParamsDialog::configureMesh()
     MeshAlgorithm algo = getSelectedMeshAlgorithm();
     switch (algo) {
         case poisson:
-            {
-                PoissonParamsDialog dialog(this);
-                dialog.exec();
-                meshParams.poissonParams = dialog.getParams();
-                break;
-            }
+        {
+            PoissonParamsDialog dialog(this);
+            dialog.exec();
+            meshParams.poissonParams = dialog.getParams();
+            break;
+        }
+
         case greedyProjectionTriangulation:
-            {
-                GreedyProjectionTriangulationParamsDialog dialog(this);
-                dialog.exec();
-                meshParams.greedyProjectionTriangulationParams = dialog.getParams();
-                break;
-            }
-            case marchingCubes:
-            {
-                MarchingCubesParamsDialog dialog(this);
-                dialog.exec();
-                meshParams.marchingCubesParams = dialog.getParams();
-                break;
-            }
+        {
+            GreedyProjectionTriangulationParamsDialog dialog(this);
+            dialog.exec();
+            meshParams.greedyProjectionTriangulationParams = dialog.getParams();
+            break;
+        }
+
+        case marchingCubes:
+        {
+            MarchingCubesParamsDialog dialog(this);
+            dialog.exec();
+            meshParams.marchingCubesParams = dialog.getParams();
+            break;
+        }
+
+        default:
+            throw algo;
     }
 }
 
@@ -108,6 +119,34 @@ ParamsDialog::getSelectedMeshAlgorithm()
             return marchingCubes;
     }
     throw activeMeshAlgorithmIndex;
+}
+
+void
+ParamsDialog::loadParams(Params *params)
+{
+    ui->mlsEnableCheckBox->setEnabled(params->mlsEnabled);
+    ui->mlsSearchRadiusSpinBox->setValue(params->mlsSearchRadius);
+    ui->mlsUpsamplingStepSizeSpinBox->setValue(params->mlsUpsamplingStepSize);
+    ui->mlsUpsamplingRadiusSpinBox->setValue(params->mlsUpsamplingRadius);
+    ui->mlsPolynomialOrderSpinBox->setValue(params->mlsPolynomialOrder);
+
+    ui->normalsSearchRadiusSpinBox->setValue(params->normalsSearchRadius);
+    ui->normalsThreadsSpinBox->setValue(params->normalsThreads);
+
+    previousMeshAlgorithm = params->meshAlgorithm;
+    unsigned int index = -1;
+    switch (params->meshAlgorithm) {
+        case poisson: index = 0; break;
+        case greedyProjectionTriangulation: index = 1; break;
+        case marchingCubes: index = 2; break;
+        default:
+            throw params->meshAlgorithm;
+    }
+
+    activeMeshAlgorithmIndex = index;
+    ui->meshAlgorithmComboBox->setCurrentIndex(index);
+
+    meshParams = params->meshParams;
 }
 
 ParamsDialog::~ParamsDialog()

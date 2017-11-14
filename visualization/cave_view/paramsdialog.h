@@ -14,7 +14,7 @@ class ParamsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ParamsDialog(QWidget *parent = 0);
+    explicit ParamsDialog(QWidget *parent = 0, Params* previousParams = nullptr);
     ~ParamsDialog();
 
     Params getParams();
@@ -32,6 +32,10 @@ protected:
 
 private:
     Ui::ParamsDialog *ui;
+    bool hasPrevious = false;
+    MeshAlgorithm previousMeshAlgorithm;
+
+    void loadParams(Params* params);
 };
 
 #endif // PARAMSDIALOG_H

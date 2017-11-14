@@ -90,9 +90,13 @@ PCLViewer::loadPcdFile (std::string filename)
     pcl::io::loadPCDFile(filename.c_str(), *cloud);
 
     ParamsLoader paramsLoader = filename;
-    std::cout << paramsLoader.exists();
+    Params previousParams;
+    if(paramsLoader.exists()) {
+        previousParams = paramsLoader.read();
+    }
 
-    Params params = getParams();
+    Params params = showParamsDialog(&previousParams);
+    paramsLoader.write(params);
 
     std::cout << "Smoothing" << std::endl;
 
@@ -281,9 +285,9 @@ PCLViewer::applyMarchingCubes(MarchingCubesParams params)
 }
 
 Params
-PCLViewer::getParams()
+PCLViewer::showParamsDialog(Params* previousParams)
 {
-    ParamsDialog dialog(this);
+    ParamsDialog dialog(this, previousParams);
     dialog.exec();
     return dialog.getParams();
 }
