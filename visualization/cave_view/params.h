@@ -8,6 +8,7 @@ enum MeshAlgorithm {
 };
 
 const char* MeshAlgorithmCString(MeshAlgorithm e);
+MeshAlgorithm CStringMeshAlgorithm(const char* s);
 
 typedef struct {
     unsigned int poissonDepth;

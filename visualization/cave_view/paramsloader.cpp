@@ -10,6 +10,10 @@
 #define JADD(js, para, name) js[#name] = para.name
 #endif
 
+#ifndef JGET
+#define JGET(js, para, name) para.name = js[#name]
+#endif
+
 using json = nlohmann::json;
 
 ParamsLoader::ParamsLoader(std::string pcdFilepath)
@@ -31,7 +35,51 @@ ParamsLoader::exists()
 Params
 ParamsLoader::read()
 {
-    return (Params) { };
+    json j;
+    std::ifstream(jsonFilepath.toUtf8().constData()) >> j;
+
+    Params params;
+
+    JGET(j, params, mlsEnabled);
+    JGET(j, params, mlsSearchRadius);
+    JGET(j, params, mlsPolynomialOrder);
+    JGET(j, params, mlsUpsamplingRadius);
+    JGET(j, params, mlsUpsamplingStepSize);
+    JGET(j, params, normalsSearchRadius);
+    JGET(j, params, normalsThreads);
+    std::string meshAlgorithmStr = j["meshAlgorithm"];
+    params.meshAlgorithm = CStringMeshAlgorithm(meshAlgorithmStr.c_str());
+
+    switch (params.meshAlgorithm) {
+        case poisson:
+            params.meshParams.poissonParams.poissonDepth = j["meshParams"]["poissonDepth"];
+            break;
+
+        case greedyProjectionTriangulation:
+        {
+            GreedyProjectionTriangulationParams p = params.meshParams.greedyProjectionTriangulationParams;
+            p.maxNearestNeighbors = j["meshParams"]["maxNearestNeighbors"];
+            p.searchRadius = j["meshParams"]["searchRadius"];
+            p.mu = j["meshParams"]["mu"];
+            break;
+        }
+
+        case marchingCubes:
+        {
+            MarchingCubesParams p = params.meshParams.marchingCubesParams;
+            p.isoLevel = j["meshParams"]["isoLevel"];
+            p.gridResolutionX = j["meshParams"]["gridResolutionX"];
+            p.gridResolutionY = j["meshParams"]["gridResolutionY"];
+            p.gridResolutionZ = j["meshParams"]["gridResolutionZ"];
+            p.gridExtensionPercentage = j["meshParams"]["gridExtensionPercentage"];
+            break;
+        }
+
+        default:
+            throw params.meshAlgorithm;
+    }
+
+    return params;
 }
 
 void
@@ -69,7 +117,6 @@ ParamsLoader::write(Params params)
 
     std::ofstream o(jsonFilepath.toUtf8().constData());
     o << std::setw(4) << j << std::endl;
-    o.close();
 }
 
 QString

@@ -17,7 +17,7 @@ int main (int argc, char *argv[])
     //return pclviewer_app(argc, argv);
 
     ParamsLoader loader = "/tmp/test.pcd";
-    MeshParams meshParams;
+    /*MeshParams meshParams;
     meshParams.marchingCubesParams = (MarchingCubesParams) { 1.0f, 2, 3, 4, 5.0f };
     Params params = (Params) {
             true,
@@ -31,6 +31,12 @@ int main (int argc, char *argv[])
             meshParams
     };
     loader.write(params);
+    */
+
+    Params params = loader.read();
+
+    ParamsLoader loader2 = "/tmp/test2.pcd";
+    loader2.write(params);
 
     return 0;
 }
