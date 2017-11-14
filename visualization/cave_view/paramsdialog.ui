@@ -343,5 +343,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsPolynomialOrderSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>184</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
