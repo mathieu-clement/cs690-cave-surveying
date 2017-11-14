@@ -266,9 +266,9 @@ PCLViewer::applyMarchingCubes(MarchingCubesParams params)
 
     pcl::MarchingCubesHoppe<pcl::PointNormal> mc;
 
-    mc.setIsoLevel(0.0f);
-    mc.setGridResolution(100, 100, 100);
-    mc.setPercentageExtendGrid(0.2f);
+    mc.setIsoLevel(params.isoLevel);
+    mc.setGridResolution(params.gridResolutionX, params.gridResolutionY, params.gridResolutionZ);
+    mc.setPercentageExtendGrid(params.gridExtensionPercentage);
 
     /*
     pcl::search::KdTree<pcl::PointNormal>::Ptr tree (new pcl::search::KdTree<pcl::PointNormal>);
