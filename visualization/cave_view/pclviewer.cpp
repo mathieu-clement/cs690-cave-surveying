@@ -90,11 +90,13 @@ PCLViewer::loadPcdFile (std::string filename)
 
     ParamsLoader paramsLoader = filename;
     Params previousParams;
+    Params* p_previousParams = nullptr;
     if(paramsLoader.exists()) {
         previousParams = paramsLoader.read();
+        p_previousParams = &previousParams;
     }
 
-    Params params = showParamsDialog(&previousParams);
+    Params params = showParamsDialog(p_previousParams);
     paramsLoader.write(params);
 
     if(!updateProgress(1, "Smoothing", &progress)) return;

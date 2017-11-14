@@ -88,7 +88,8 @@ ParamsDialog::configureMesh()
 
         case greedyProjectionTriangulation:
         {
-            GreedyProjectionTriangulationParamsDialog dialog(this, &(meshParams.greedyProjectionTriangulationParams));
+            GreedyProjectionTriangulationParamsDialog dialog(this,
+                &(meshParams.greedyProjectionTriangulationParams));
             dialog.exec();
             meshParams.greedyProjectionTriangulationParams = dialog.getParams();
             break;
