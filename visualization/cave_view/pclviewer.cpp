@@ -18,7 +18,6 @@
 #include <QFileDialog>
 #include <QIcon>
 #include <QProgressDialog>
-#include <QSound>
 
 PCLViewer::PCLViewer (QWidget *parent) :
   QMainWindow (parent),
@@ -100,9 +99,6 @@ PCLViewer::loadPcdFile (std::string filename)
 
     std::cout << "Smoothing" << std::endl;
 
-    QSound sound("/Users/mathieuclement/Downloads/jeopardy_think.wav");
-    sound.play();
-
     pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
 
     if (params.mlsEnabled) {
@@ -181,8 +177,6 @@ PCLViewer::loadPcdFile (std::string filename)
 
     QFileInfo fi(QString::fromStdString(filename));
     ui->filenameLabel->setText(fi.fileName());
-
-    sound.stop();
 
     this->raise();
     this->activateWindow();
