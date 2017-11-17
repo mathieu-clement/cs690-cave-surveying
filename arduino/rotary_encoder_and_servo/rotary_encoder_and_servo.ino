@@ -48,9 +48,9 @@ void changeA() {
         counter--;
         if (counter == -1) {
           counter = 999;
-          }
         }
     }
+  }
 }
 
 void changeB() {
