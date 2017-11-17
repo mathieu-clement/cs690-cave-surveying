@@ -17,8 +17,8 @@ void setup() {
   Serial.begin (9600);
 
   Servo servo;
-  servo.attach(9);
-  servo.write(180); // max speed. 90 to stop, 0 for max speed in reverse
+  servo.attach(5);
+  servo.write(0); // max speed. 90 to stop, 0 for max speed in reverse
 
   attachInterrupt(digitalPinToInterrupt(rotaryA), changeA, CHANGE);
   attachInterrupt(digitalPinToInterrupt(rotaryB), changeB, CHANGE);
@@ -48,6 +48,7 @@ void changeA() {
         counter--;
         if (counter == -1) {
           counter = 999;
+          }
         }
     }
 }
