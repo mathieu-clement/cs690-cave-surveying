@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Cave Viewer per-file settings
+visualization/data/*.json
