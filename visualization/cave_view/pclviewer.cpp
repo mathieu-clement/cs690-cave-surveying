@@ -92,6 +92,7 @@ PCLViewer::loadPcdFile (std::string filename)
     ParamsLoader paramsLoader = filename;
     Params previousParams;
     Params* p_previousParams = nullptr;
+
     if(paramsLoader.exists()) {
         previousParams = paramsLoader.read();
         p_previousParams = &previousParams;
@@ -171,13 +172,13 @@ PCLViewer::loadPcdFile (std::string filename)
 
     viewer->removeAllPointClouds();
     viewer->removeAllShapes();
-    //viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
+    viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
     viewer->addPolygonMesh(*pMesh, "mesh");
     viewer->resetCamera();
     ui->qvtkWidget->update();
 
     enableUi();
-    ui->showPointsCheckbox->setChecked(false);
+    ui->showPointsCheckbox->setChecked(true);
     ui->showMeshCheckbox->setChecked(true);
 
     QFileInfo fi(QString::fromStdString(filename));
