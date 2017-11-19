@@ -56,9 +56,6 @@ protected:
   void
   enableUi();
 
-  Params
-  showParamsDialog(Params* previousParams);
-
 private:
   Ui::PCLViewer *ui;
 

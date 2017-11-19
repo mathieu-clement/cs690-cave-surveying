@@ -98,7 +98,9 @@ PCLViewer::loadPcdFile (std::string filename)
         p_previousParams = &previousParams;
     }
 
-    Params params = showParamsDialog(p_previousParams);
+    ParamsDialog dialog(this, p_previousParams);
+    if (dialog.exec() == ParamsDialog::Rejected) return;
+    Params params = dialog.getParams();
     paramsLoader.write(params);
 
     if(!updateProgress(1, "Smoothing", &progress)) return;
@@ -282,14 +284,6 @@ PCLViewer::applyMarchingCubes(MarchingCubesParams params)
     */
     mc.setInputCloud(*cloud_smoothed_normals);
     mc.reconstruct(*mesh);
-}
-
-Params
-PCLViewer::showParamsDialog(Params* previousParams)
-{
-    ParamsDialog dialog(this, previousParams);
-    dialog.exec();
-    return dialog.getParams();
 }
 
 PCLViewer::~PCLViewer ()

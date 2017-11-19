@@ -121,6 +121,9 @@
    <property name="text">
     <string>OK</string>
    </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QCheckBox" name="mlsEnableCheckBox">
    <property name="geometry">
@@ -264,6 +267,19 @@
     <string>Normals estimation</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="cancelButton">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>440</y>
+     <width>91</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>mlsEnableCheckBox</tabstop>
@@ -275,6 +291,7 @@
   <tabstop>normalsThreadsSpinBox</tabstop>
   <tabstop>meshAlgorithmComboBox</tabstop>
   <tabstop>configureMeshButton</tabstop>
+  <tabstop>cancelButton</tabstop>
   <tabstop>okButton</tabstop>
  </tabstops>
  <resources/>
@@ -356,6 +373,22 @@
     <hint type="destinationlabel">
      <x>268</x>
      <y>184</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ParamsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>255</x>
+     <y>455</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>205</x>
+     <y>240</y>
     </hint>
    </hints>
   </connection>

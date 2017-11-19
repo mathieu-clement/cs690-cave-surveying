@@ -53,7 +53,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>100</y>
+      <y>120</y>
       <width>111</width>
       <height>18</height>
      </rect>
@@ -76,7 +76,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>150</y>
+      <y>170</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -148,6 +148,19 @@
     </property>
     <property name="text">
      <string>Cmd: Rotate</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="changeParametersButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>151</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Change parameters</string>
     </property>
    </widget>
   </widget>
