@@ -65,7 +65,7 @@ private:
   pcl::PointCloud<pcl::PointXYZ>::Ptr *cloud_smoothed;
   pcl::PointCloud<pcl::PointNormal>::Ptr *cloud_smoothed_normals;
   pcl::PolygonMesh *mesh;
-  std::string lastFilename;
+  std::string lastFilename = "";
 
   void
   setUiEnabled (bool enabled);

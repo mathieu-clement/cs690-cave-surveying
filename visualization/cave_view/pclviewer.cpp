@@ -112,56 +112,62 @@ PCLViewer::loadPcdFile (std::string filename)
         return;
     }
     ui->changeParametersButton->setEnabled(true);
-    lastFilename = filename;
     Params params = dialog.getParams();
     paramsLoader.write(params);
 
-    if(!updateProgress(1, "Smoothing", &progress)) return;
+    bool smoothingChanged = smoothingParamsChanged(p_previousParams, &params) || filename != lastFilename;
+    bool normalsChanged = normalsParamsChanged(p_previousParams, &params) || filename != lastFilename;
+    lastFilename = filename;
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
+    if (smoothingChanged) {
+        if(!updateProgress(1, "Smoothing", &progress)) return;
+        pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
 
-    if (params.mlsEnabled) {
-        pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ> mls;
-        mls.setInputCloud(cloud);
-        mls.setSearchRadius(params.mlsSearchRadius);
-        mls.setPolynomialFit(true);
-        mls.setPolynomialOrder(params.mlsPolynomialOrder);
-        mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
-        mls.setUpsamplingRadius(params.mlsUpsamplingRadius);
-        mls.setUpsamplingStepSize(params.mlsUpsamplingStepSize);
+        if (params.mlsEnabled) {
+            pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ> mls;
+            mls.setInputCloud(cloud);
+            mls.setSearchRadius(params.mlsSearchRadius);
+            mls.setPolynomialFit(true);
+            mls.setPolynomialOrder(params.mlsPolynomialOrder);
+            mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
+            mls.setUpsamplingRadius(params.mlsUpsamplingRadius);
+            mls.setUpsamplingStepSize(params.mlsUpsamplingStepSize);
 
-        pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
+            pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
+            this->cloud_smoothed = pCloud_smoothed;
+            mls.process(**pCloud_smoothed);
+        } else {
+            pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(cloud);
+        }
+
         this->cloud_smoothed = pCloud_smoothed;
-        mls.process(**pCloud_smoothed);
-    } else {
-        pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(cloud);
     }
 
-    this->cloud_smoothed = pCloud_smoothed;
+    if (smoothingChanged || normalsChanged) {
+        if(!updateProgress(2, "Estimating normals", &progress)) return;
 
-    if(!updateProgress(2, "Estimating normals", &progress)) return;
+        pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
+        ne.setNumberOfThreads(params.normalsThreads);
+        ne.setInputCloud(*cloud_smoothed);
+        ne.setRadiusSearch(params.normalsSearchRadius);
+        Eigen::Vector4f centroid;
+        pcl::compute3DCentroid(**cloud_smoothed, centroid);
+        ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
 
-    pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
-    ne.setNumberOfThreads(params.normalsThreads);
-    ne.setInputCloud(*cloud_smoothed);
-    ne.setRadiusSearch(params.normalsSearchRadius);
-    Eigen::Vector4f centroid;
-    pcl::compute3DCentroid(**cloud_smoothed, centroid);
-    ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
+        pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
+        ne.compute(*cloud_normals);
 
-    pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
-    ne.compute(*cloud_normals);
+        for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
+            cloud_normals->points[i].normal_x *= -1;
+            cloud_normals->points[i].normal_y *= -1;
+            cloud_normals->points[i].normal_z *= -1;
+        }
 
-    for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
-        cloud_normals->points[i].normal_x *= -1;
-        cloud_normals->points[i].normal_y *= -1;
-        cloud_normals->points[i].normal_z *= -1;
+        if(!updateProgress(3, "Concatenating points and normals", &progress)) return;
+
+        cloud_smoothed_normals = new pcl::PointCloud<pcl::PointNormal>::Ptr(new pcl::PointCloud<pcl::PointNormal>());
+        pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
     }
-
-    if(!updateProgress(3, "Concatenating points and normals", &progress)) return;
-
-    cloud_smoothed_normals = new pcl::PointCloud<pcl::PointNormal>::Ptr(new pcl::PointCloud<pcl::PointNormal>());
-    pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
 
     if(!updateProgress(4, "Mesh reconstruction", &progress)) return;
 
@@ -192,7 +198,7 @@ PCLViewer::loadPcdFile (std::string filename)
     viewer->removeAllShapes();
 
     if (ui->showPointsCheckbox->isChecked()) {
-        viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
+        viewer->addPointCloud (*cloud_smoothed, "cloud_smoothed");
     }
 
     if (ui->showMeshCheckbox->isChecked()) {

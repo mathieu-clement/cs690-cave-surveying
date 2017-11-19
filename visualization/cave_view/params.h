@@ -48,4 +48,7 @@ typedef struct {
     MeshParams meshParams;
 } Params;
 
+bool smoothingParamsChanged(Params *p1, Params *p2);
+bool normalsParamsChanged(Params *p1, Params *p2);
+
 #endif // PARAMS_H
