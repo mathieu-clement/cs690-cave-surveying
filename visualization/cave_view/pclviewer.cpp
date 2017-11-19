@@ -86,7 +86,7 @@ PCLViewer::loadPcdFile (std::string filename)
     QProgressDialog progress("Reading points...", "Cancel", 0, 5, this);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(0);
-    //progress.setRange(0, 0);
+    //progress.setRange(0, 0); // undetermined progress bar
     progress.show();
 
     progress.setValue(0);
@@ -107,7 +107,7 @@ PCLViewer::loadPcdFile (std::string filename)
     }
 
     ParamsDialog dialog(this, p_previousParams);
-    if (dialog.exec() == QDialog::Rejected) {
+    if (dialog.exec() == QDialog::Rejected) { // cancelled?
         enableUi();
         return;
     }
