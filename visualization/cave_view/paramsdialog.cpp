@@ -150,6 +150,7 @@ ParamsDialog::loadParams(Params *params)
     }
 
     activeMeshAlgorithmIndex = index;
+    meshAlgorithm = getSelectedMeshAlgorithm();
     ui->meshAlgorithmComboBox->setCurrentIndex(index);
 
     meshParams = params->meshParams;
