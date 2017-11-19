@@ -183,14 +183,19 @@ PCLViewer::loadPcdFile (std::string filename)
 
     viewer->removeAllPointClouds();
     viewer->removeAllShapes();
-    viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
-    viewer->addPolygonMesh(*pMesh, "mesh");
+
+    if (ui->showPointsCheckbox->isChecked()) {
+        viewer->addPointCloud (*pCloud_smoothed, "cloud_smoothed");
+    }
+
+    if (ui->showMeshCheckbox->isChecked()) {
+        viewer->addPolygonMesh(*pMesh, "mesh");
+    }
+
     viewer->resetCamera();
     ui->qvtkWidget->update();
 
     enableUi();
-    ui->showPointsCheckbox->setChecked(true);
-    ui->showMeshCheckbox->setChecked(true);
 
     QFileInfo fi(QString::fromStdString(filename));
     ui->filenameLabel->setText(fi.fileName());

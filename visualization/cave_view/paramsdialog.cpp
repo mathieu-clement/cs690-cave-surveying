@@ -4,6 +4,8 @@
 #include "greedyprojectiontriangulationparamsdialog.h"
 #include "marchingcubesparamsdialog.h"
 
+#include <iostream>
+
 ParamsDialog::ParamsDialog(QWidget *parent, Params* previousParams) :
     QDialog(parent),
     ui(new Ui::ParamsDialog)
@@ -102,6 +104,7 @@ ParamsDialog::configureMesh()
         }
 
         default:
+            std::cerr << "Cannot configure mesh. Algorithm '" << algo << "' unknown." << std::endl;
             throw algo;
     }
 }
@@ -117,6 +120,7 @@ ParamsDialog::getSelectedMeshAlgorithm()
         case 2:
             return marchingCubes;
     }
+    std::cerr << "Mesh algorithm of index '" << activeMeshAlgorithmIndex << "' unknown." << std::endl;
     throw activeMeshAlgorithmIndex;
 }
 
@@ -139,7 +143,10 @@ ParamsDialog::loadParams(Params *params)
         case greedyProjectionTriangulation: index = 1; break;
         case marchingCubes: index = 2; break;
         default:
-            throw params->meshAlgorithm;
+            {
+                std::cerr << "Mesh algorithm '" << params->meshAlgorithm << "' unknown." << std::endl;
+                throw params->meshAlgorithm;
+            }
     }
 
     activeMeshAlgorithmIndex = index;
