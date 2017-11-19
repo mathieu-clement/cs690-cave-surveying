@@ -40,6 +40,7 @@ PCLViewer::PCLViewer (QWidget *parent) :
 
   // Connect buttons
   connect (ui->loadFileButton, SIGNAL(clicked()), this, SLOT(loadFileButtonPressed()));
+  connect (ui->changeParametersButton, SIGNAL(clicked()), this, SLOT(changeParameters()));
 
   // Connect checkboxes
   connect (ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
@@ -51,6 +52,12 @@ PCLViewer::PCLViewer (QWidget *parent) :
 
   this->raise();
   this->activateWindow();
+}
+
+void
+PCLViewer::changeParameters()
+{
+    loadPcdFile(lastFilename);
 }
 
 void
@@ -75,7 +82,7 @@ PCLViewer::loadPcdFile (std::string filename)
 
     disableUi();
 
-    QProgressDialog progress("Loading file...", "Cancel", 0, 5, this);
+    QProgressDialog progress("Reading points...", "Cancel", 0, 5, this);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(0);
     //progress.setRange(0, 0);
@@ -100,6 +107,8 @@ PCLViewer::loadPcdFile (std::string filename)
 
     ParamsDialog dialog(this, p_previousParams);
     if (dialog.exec() == ParamsDialog::Rejected) return;
+    ui->changeParametersButton->setEnabled(true);
+    lastFilename = filename;
     Params params = dialog.getParams();
     paramsLoader.write(params);
 

@@ -151,6 +151,9 @@
     </property>
    </widget>
    <widget class="QPushButton" name="changeParametersButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -172,6 +175,12 @@
    <header>QVTKWidget.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>loadFileButton</tabstop>
+  <tabstop>changeParametersButton</tabstop>
+  <tabstop>showPointsCheckbox</tabstop>
+  <tabstop>showMeshCheckbox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
