@@ -15,6 +15,7 @@
 
 #include <QApplication>
 #include <QColorDialog>
+#include <QDialog>
 #include <QFileDialog>
 #include <QIcon>
 #include <QProgressDialog>
@@ -106,7 +107,10 @@ PCLViewer::loadPcdFile (std::string filename)
     }
 
     ParamsDialog dialog(this, p_previousParams);
-    if (dialog.exec() == ParamsDialog::Rejected) return;
+    if (dialog.exec() == QDialog::Rejected) {
+        enableUi();
+        return;
+    }
     ui->changeParametersButton->setEnabled(true);
     lastFilename = filename;
     Params params = dialog.getParams();
@@ -176,6 +180,9 @@ PCLViewer::loadPcdFile (std::string filename)
         case marchingCubes:
             applyMarchingCubes(params.meshParams.marchingCubesParams);
             break;
+
+        default:
+            std::cerr << "No mesh algorithm has been picked." << std::endl;
     }
 
     // Set progress to 100 % and close progress dialog
