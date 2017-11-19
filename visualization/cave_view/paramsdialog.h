@@ -32,7 +32,6 @@ protected:
 
 private:
     Ui::ParamsDialog *ui;
-    bool hasPrevious = false;
     MeshAlgorithm previousMeshAlgorithm;
 
     void loadParams(Params* params);
