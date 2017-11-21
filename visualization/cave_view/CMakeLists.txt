@@ -1,12 +1,14 @@
 cmake_minimum_required (VERSION 2.6 FATAL_ERROR)
 
 set (CMAKE_CXX_STANDARD 11)
+#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-inconsistent-missing-override")
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override")
 set (QT_QMAKE_EXECUTABLE "/opt/local/libexec/qt5/bin/qmake")
 
 project      (pcl-visualizer)
 find_package (Qt5 REQUIRED COMPONENTS Widgets Core Gui)
 find_package (Qt5Widgets REQUIRED)
-find_package (VTK 7.1.1 REQUIRED)
+find_package (VTK 8.0.1 REQUIRED NO_MODULE)
 find_package (PCL 1.7.1 REQUIRED)
 
 include_directories (${PCL_INCLUDE_DIRS})
@@ -17,7 +19,9 @@ set  (project_SOURCES   main.cpp pclviewer.cpp paramsdialog.cpp poissonparamsdia
 set  (project_HEADERS   pclviewer.h params.h paramsdialog.h poissonparamsdialog.h greedyprojectiontriangulationparamsdialog.h marchingcubesparamsdialog.h paramsloader.h json.hpp)
 set  (project_FORMS     pclviewer.ui paramsdialog.ui poissonparamsdialog.ui greedyprojectiontriangulationparamsdialog.ui marchingcubesparamsdialog.ui)
 set  (project_RESOURCES icons.qrc)
-set  (VTK_LIBRARIES     vtkRendering vtkGraphics vtkHybrid QVTK)
+
+#set  (VTK_LIBRARIES     vtkRendering vtkGraphics vtkHybrid QVTK)
+include(${VTK_USE_FILE})
 
 QT5_WRAP_CPP (project_HEADERS_MOC   ${project_HEADERS})
 QT5_WRAP_UI  (project_FORMS_HEADERS ${project_FORMS})
