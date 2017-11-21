@@ -42,6 +42,7 @@ PCLViewer::PCLViewer (QWidget *parent) :
   // Connect buttons
   connect (ui->loadFileButton, SIGNAL(clicked()), this, SLOT(loadFileButtonPressed()));
   connect (ui->changeParametersButton, SIGNAL(clicked()), this, SLOT(changeParameters()));
+  connect (ui->resetButton, SIGNAL(clicked()), this, SLOT(resetCamera()));
 
   // Connect checkboxes
   connect (ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
@@ -267,6 +268,13 @@ PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
     dialog->setLabelText(message);
     QApplication::processEvents();
     return true;
+}
+
+void
+PCLViewer::resetCamera()
+{
+    viewer->resetCamera();
+    ui->qvtkWidget->update();
 }
 
 void

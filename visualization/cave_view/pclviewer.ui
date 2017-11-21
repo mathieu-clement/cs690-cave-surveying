@@ -26,7 +26,7 @@
    <string>PCLViewer</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QVTKWidget" name="qvtkWidget">
+   <widget class="QVTKWidget" name="qvtkWidget" native="true">
     <property name="geometry">
      <rect>
       <x>249</x>
@@ -164,6 +164,19 @@
     </property>
     <property name="text">
      <string>Change parameters</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="resetButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>460</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Zoom out</string>
     </property>
    </widget>
   </widget>

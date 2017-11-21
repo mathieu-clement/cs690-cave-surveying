@@ -46,6 +46,9 @@ public Q_SLOTS:
   void
   changeParameters();
 
+  void
+  resetCamera();
+
 protected:
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   PointCloudT::Ptr cloud;
