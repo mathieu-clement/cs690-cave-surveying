@@ -261,7 +261,7 @@ PCLViewer::setUiEnabled(bool enabled)
 bool
 PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
 {
-    std::cout << "Progress (" << step << "): " << message.toAscii().constData() << std::endl;
+    std::cout << "Progress (" << step << "): " << message.toUtf8().constData() << std::endl;
     if (dialog->wasCanceled()) return false;
     dialog->setValue(step);
     dialog->setLabelText(message);
