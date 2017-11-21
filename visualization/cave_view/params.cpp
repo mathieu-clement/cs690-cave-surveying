@@ -24,7 +24,8 @@ MeshAlgorithm CStringMeshAlgorithm(const char* s)
 
 bool smoothingParamsChanged(Params *p1, Params *p2)
 {
-    return p1->mlsEnabled != p2->mlsEnabled ||
+    return p1 == nullptr || p2 == nullptr ||
+        p1->mlsEnabled != p2->mlsEnabled ||
         p1->mlsPolynomialOrder != p2->mlsPolynomialOrder ||
         p1->mlsSearchRadius != p2->mlsSearchRadius ||
         p1->mlsUpsamplingRadius != p2->mlsUpsamplingRadius ||
@@ -33,5 +34,6 @@ bool smoothingParamsChanged(Params *p1, Params *p2)
 
 bool normalsParamsChanged(Params *p1, Params *p2)
 {
-    return p1->normalsSearchRadius != p2->normalsSearchRadius;
+    return p1 == nullptr || p2 == nullptr ||
+        p1->normalsSearchRadius != p2->normalsSearchRadius;
 }
