@@ -140,7 +140,7 @@ PCLViewer::loadPcdFile(std::string filename) {
         this->cloud_smoothed = pCloud_smoothed;
     }
 
-    if (smoothingChanged || normalsChanged) {
+    if ((smoothingChanged || normalsChanged) && params.meshAlgorithm != noMesh) {
         if (!updateProgress(2, "Estimating normals", &progress)) return;
 
         pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
@@ -166,26 +166,32 @@ PCLViewer::loadPcdFile(std::string filename) {
         pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
     }
 
-    if (!updateProgress(4, "Mesh reconstruction", &progress)) return;
+    if (params.meshAlgorithm != noMesh) {
+        if (!updateProgress(4, "Mesh reconstruction", &progress)) return;
 
-    pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
-    this->mesh = pMesh;
+        pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
+        this->mesh = pMesh;
 
-    switch (params.meshAlgorithm) {
-        case poisson:
-            applyPoisson(params.meshParams.poissonParams);
-            break;
+        switch (params.meshAlgorithm) {
+            case poisson:
+                applyPoisson(params.meshParams.poissonParams);
+                break;
 
-        case greedyProjectionTriangulation:
-            applyGreedyProjectionTriangulation(params.meshParams.greedyProjectionTriangulationParams);
-            break;
+            case greedyProjectionTriangulation:
+                applyGreedyProjectionTriangulation(params.meshParams.greedyProjectionTriangulationParams);
+                break;
 
-        case marchingCubes:
-            applyMarchingCubes(params.meshParams.marchingCubesParams);
-            break;
+            case marchingCubes:
+                applyMarchingCubes(params.meshParams.marchingCubesParams);
+                break;
 
-        default:
-            std::cerr << "No mesh algorithm has been picked." << std::endl;
+            default:
+                std::cerr << "No mesh algorithm has been picked." << std::endl;
+        }
+
+        ui->showMeshCheckbox->setEnabled(true);
+    } else {
+        mesh = nullptr;
     }
 
     // Set progress to 100 % and close progress dialog
@@ -198,14 +204,18 @@ PCLViewer::loadPcdFile(std::string filename) {
         viewer->addPointCloud(*cloud_smoothed, "cloud_smoothed");
     }
 
-    if (ui->showMeshCheckbox->isChecked()) {
-        viewer->addPolygonMesh(*pMesh, "mesh");
+    if (ui->showMeshCheckbox->isChecked() && mesh != nullptr) {
+        viewer->addPolygonMesh(*mesh, "mesh");
     }
 
     viewer->resetCamera();
     ui->qvtkWidget->update();
 
     enableUi();
+    if (mesh == nullptr) {
+        ui->showMeshCheckbox->setEnabled(false);
+        ui->showMeshCheckbox->setChecked(false);
+    }
 
     QFileInfo fi(QString::fromStdString(filename));
     ui->filenameLabel->setText(fi.fileName());

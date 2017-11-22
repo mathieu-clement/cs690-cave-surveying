@@ -4,7 +4,8 @@
 enum MeshAlgorithm {
     poisson,
     greedyProjectionTriangulation,
-    marchingCubes
+    marchingCubes,
+    noMesh
 };
 
 const char *MeshAlgorithmCString(MeshAlgorithm e);

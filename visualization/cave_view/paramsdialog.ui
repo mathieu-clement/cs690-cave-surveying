@@ -194,6 +194,11 @@
                                 <string>Marching Cubes</string>
                             </property>
                         </item>
+                        <item>
+                            <property name="text">
+                                <string>None</string>
+                            </property>
+                        </item>
                     </widget>
                 </item>
                 <item>
