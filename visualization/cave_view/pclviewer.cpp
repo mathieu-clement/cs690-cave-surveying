@@ -320,6 +320,7 @@ PCLViewer::colorize()
         auto value = static_cast<uint8_t>(255 * d / maxDistance);
         it->r = value;
         it->g = static_cast<uint8_t>(255 - value);
+        it->b = 192;
     }
 }
 
