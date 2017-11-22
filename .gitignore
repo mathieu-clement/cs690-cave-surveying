@@ -33,3 +33,6 @@
 
 # Cave Viewer per-file settings
 visualization/data/*.json
+
+# IDEA
+.idea/
