@@ -1,97 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PoissonParamsDialog</class>
- <widget class="QDialog" name="PoissonParamsDialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>232</width>
-    <height>113</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
-  </property>
-  <widget class="QLabel" name="label_8">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>361</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Poisson (mesh reconstruction)</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="formLayoutWidget_3">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>30</y>
-     <width>191</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout_3">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_9">
-      <property name="text">
-       <string>Depth:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QSpinBox" name="poissonDepthSpinBox">
-      <property name="value">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QPushButton" name="okButton">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>70</y>
-     <width>81</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>OK</string>
-   </property>
-  </widget>
- </widget>
- <resources/>
- <connections>
-  <connection>
-   <sender>okButton</sender>
-   <signal>clicked()</signal>
-   <receiver>PoissonParamsDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>340</x>
-     <y>235</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>195</x>
-     <y>130</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+    <class>PoissonParamsDialog</class>
+    <widget class="QDialog" name="PoissonParamsDialog">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>232</width>
+                <height>113</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Dialog</string>
+        </property>
+        <property name="modal">
+            <bool>true</bool>
+        </property>
+        <widget class="QLabel" name="label_8">
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>10</y>
+                    <width>361</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Poisson (mesh reconstruction)</string>
+            </property>
+        </widget>
+        <widget class="QWidget" name="formLayoutWidget_3">
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>30</y>
+                    <width>191</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <layout class="QFormLayout" name="formLayout_3">
+                <item row="0" column="0">
+                    <widget class="QLabel" name="label_9">
+                        <property name="text">
+                            <string>Depth:</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="0" column="1">
+                    <widget class="QSpinBox" name="poissonDepthSpinBox">
+                        <property name="value">
+                            <number>9</number>
+                        </property>
+                    </widget>
+                </item>
+            </layout>
+        </widget>
+        <widget class="QPushButton" name="okButton">
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>70</y>
+                    <width>81</width>
+                    <height>32</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>OK</string>
+            </property>
+        </widget>
+    </widget>
+    <resources/>
+    <connections>
+        <connection>
+            <sender>okButton</sender>
+            <signal>clicked()</signal>
+            <receiver>PoissonParamsDialog</receiver>
+            <slot>accept()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>340</x>
+                    <y>235</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>195</x>
+                    <y>130</y>
+                </hint>
+            </hints>
+        </connection>
+    </connections>
 </ui>

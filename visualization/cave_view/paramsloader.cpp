@@ -17,25 +17,21 @@
 
 using json = nlohmann::json;
 
-ParamsLoader::ParamsLoader(std::string pcdFilepath)
-{
+ParamsLoader::ParamsLoader(std::string pcdFilepath) {
     jsonFilepath = makeJsonFilepath(pcdFilepath);
 }
 
-ParamsLoader::ParamsLoader(const char* pcdFilepath) : ParamsLoader::ParamsLoader(std::string(pcdFilepath))
-{
+ParamsLoader::ParamsLoader(const char *pcdFilepath) : ParamsLoader::ParamsLoader(std::string(pcdFilepath)) {
 
 }
 
 bool
-ParamsLoader::exists()
-{
+ParamsLoader::exists() {
     return QFileInfo(jsonFilepath).exists();
 }
 
 Params
-ParamsLoader::read()
-{
+ParamsLoader::read() {
     json j;
     std::ifstream(jsonFilepath.toUtf8().constData()) >> j;
 
@@ -53,27 +49,25 @@ ParamsLoader::read()
 
     switch (params.meshAlgorithm) {
         case poisson:
-            params.meshParams.poissonParams = (PoissonParams) { j["meshParams"]["poissonDepth"] };
+            params.meshParams.poissonParams = (PoissonParams) {j["meshParams"]["poissonDepth"]};
             break;
 
-        case greedyProjectionTriangulation:
-        {
+        case greedyProjectionTriangulation: {
             params.meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
-                j["meshParams"]["maxNearestNeighbors"],
-                j["meshParams"]["searchRadius"],
-                j["meshParams"]["mu"]
+                    j["meshParams"]["maxNearestNeighbors"],
+                    j["meshParams"]["searchRadius"],
+                    j["meshParams"]["mu"]
             };
             break;
         }
 
-        case marchingCubes:
-        {
+        case marchingCubes: {
             params.meshParams.marchingCubesParams = (MarchingCubesParams) {
-                (float) j["meshParams"]["isoLevel"],
-                j["meshParams"]["gridResolutionX"],
-                j["meshParams"]["gridResolutionY"],
-                j["meshParams"]["gridResolutionZ"],
-                (float) j["meshParams"]["gridExtensionPercentage"]
+                    (float) j["meshParams"]["isoLevel"],
+                    j["meshParams"]["gridResolutionX"],
+                    j["meshParams"]["gridResolutionY"],
+                    j["meshParams"]["gridResolutionZ"],
+                    (float) j["meshParams"]["gridExtensionPercentage"]
             };
             break;
         }
@@ -86,8 +80,7 @@ ParamsLoader::read()
 }
 
 void
-ParamsLoader::write(Params params)
-{
+ParamsLoader::write(Params params) {
     json j;
     JADD(j, params, mlsEnabled);
     JADD(j, params, mlsSearchRadius);
@@ -123,8 +116,7 @@ ParamsLoader::write(Params params)
 }
 
 QString
-ParamsLoader::makeJsonFilepath(std::string pcdFilepath)
-{
+ParamsLoader::makeJsonFilepath(std::string pcdFilepath) {
     QFileInfo pcdFi(QString::fromStdString(pcdFilepath));
     std::string pcdFilename = pcdFi.fileName().toStdString();
     std::string bname = basename(pcdFilename);
@@ -133,7 +125,6 @@ ParamsLoader::makeJsonFilepath(std::string pcdFilepath)
 }
 
 std::string
-ParamsLoader::basename(std::string filename)
-{
+ParamsLoader::basename(std::string filename) {
     return filename.substr(0, filename.find_last_of("."));
 }

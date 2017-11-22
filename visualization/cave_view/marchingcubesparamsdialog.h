@@ -5,15 +5,14 @@
 #include "params.h"
 
 namespace Ui {
-class MarchingCubesParamsDialog;
+    class MarchingCubesParamsDialog;
 }
 
-class MarchingCubesParamsDialog : public QDialog
-{
-    Q_OBJECT
+class MarchingCubesParamsDialog : public QDialog {
+Q_OBJECT
 
 public:
-    explicit MarchingCubesParamsDialog(QWidget *parent = 0, MarchingCubesParams* previousParams = nullptr);
+    explicit MarchingCubesParamsDialog(QWidget *parent = 0, MarchingCubesParams *previousParams = nullptr);
 
     MarchingCubesParams getParams();
 

@@ -20,71 +20,71 @@
 typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
 
-namespace Ui
-{
-  class PCLViewer;
+namespace Ui {
+    class PCLViewer;
 }
 
-class PCLViewer : public QMainWindow
-{
-  Q_OBJECT
+class PCLViewer : public QMainWindow {
+Q_OBJECT
 
 public:
-  explicit PCLViewer (QWidget *parent = 0);
-  ~PCLViewer ();
+    explicit PCLViewer(QWidget *parent = 0);
+
+    ~PCLViewer();
 
 public Q_SLOTS:
-  void
-  loadFileButtonPressed ();
 
-  void
-  showPointsCheckBoxToggled (bool checked);
+    void
+    loadFileButtonPressed();
 
-  void
-  showMeshCheckBoxToggled (bool checked);
+    void
+    showPointsCheckBoxToggled(bool checked);
 
-  void
-  changeParameters();
+    void
+    showMeshCheckBoxToggled(bool checked);
 
-  void
-  resetCamera();
+    void
+    changeParameters();
+
+    void
+    resetCamera();
 
 protected:
-  boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-  PointCloudT::Ptr cloud;
+    boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
+    PointCloudT::Ptr cloud;
 
-  void
-  loadPcdFile (std::string filename);
+    void
+    loadPcdFile(std::string filename);
 
-  void
-  disableUi();
+    void
+    disableUi();
 
-  void
-  enableUi();
+    void
+    enableUi();
 
 private:
-  Ui::PCLViewer *ui;
+    Ui::PCLViewer *ui;
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr *cloud_smoothed;
-  pcl::PointCloud<pcl::PointNormal>::Ptr *cloud_smoothed_normals;
-  pcl::PolygonMesh *mesh;
-  std::string lastFilename = "";
+    pcl::PointCloud<pcl::PointXYZ>::Ptr *cloud_smoothed;
+    pcl::PointCloud<pcl::PointNormal>::Ptr *cloud_smoothed_normals;
+    pcl::PolygonMesh *mesh;
+    std::string lastFilename = "";
 
-  void
-  setUiEnabled (bool enabled);
+    void
+    setUiEnabled(bool enabled);
 
-  // Returns false if progress dialog cancelled
-  bool
-  updateProgress (int step, QString message, QProgressDialog *dialog);
+    // Returns false if progress dialog cancelled
+    bool
+    updateProgress(int step, QString message, QProgressDialog *dialog);
 
-  void
-  applyPoisson(PoissonParams poissonParams);
+    void
+    applyPoisson(PoissonParams poissonParams);
 
-  void
-  applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params);
+    void
+    applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params);
 
-  void
-  applyMarchingCubes(MarchingCubesParams params);
+    void
+    applyMarchingCubes(MarchingCubesParams params);
 };
 
 #endif // PCLVIEWER_H

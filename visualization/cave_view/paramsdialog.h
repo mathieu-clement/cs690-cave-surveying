@@ -6,21 +6,23 @@
 #include "params.h"
 
 namespace Ui {
-class ParamsDialog;
+    class ParamsDialog;
 }
 
-class ParamsDialog : public QDialog
-{
-    Q_OBJECT
+class ParamsDialog : public QDialog {
+Q_OBJECT
 
 public:
-    explicit ParamsDialog(QWidget *parent = 0, Params* previousParams = nullptr);
+    explicit ParamsDialog(QWidget *parent = 0, Params *previousParams = nullptr);
+
     ~ParamsDialog();
 
     Params getParams();
 
 public Q_SLOTS:
+
     void activateMeshAlgorithm(int index);
+
     void configureMesh();
 
 protected:
@@ -34,7 +36,7 @@ private:
     Ui::ParamsDialog *ui;
     MeshAlgorithm previousMeshAlgorithm;
 
-    void loadParams(Params* params);
+    void loadParams(Params *params);
 };
 
 #endif // PARAMSDIALOG_H

@@ -6,14 +6,16 @@
 #include <string>
 #include <QString>
 
-class ParamsLoader
-{
+class ParamsLoader {
 public:
     ParamsLoader(std::string pcdFilepath);
-    ParamsLoader(const char* pcdFilepath);
+
+    ParamsLoader(const char *pcdFilepath);
 
     bool exists();
+
     Params read();
+
     void write(Params params);
 
 private:

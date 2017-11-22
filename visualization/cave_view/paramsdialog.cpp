@@ -6,14 +6,13 @@
 
 #include <iostream>
 
-ParamsDialog::ParamsDialog(QWidget *parent, Params* previousParams) :
-    QDialog(parent),
-    ui(new Ui::ParamsDialog)
-{
+ParamsDialog::ParamsDialog(QWidget *parent, Params *previousParams) :
+        QDialog(parent),
+        ui(new Ui::ParamsDialog) {
     ui->setupUi(this);
     this->setWindowTitle("Mesh Parameters");
-    connect (ui->configureMeshButton, SIGNAL(clicked()), this, SLOT(configureMesh()));
-    connect (ui->meshAlgorithmComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(activateMeshAlgorithm(int)));
+    connect(ui->configureMeshButton, SIGNAL(clicked()), this, SLOT(configureMesh()));
+    connect(ui->meshAlgorithmComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(activateMeshAlgorithm(int)));
 
     if (previousParams != nullptr) {
         loadParams(previousParams);
@@ -23,8 +22,7 @@ ParamsDialog::ParamsDialog(QWidget *parent, Params* previousParams) :
 }
 
 Params
-ParamsDialog::getParams()
-{
+ParamsDialog::getParams() {
     bool mlsEnabled = ui->mlsEnableCheckBox->isChecked();
     double mlsSearchRadius = ui->mlsSearchRadiusSpinBox->value();
     unsigned int mlsPolynomialOrder = ui->mlsPolynomialOrderSpinBox->value();
@@ -34,69 +32,61 @@ ParamsDialog::getParams()
     unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
 
     Params params = {
-                        mlsEnabled, mlsSearchRadius, mlsPolynomialOrder,
-                        mlsUpsamplingRadius, mlsUpsamplingStepSize,
-                        normalsSearchRadius, normalsThreads,
-                        meshAlgorithm, meshParams
-                    };
+            mlsEnabled, mlsSearchRadius, mlsPolynomialOrder,
+            mlsUpsamplingRadius, mlsUpsamplingStepSize,
+            normalsSearchRadius, normalsThreads,
+            meshAlgorithm, meshParams
+    };
     return params;
 }
 
 void
-ParamsDialog::activateMeshAlgorithm(int index)
-{
+ParamsDialog::activateMeshAlgorithm(int index) {
     activeMeshAlgorithmIndex = index;
 
     // Default values
 
     meshAlgorithm = getSelectedMeshAlgorithm();
     switch (meshAlgorithm) {
-        case poisson:
-            {
-                meshParams.poissonParams = (PoissonParams) { 9 };
-                break;
-            }
-        case greedyProjectionTriangulation:
-            {
-                meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
-                        200, 15.0, 3.0
-                };
-                break;
-            }
-        case marchingCubes:
-            {
-                meshParams.marchingCubesParams = (MarchingCubesParams) {
-                        0.0f, 100, 100, 100, 0.2f
-                };
-                break;
-            }
+        case poisson: {
+            meshParams.poissonParams = (PoissonParams) {9};
+            break;
+        }
+        case greedyProjectionTriangulation: {
+            meshParams.greedyProjectionTriangulationParams = (GreedyProjectionTriangulationParams) {
+                    200, 15.0, 3.0
+            };
+            break;
+        }
+        case marchingCubes: {
+            meshParams.marchingCubesParams = (MarchingCubesParams) {
+                    0.0f, 100, 100, 100, 0.2f
+            };
+            break;
+        }
     }
 }
 
 void
-ParamsDialog::configureMesh()
-{
+ParamsDialog::configureMesh() {
     MeshAlgorithm algo = getSelectedMeshAlgorithm();
     switch (algo) {
-        case poisson:
-        {
+        case poisson: {
             PoissonParamsDialog dialog(this, &(meshParams.poissonParams));
             dialog.exec();
             meshParams.poissonParams = dialog.getParams();
             break;
         }
 
-        case greedyProjectionTriangulation:
-        {
+        case greedyProjectionTriangulation: {
             GreedyProjectionTriangulationParamsDialog dialog(this,
-                &(meshParams.greedyProjectionTriangulationParams));
+                                                             &(meshParams.greedyProjectionTriangulationParams));
             dialog.exec();
             meshParams.greedyProjectionTriangulationParams = dialog.getParams();
             break;
         }
 
-        case marchingCubes:
-        {
+        case marchingCubes: {
             MarchingCubesParamsDialog dialog(this, &(meshParams.marchingCubesParams));
             dialog.exec();
             meshParams.marchingCubesParams = dialog.getParams();
@@ -110,9 +100,8 @@ ParamsDialog::configureMesh()
 }
 
 MeshAlgorithm
-ParamsDialog::getSelectedMeshAlgorithm()
-{
-    switch(activeMeshAlgorithmIndex) {
+ParamsDialog::getSelectedMeshAlgorithm() {
+    switch (activeMeshAlgorithmIndex) {
         case 0:
             return poisson;
         case 1:
@@ -125,8 +114,7 @@ ParamsDialog::getSelectedMeshAlgorithm()
 }
 
 void
-ParamsDialog::loadParams(Params *params)
-{
+ParamsDialog::loadParams(Params *params) {
     ui->mlsEnableCheckBox->setChecked(params->mlsEnabled);
     ui->mlsSearchRadiusSpinBox->setValue(params->mlsSearchRadius);
     ui->mlsUpsamplingStepSizeSpinBox->setValue(params->mlsUpsamplingStepSize);
@@ -139,14 +127,19 @@ ParamsDialog::loadParams(Params *params)
     previousMeshAlgorithm = params->meshAlgorithm;
     unsigned int index = -1;
     switch (params->meshAlgorithm) {
-        case poisson: index = 0; break;
-        case greedyProjectionTriangulation: index = 1; break;
-        case marchingCubes: index = 2; break;
-        default:
-            {
-                std::cerr << "Mesh algorithm '" << params->meshAlgorithm << "' unknown." << std::endl;
-                throw params->meshAlgorithm;
-            }
+        case poisson:
+            index = 0;
+            break;
+        case greedyProjectionTriangulation:
+            index = 1;
+            break;
+        case marchingCubes:
+            index = 2;
+            break;
+        default: {
+            std::cerr << "Mesh algorithm '" << params->meshAlgorithm << "' unknown." << std::endl;
+            throw params->meshAlgorithm;
+        }
     }
 
     activeMeshAlgorithmIndex = index;
@@ -156,7 +149,6 @@ ParamsDialog::loadParams(Params *params)
     meshParams = params->meshParams;
 }
 
-ParamsDialog::~ParamsDialog()
-{
+ParamsDialog::~ParamsDialog() {
     delete ui;
 }

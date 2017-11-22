@@ -7,8 +7,9 @@ enum MeshAlgorithm {
     marchingCubes
 };
 
-const char* MeshAlgorithmCString(MeshAlgorithm e);
-MeshAlgorithm CStringMeshAlgorithm(const char* s);
+const char *MeshAlgorithmCString(MeshAlgorithm e);
+
+MeshAlgorithm CStringMeshAlgorithm(const char *s);
 
 typedef struct {
     unsigned int poissonDepth;
@@ -49,6 +50,7 @@ typedef struct {
 } Params;
 
 bool smoothingParamsChanged(Params *p1, Params *p2);
+
 bool normalsParamsChanged(Params *p1, Params *p2);
 
 #endif // PARAMS_H

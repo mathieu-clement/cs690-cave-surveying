@@ -20,57 +20,54 @@
 #include <QIcon>
 #include <QProgressDialog>
 
-PCLViewer::PCLViewer (QWidget *parent) :
-  QMainWindow (parent),
-  ui (new Ui::PCLViewer)
-{
-  ui->setupUi (this);
-  this->setWindowTitle ("Cave Viewer");
-  this->setWindowIcon(QIcon(":/duck.ico"));
+PCLViewer::PCLViewer(QWidget *parent) :
+        QMainWindow(parent),
+        ui(new Ui::PCLViewer) {
+    ui->setupUi(this);
+    this->setWindowTitle("Cave Viewer");
+    this->setWindowIcon(QIcon(":/duck.ico"));
 
-  // Setup the cloud pointer
-  cloud.reset (new PointCloudT);
+    // Setup the cloud pointer
+    cloud.reset(new PointCloudT);
 
-  // Set up the QVTK window
-  viewer.reset (new pcl::visualization::PCLVisualizer ("viewer", false));
-  viewer->setShowFPS(false);
-  viewer->setBackgroundColor(0.2, 0.2, 0.2);
-  ui->qvtkWidget->SetRenderWindow (viewer->getRenderWindow ());
-  viewer->setupInteractor (ui->qvtkWidget->GetInteractor (), ui->qvtkWidget->GetRenderWindow ());
-  ui->qvtkWidget->update ();
+    // Set up the QVTK window
+    viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
+    viewer->setShowFPS(false);
+    viewer->setBackgroundColor(0.2, 0.2, 0.2);
+    ui->qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
+    viewer->setupInteractor(ui->qvtkWidget->GetInteractor(), ui->qvtkWidget->GetRenderWindow());
+    ui->qvtkWidget->update();
 
-  // Connect buttons
-  connect (ui->loadFileButton, SIGNAL(clicked()), this, SLOT(loadFileButtonPressed()));
-  connect (ui->changeParametersButton, SIGNAL(clicked()), this, SLOT(changeParameters()));
-  connect (ui->resetButton, SIGNAL(clicked()), this, SLOT(resetCamera()));
+    // Connect buttons
+    connect(ui->loadFileButton, SIGNAL(clicked()), this, SLOT(loadFileButtonPressed()));
+    connect(ui->changeParametersButton, SIGNAL(clicked()), this, SLOT(changeParameters()));
+    connect(ui->resetButton, SIGNAL(clicked()), this, SLOT(resetCamera()));
 
-  // Connect checkboxes
-  connect (ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
-  connect (ui->showMeshCheckbox, SIGNAL(toggled(bool)), this, SLOT(showMeshCheckBoxToggled(bool)));
+    // Connect checkboxes
+    connect(ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
+    connect(ui->showMeshCheckbox, SIGNAL(toggled(bool)), this, SLOT(showMeshCheckBoxToggled(bool)));
 
-  // Controls inactive until file is loaded
-  disableUi();
-  ui->filenameLabel->setText(QString::Null());
+    // Controls inactive until file is loaded
+    disableUi();
+    ui->filenameLabel->setText(QString::Null());
 
-  this->raise();
-  this->activateWindow();
+    this->raise();
+    this->activateWindow();
 }
 
 void
-PCLViewer::changeParameters()
-{
+PCLViewer::changeParameters() {
     loadPcdFile(lastFilename);
 }
 
 void
-PCLViewer::loadFileButtonPressed()
-{
+PCLViewer::loadFileButtonPressed() {
     QString fileName = QFileDialog::getOpenFileName(
-                this,
-                "Load point cloud data file",
-                QDir::currentPath(),
-                "PCD files (*.pcd)"
-                );
+            this,
+            "Load point cloud data file",
+            QDir::currentPath(),
+            "PCD files (*.pcd)"
+    );
 
     if (fileName.isNull()) return;
 
@@ -78,8 +75,7 @@ PCLViewer::loadFileButtonPressed()
 }
 
 void
-PCLViewer::loadPcdFile (std::string filename)
-{
+PCLViewer::loadPcdFile(std::string filename) {
     std::cout << "Loading file: " << filename << std::endl;
 
     disableUi();
@@ -100,9 +96,9 @@ PCLViewer::loadPcdFile (std::string filename)
 
     ParamsLoader paramsLoader = filename;
     Params previousParams;
-    Params* p_previousParams = nullptr;
+    Params *p_previousParams = nullptr;
 
-    if(paramsLoader.exists()) {
+    if (paramsLoader.exists()) {
         previousParams = paramsLoader.read();
         p_previousParams = &previousParams;
     }
@@ -121,16 +117,16 @@ PCLViewer::loadPcdFile (std::string filename)
     lastFilename = filename;
 
     if (smoothingChanged) {
-        if(!updateProgress(1, "Smoothing", &progress)) return;
+        if (!updateProgress(1, "Smoothing", &progress)) return;
         pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
 
         if (params.mlsEnabled) {
-            pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ> mls;
+            pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ> mls;
             mls.setInputCloud(cloud);
             mls.setSearchRadius(params.mlsSearchRadius);
             mls.setPolynomialFit(true);
             mls.setPolynomialOrder(params.mlsPolynomialOrder);
-            mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ,pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
+            mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
             mls.setUpsamplingRadius(params.mlsUpsamplingRadius);
             mls.setUpsamplingStepSize(params.mlsUpsamplingStepSize);
 
@@ -145,7 +141,7 @@ PCLViewer::loadPcdFile (std::string filename)
     }
 
     if (smoothingChanged || normalsChanged) {
-        if(!updateProgress(2, "Estimating normals", &progress)) return;
+        if (!updateProgress(2, "Estimating normals", &progress)) return;
 
         pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
         ne.setNumberOfThreads(params.normalsThreads);
@@ -155,22 +151,22 @@ PCLViewer::loadPcdFile (std::string filename)
         pcl::compute3DCentroid(**cloud_smoothed, centroid);
         ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
 
-        pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
+        pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal>());
         ne.compute(*cloud_normals);
 
-        for (size_t i = 0 ; i < cloud_normals->size() ; ++i) {
+        for (size_t i = 0; i < cloud_normals->size(); ++i) {
             cloud_normals->points[i].normal_x *= -1;
             cloud_normals->points[i].normal_y *= -1;
             cloud_normals->points[i].normal_z *= -1;
         }
 
-        if(!updateProgress(3, "Concatenating points and normals", &progress)) return;
+        if (!updateProgress(3, "Concatenating points and normals", &progress)) return;
 
         cloud_smoothed_normals = new pcl::PointCloud<pcl::PointNormal>::Ptr(new pcl::PointCloud<pcl::PointNormal>());
         pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
     }
 
-    if(!updateProgress(4, "Mesh reconstruction", &progress)) return;
+    if (!updateProgress(4, "Mesh reconstruction", &progress)) return;
 
     pcl::PolygonMesh *pMesh = new pcl::PolygonMesh;
     this->mesh = pMesh;
@@ -199,7 +195,7 @@ PCLViewer::loadPcdFile (std::string filename)
     viewer->removeAllShapes();
 
     if (ui->showPointsCheckbox->isChecked()) {
-        viewer->addPointCloud (*cloud_smoothed, "cloud_smoothed");
+        viewer->addPointCloud(*cloud_smoothed, "cloud_smoothed");
     }
 
     if (ui->showMeshCheckbox->isChecked()) {
@@ -219,9 +215,8 @@ PCLViewer::loadPcdFile (std::string filename)
 }
 
 void
-PCLViewer::showPointsCheckBoxToggled(bool checked)
-{
-    if(checked && !viewer->contains("cloud_smoothed")) {
+PCLViewer::showPointsCheckBoxToggled(bool checked) {
+    if (checked && !viewer->contains("cloud_smoothed")) {
         viewer->addPointCloud(*this->cloud_smoothed, "cloud_smoothed");
     } else if (viewer->contains("cloud_smoothed")) {
         viewer->removePointCloud("cloud_smoothed");
@@ -230,38 +225,33 @@ PCLViewer::showPointsCheckBoxToggled(bool checked)
 }
 
 void
-PCLViewer::showMeshCheckBoxToggled(bool checked)
-{
-    if(checked && !viewer->contains("mesh")) {
+PCLViewer::showMeshCheckBoxToggled(bool checked) {
+    if (checked && !viewer->contains("mesh")) {
         viewer->addPolygonMesh(*this->mesh, "mesh");
-    } else if (viewer->contains("mesh")){
+    } else if (viewer->contains("mesh")) {
         viewer->removePolygonMesh("mesh");
     }
     ui->qvtkWidget->update();
 }
 
 void
-PCLViewer::disableUi()
-{
+PCLViewer::disableUi() {
     setUiEnabled(false);
 }
 
 void
-PCLViewer::enableUi()
-{
+PCLViewer::enableUi() {
     setUiEnabled(true);
 }
 
 void
-PCLViewer::setUiEnabled(bool enabled)
-{
+PCLViewer::setUiEnabled(bool enabled) {
     ui->showPointsCheckbox->setEnabled(enabled);
     ui->showMeshCheckbox->setEnabled(enabled);
 }
-  
+
 bool
-PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
-{
+PCLViewer::updateProgress(int step, QString message, QProgressDialog *dialog) {
     std::cout << "Progress (" << step << "): " << message.toUtf8().constData() << std::endl;
     if (dialog->wasCanceled()) return false;
     dialog->setValue(step);
@@ -271,15 +261,13 @@ PCLViewer::updateProgress (int step, QString message, QProgressDialog *dialog)
 }
 
 void
-PCLViewer::resetCamera()
-{
+PCLViewer::resetCamera() {
     viewer->resetCamera();
     ui->qvtkWidget->update();
 }
 
 void
-PCLViewer::applyPoisson(PoissonParams poissonParams)
-{
+PCLViewer::applyPoisson(PoissonParams poissonParams) {
     std::cout << "Computing mesh using Poisson" << std::endl;
 
     pcl::Poisson<pcl::PointNormal> poisson;
@@ -289,8 +277,7 @@ PCLViewer::applyPoisson(PoissonParams poissonParams)
 }
 
 void
-PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params)
-{
+PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params) {
     std::cout << "Computing mesh using GreedyProjectionTriangulation" << std::endl;
 
     pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
@@ -302,8 +289,7 @@ PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParam
 }
 
 void
-PCLViewer::applyMarchingCubes(MarchingCubesParams params)
-{
+PCLViewer::applyMarchingCubes(MarchingCubesParams params) {
     std::cout << "Computing mesh using Marching Cubes" << std::endl;
 
     pcl::MarchingCubesHoppe<pcl::PointNormal> mc;
@@ -321,7 +307,6 @@ PCLViewer::applyMarchingCubes(MarchingCubesParams params)
     mc.reconstruct(*mesh);
 }
 
-PCLViewer::~PCLViewer ()
-{
-  delete ui;
+PCLViewer::~PCLViewer() {
+    delete ui;
 }

@@ -5,16 +5,15 @@
 #include "params.h"
 
 namespace Ui {
-class GreedyProjectionTriangulationParamsDialog;
+    class GreedyProjectionTriangulationParamsDialog;
 }
 
-class GreedyProjectionTriangulationParamsDialog : public QDialog
-{
-    Q_OBJECT
+class GreedyProjectionTriangulationParamsDialog : public QDialog {
+Q_OBJECT
 
 public:
     explicit GreedyProjectionTriangulationParamsDialog(
-            QWidget *parent = 0, GreedyProjectionTriangulationParams* previousParams = nullptr);
+            QWidget *parent = 0, GreedyProjectionTriangulationParams *previousParams = nullptr);
 
     GreedyProjectionTriangulationParams getParams();
 

@@ -5,15 +5,15 @@
 #include "params.h"
 
 namespace Ui {
-class PoissonParamsDialog;
+    class PoissonParamsDialog;
 }
 
-class PoissonParamsDialog : public QDialog
-{
-    Q_OBJECT
+class PoissonParamsDialog : public QDialog {
+Q_OBJECT
 
 public:
-    explicit PoissonParamsDialog(QWidget *parent = 0, PoissonParams* previousParams = nullptr);
+    explicit PoissonParamsDialog(QWidget *parent = 0, PoissonParams *previousParams = nullptr);
+
     ~PoissonParamsDialog();
 
     PoissonParams getParams();

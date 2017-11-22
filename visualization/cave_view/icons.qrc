@@ -1,5 +1,5 @@
 <RCC>
-<qresource>
-    <file>duck.ico</file>
-</qresource>
+    <qresource>
+        <file>duck.ico</file>
+    </qresource>
 </RCC>
