@@ -334,39 +334,36 @@ PCLViewer::removeOutliers()
 
     int len = cloud->size();
     std::cout << "Original size: " << cloud->size() << std::endl;
-    int low5 = static_cast<int>(len * 0.05);
-    int high95 = static_cast<int>(len * 0.95);
-    int countUp95 = len - high95;
-
-    std::cout << "Remove outliers, low5: " << low5 << " high95: " << high95 << ", countUp95: " << countUp95
-              << std::endl;
+    int lowIdx = static_cast<int>(len * 0.03);
+    int highIdx = static_cast<int>(len * 0.97);
+    int countUp = len - highIdx;
 
     auto it = cloud->begin();
 
-    for (int i = 0; i < low5; ++i) {
+    for (int i = 0; i < lowIdx; ++i) {
         it++;
     }
-    float low5Val = distance(it);
+    float lowVal = distance(it);
 
     it = cloud->end();
     --it;
-    for (int i = countUp95; i >= 0; i--) {
+    for (int i = countUp; i >= 0; i--) {
         it--;
     }
-    float high95Val = distance(it);
+    float highVal = distance(it);
 
     it = cloud->begin();
     for (it = cloud->begin(); it < cloud->end();) {
         auto it2 = it;
         ++it;
-        if (distance(it) < low5Val || distance(it) > high95Val) {
+        if (distance(it) < lowVal || distance(it) > highVal) {
             cloud->erase(it2);
         }
     }
 
     it = cloud->end();
     --it;
-    for (int i = countUp95; i >= 0; --i) {
+    for (int i = countUp; i >= 0; --i) {
         auto it2 = it;
         --it;
         cloud->erase(it2);
