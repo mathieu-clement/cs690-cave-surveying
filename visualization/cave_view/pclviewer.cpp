@@ -22,7 +22,8 @@
 
 PCLViewer::PCLViewer(QWidget *parent) :
         QMainWindow(parent),
-        ui(new Ui::PCLViewer) {
+        ui(new Ui::PCLViewer)
+{
     ui->setupUi(this);
     this->setWindowTitle("Cave Viewer");
     this->setWindowIcon(QIcon(":/duck.ico"));
@@ -56,12 +57,14 @@ PCLViewer::PCLViewer(QWidget *parent) :
 }
 
 void
-PCLViewer::changeParameters() {
+PCLViewer::changeParameters()
+{
     loadPcdFile(lastFilename);
 }
 
 void
-PCLViewer::loadFileButtonPressed() {
+PCLViewer::loadFileButtonPressed()
+{
     QString fileName = QFileDialog::getOpenFileName(
             this,
             "Load point cloud data file",
@@ -75,7 +78,8 @@ PCLViewer::loadFileButtonPressed() {
 }
 
 void
-PCLViewer::loadPcdFile(std::string filename) {
+PCLViewer::loadPcdFile(std::string filename)
+{
     std::cout << "Loading file: " << filename << std::endl;
 
     disableUi();
@@ -93,6 +97,9 @@ PCLViewer::loadPcdFile(std::string filename) {
     // http://www.pointclouds.org/assets/icra2012/surface.pdf
 
     pcl::io::loadPCDFile(filename.c_str(), *cloud);
+
+    removeOutliers();
+    colorize();
 
     ParamsLoader paramsLoader = filename;
     Params previousParams;
@@ -118,23 +125,23 @@ PCLViewer::loadPcdFile(std::string filename) {
 
     if (smoothingChanged) {
         if (!updateProgress(1, "Smoothing", &progress)) return;
-        pcl::PointCloud<pcl::PointXYZ>::Ptr *pCloud_smoothed;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr *pCloud_smoothed;
 
         if (params.mlsEnabled) {
-            pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ> mls;
+            pcl::MovingLeastSquares<pcl::PointXYZRGB, pcl::PointXYZRGB> mls;
             mls.setInputCloud(cloud);
             mls.setSearchRadius(params.mlsSearchRadius);
             mls.setPolynomialFit(true);
             mls.setPolynomialOrder(params.mlsPolynomialOrder);
-            mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ>::SAMPLE_LOCAL_PLANE);
+            mls.setUpsamplingMethod(pcl::MovingLeastSquares<pcl::PointXYZRGB, pcl::PointXYZRGB>::SAMPLE_LOCAL_PLANE);
             mls.setUpsamplingRadius(params.mlsUpsamplingRadius);
             mls.setUpsamplingStepSize(params.mlsUpsamplingStepSize);
 
-            pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
+            pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZRGB>::Ptr(new pcl::PointCloud<pcl::PointXYZRGB>());
             this->cloud_smoothed = pCloud_smoothed;
             mls.process(**pCloud_smoothed);
         } else {
-            pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZ>::Ptr(cloud);
+            pCloud_smoothed = new pcl::PointCloud<pcl::PointXYZRGB>::Ptr(cloud);
         }
 
         this->cloud_smoothed = pCloud_smoothed;
@@ -143,7 +150,7 @@ PCLViewer::loadPcdFile(std::string filename) {
     if ((smoothingChanged || normalsChanged) && params.meshAlgorithm != noMesh) {
         if (!updateProgress(2, "Estimating normals", &progress)) return;
 
-        pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> ne;
+        pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> ne;
         ne.setNumberOfThreads(params.normalsThreads);
         ne.setInputCloud(*cloud_smoothed);
         ne.setRadiusSearch(params.normalsSearchRadius);
@@ -162,7 +169,8 @@ PCLViewer::loadPcdFile(std::string filename) {
 
         if (!updateProgress(3, "Concatenating points and normals", &progress)) return;
 
-        cloud_smoothed_normals = new pcl::PointCloud<pcl::PointNormal>::Ptr(new pcl::PointCloud<pcl::PointNormal>());
+        cloud_smoothed_normals = new pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr(
+                new pcl::PointCloud<pcl::PointXYZRGBNormal>());
         pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
     }
 
@@ -225,7 +233,8 @@ PCLViewer::loadPcdFile(std::string filename) {
 }
 
 void
-PCLViewer::showPointsCheckBoxToggled(bool checked) {
+PCLViewer::showPointsCheckBoxToggled(bool checked)
+{
     if (checked && !viewer->contains("cloud_smoothed")) {
         viewer->addPointCloud(*this->cloud_smoothed, "cloud_smoothed");
     } else if (viewer->contains("cloud_smoothed")) {
@@ -235,7 +244,8 @@ PCLViewer::showPointsCheckBoxToggled(bool checked) {
 }
 
 void
-PCLViewer::showMeshCheckBoxToggled(bool checked) {
+PCLViewer::showMeshCheckBoxToggled(bool checked)
+{
     if (checked && !viewer->contains("mesh")) {
         viewer->addPolygonMesh(*this->mesh, "mesh");
     } else if (viewer->contains("mesh")) {
@@ -245,23 +255,27 @@ PCLViewer::showMeshCheckBoxToggled(bool checked) {
 }
 
 void
-PCLViewer::disableUi() {
+PCLViewer::disableUi()
+{
     setUiEnabled(false);
 }
 
 void
-PCLViewer::enableUi() {
+PCLViewer::enableUi()
+{
     setUiEnabled(true);
 }
 
 void
-PCLViewer::setUiEnabled(bool enabled) {
+PCLViewer::setUiEnabled(bool enabled)
+{
     ui->showPointsCheckbox->setEnabled(enabled);
     ui->showMeshCheckbox->setEnabled(enabled);
 }
 
 bool
-PCLViewer::updateProgress(int step, QString message, QProgressDialog *dialog) {
+PCLViewer::updateProgress(int step, QString message, QProgressDialog *dialog)
+{
     std::cout << "Progress (" << step << "): " << message.toUtf8().constData() << std::endl;
     if (dialog->wasCanceled()) return false;
     dialog->setValue(step);
@@ -271,26 +285,113 @@ PCLViewer::updateProgress(int step, QString message, QProgressDialog *dialog) {
 }
 
 void
-PCLViewer::resetCamera() {
+PCLViewer::resetCamera()
+{
     viewer->resetCamera();
     ui->qvtkWidget->update();
 }
 
+float
+PCLViewer::distance(pcl::PointCloud<pcl::PointXYZRGB>::iterator it)
+{
+    return sqrt(it->x * it->x + it->y * it->y + it->z * it->z);
+}
+
+float
+PCLViewer::distance(pcl::PointXYZRGB p)
+{
+    return sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+}
+
 void
-PCLViewer::applyPoisson(PoissonParams poissonParams) {
+PCLViewer::colorize()
+{
+    double maxDistance = 0.0;
+
+    for (auto it = cloud->begin(); it < cloud->end(); ++it) {
+        float d = distance(it);
+        if (d > maxDistance) maxDistance = d;
+    }
+
+    std::cout << "Max distance: " << maxDistance << std::endl;
+
+    for (auto it = cloud->begin(); it < cloud->end(); ++it) {
+        float d = distance(it);
+        auto value = static_cast<uint8_t>(255 * d / maxDistance);
+        it->r = value;
+        it->g = static_cast<uint8_t>(255 - value);
+    }
+}
+
+void
+PCLViewer::removeOutliers()
+{
+    std::sort(cloud->begin(), cloud->end(), [this](pcl::PointXYZRGB &p1, pcl::PointXYZRGB &p2) {
+        float d1 = distance(p1);
+        float d2 = distance(p2);
+        return d1 < d2;
+    });
+
+    int len = cloud->size();
+    std::cout << "Original size: " << cloud->size() << std::endl;
+    int low5 = static_cast<int>(len * 0.05);
+    int high95 = static_cast<int>(len * 0.95);
+    int countUp95 = len - high95;
+
+    std::cout << "Remove outliers, low5: " << low5 << " high95: " << high95 << ", countUp95: " << countUp95
+              << std::endl;
+
+    auto it = cloud->begin();
+
+    for (int i = 0; i < low5; ++i) {
+        it++;
+    }
+    float low5Val = distance(it);
+
+    it = cloud->end();
+    --it;
+    for (int i = countUp95; i >= 0; i--) {
+        it--;
+    }
+    float high95Val = distance(it);
+
+    it = cloud->begin();
+    for (it = cloud->begin(); it < cloud->end();) {
+        auto it2 = it;
+        ++it;
+        if (distance(it) < low5Val || distance(it) > high95Val) {
+            cloud->erase(it2);
+        }
+    }
+
+    it = cloud->end();
+    --it;
+    for (int i = countUp95; i >= 0; --i) {
+        auto it2 = it;
+        --it;
+        cloud->erase(it2);
+    }
+
+    std::cout << "New size: " << cloud->size() << std::endl;
+}
+
+void
+PCLViewer::applyPoisson(PoissonParams poissonParams)
+{
     std::cout << "Computing mesh using Poisson" << std::endl;
 
-    pcl::Poisson<pcl::PointNormal> poisson;
+    pcl::Poisson<pcl::PointXYZRGBNormal> poisson;
     poisson.setDepth(poissonParams.poissonDepth);
     poisson.setInputCloud(*cloud_smoothed_normals);
     poisson.reconstruct(*mesh);
 }
 
 void
-PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params) {
+PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParams params)
+{
     std::cout << "Computing mesh using GreedyProjectionTriangulation" << std::endl;
 
-    pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
+    pcl::GreedyProjectionTriangulation<pcl::PointXYZRGBNormal> gp3;
     gp3.setMaximumNearestNeighbors(params.maxNearestNeighbors);
     gp3.setSearchRadius(params.searchRadius);
     gp3.setMu(params.mu);
@@ -299,10 +400,11 @@ PCLViewer::applyGreedyProjectionTriangulation(GreedyProjectionTriangulationParam
 }
 
 void
-PCLViewer::applyMarchingCubes(MarchingCubesParams params) {
+PCLViewer::applyMarchingCubes(MarchingCubesParams params)
+{
     std::cout << "Computing mesh using Marching Cubes" << std::endl;
 
-    pcl::MarchingCubesHoppe<pcl::PointNormal> mc;
+    pcl::MarchingCubesHoppe<pcl::PointXYZRGBNormal> mc;
 
     mc.setIsoLevel(params.isoLevel);
     mc.setGridResolution(params.gridResolutionX, params.gridResolutionY, params.gridResolutionZ);
@@ -317,6 +419,7 @@ PCLViewer::applyMarchingCubes(MarchingCubesParams params) {
     mc.reconstruct(*mesh);
 }
 
-PCLViewer::~PCLViewer() {
+PCLViewer::~PCLViewer()
+{
     delete ui;
 }

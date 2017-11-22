@@ -17,7 +17,7 @@
 
 #include "params.h"
 
-typedef pcl::PointXYZ PointT;
+typedef pcl::PointXYZRGB PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
 
 namespace Ui {
@@ -65,8 +65,8 @@ protected:
 private:
     Ui::PCLViewer *ui;
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr *cloud_smoothed;
-    pcl::PointCloud<pcl::PointNormal>::Ptr *cloud_smoothed_normals;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr *cloud_smoothed;
+    pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr *cloud_smoothed_normals;
     pcl::PolygonMesh *mesh;
     std::string lastFilename = "";
 
@@ -85,6 +85,18 @@ private:
 
     void
     applyMarchingCubes(MarchingCubesParams params);
+
+    float
+    distance(pcl::PointCloud<pcl::PointXYZRGB>::iterator it);
+
+    float
+    distance(pcl::PointXYZRGB p);
+
+    void
+    removeOutliers();
+
+    void
+    colorize();
 };
 
 #endif // PCLVIEWER_H
