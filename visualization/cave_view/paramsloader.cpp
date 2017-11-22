@@ -72,6 +72,10 @@ ParamsLoader::read() {
             break;
         }
 
+        case noMesh: {
+            params = {};
+        }
+
         default:
             throw params.meshAlgorithm;
     }
@@ -109,6 +113,9 @@ ParamsLoader::write(Params params) {
             JADD(j["meshParams"], params.meshParams.marchingCubesParams, gridResolutionZ);
             JADD(j["meshParams"], params.meshParams.marchingCubesParams, gridExtensionPercentage);
             break;
+
+        case noMesh:
+            break;
     }
 
     std::ofstream o(jsonFilepath.toUtf8().constData());
@@ -126,5 +133,5 @@ ParamsLoader::makeJsonFilepath(std::string pcdFilepath) {
 
 std::string
 ParamsLoader::basename(std::string filename) {
-    return filename.substr(0, filename.find_last_of("."));
+    return filename.substr(0, filename.find_last_of('.'));
 }

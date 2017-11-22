@@ -47,6 +47,9 @@ ParamsDialog::activateMeshAlgorithm(int index) {
     // Default values
 
     meshAlgorithm = getSelectedMeshAlgorithm();
+
+    ui->configureMeshButton->setEnabled(meshAlgorithm != noMesh);
+
     switch (meshAlgorithm) {
         case poisson: {
             meshParams.poissonParams = (PoissonParams) {9};
@@ -64,6 +67,9 @@ ParamsDialog::activateMeshAlgorithm(int index) {
             };
             break;
         }
+        case noMesh:
+            meshParams = (MeshParams) { };
+            break;
     }
 }
 
@@ -108,6 +114,8 @@ ParamsDialog::getSelectedMeshAlgorithm() {
             return greedyProjectionTriangulation;
         case 2:
             return marchingCubes;
+        case 3:
+            return noMesh;
     }
     std::cerr << "Mesh algorithm of index '" << activeMeshAlgorithmIndex << "' unknown." << std::endl;
     throw activeMeshAlgorithmIndex;
@@ -135,6 +143,10 @@ ParamsDialog::loadParams(Params *params) {
             break;
         case marchingCubes:
             index = 2;
+            break;
+        case noMesh:
+            index = 3;
+            ui->configureMeshButton->setEnabled(false);
             break;
         default: {
             std::cerr << "Mesh algorithm '" << params->meshAlgorithm << "' unknown." << std::endl;
