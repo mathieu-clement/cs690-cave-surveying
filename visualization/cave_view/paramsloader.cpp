@@ -74,6 +74,7 @@ ParamsLoader::read() {
 
         case noMesh: {
             params = {};
+            break;
         }
 
         default:
