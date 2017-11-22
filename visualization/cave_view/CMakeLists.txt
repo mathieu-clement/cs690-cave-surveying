@@ -11,7 +11,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(VTK 8.0.1 REQUIRED NO_MODULE)
 find_package(PCL 1.7.1 REQUIRED)
 
-include_directories(${PCL_INCLUDE_DIRS})
+include_directories(SYSTEM ${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
@@ -27,7 +27,7 @@ QT5_WRAP_CPP(project_HEADERS_MOC ${project_HEADERS})
 QT5_WRAP_UI(project_FORMS_HEADERS ${project_FORMS})
 QT5_ADD_RESOURCES(project_RESOURCES ${project_RESOURCES})
 
-include_directories(${Qt5Widgets_INCLUDES})
+include_directories(SYSTEM ${Qt5Widgets_INCLUDES})
 add_definitions(${Qt5Widgets_DEFINITIONS})
 
 ADD_EXECUTABLE(pcl_visualizer ${project_SOURCES}
