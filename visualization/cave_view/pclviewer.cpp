@@ -34,7 +34,7 @@ PCLViewer::PCLViewer(QWidget *parent) :
     // Set up the QVTK window
     viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
     viewer->setShowFPS(false);
-    viewer->setBackgroundColor(0.1, 0.1, 0.1);
+    setBackgroundColor(0.2f);
     ui->qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(ui->qvtkWidget->GetInteractor(), ui->qvtkWidget->GetRenderWindow());
     ui->qvtkWidget->update();
@@ -48,12 +48,59 @@ PCLViewer::PCLViewer(QWidget *parent) :
     connect(ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
     connect(ui->showMeshCheckbox, SIGNAL(toggled(bool)), this, SLOT(showMeshCheckBoxToggled(bool)));
 
+    // Connect sliders
+    connect(ui->backgroundSlider, SIGNAL(sliderMoved(int)), this, SLOT(setBackgroundColorInt(int)));
+    connect(ui->backgroundSlider, SIGNAL(valueChanged(int)), this, SLOT(setBackgroundColorInt(int)));
+
     // Controls inactive until file is loaded
     disableUi();
     ui->filenameLabel->setText(QString::Null());
 
     this->raise();
     this->activateWindow();
+    grabKeyboard();
+}
+
+void
+PCLViewer::setBackgroundColor(float grayLevel)
+{
+    viewer->setBackgroundColor(grayLevel, grayLevel, grayLevel);
+    ui->qvtkWidget->update();
+}
+
+void
+PCLViewer::setBackgroundColorInt(int percents)
+{
+    setBackgroundColor(percents/100.0f);
+}
+
+void
+PCLViewer::keyReleaseEvent(QKeyEvent *event)
+{
+    // Pressing "W" enables the wireframe-based representation
+    // Pressing "P" enables the point-based representation
+    // In both cases, the background color is forced to black because
+    // both modes use white in the foreground.
+    if(event->key() == Qt::Key_W || event->key() == Qt::Key_P)
+    {
+        ui->backgroundSlider->setValue(0);
+        setBackgroundColor(0.0f);
+    }
+
+    if (event->key() == Qt::Key_W) {
+        viewer->setRepresentationToWireframeForAllActors();
+        ui->qvtkWidget->update();
+    } else if (event->key() == Qt::Key_P) {
+        viewer->setRepresentationToPointsForAllActors();
+        ui->qvtkWidget->update();
+    } else if (event->key() == Qt::Key_S) {
+        viewer->setRepresentationToSurfaceForAllActors();
+        ui->qvtkWidget->update();
+    } else if (event->key() == Qt::Key_J) {
+        viewer->saveScreenshot("screenshot.png");
+    }
+
+    QMainWindow::keyReleaseEvent(event);
 }
 
 void
@@ -207,6 +254,8 @@ PCLViewer::loadPcdFile(std::string filename)
 
     viewer->removeAllPointClouds();
     viewer->removeAllShapes();
+
+    //viewer->addPointCloudNormals(*cloud_smoothed, *cloud_smoothed_normals, 100, 0.02f, "cloud_normals");
 
     if (ui->showPointsCheckbox->isChecked()) {
         addPointCloud();

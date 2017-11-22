@@ -4,6 +4,7 @@
 #include <iostream>
 
 // Qt
+#include <QKeyEvent>
 #include <QMainWindow>
 #include <QProgressDialog>
 
@@ -49,6 +50,9 @@ public Q_SLOTS:
     void
     resetCamera();
 
+    void
+    setBackgroundColorInt(int percents);
+
 protected:
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
     PointCloudT::Ptr cloud;
@@ -61,6 +65,9 @@ protected:
 
     void
     enableUi();
+
+    void
+    keyReleaseEvent(QKeyEvent *);
 
 private:
     Ui::PCLViewer *ui;
@@ -97,6 +104,9 @@ private:
 
     void
     addPointCloud();
+
+    void
+    setBackgroundColor(float grayLevel);
 
     void
     colorize();
