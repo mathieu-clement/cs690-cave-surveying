@@ -96,6 +96,9 @@ private:
     removeOutliers();
 
     void
+    addPointCloud();
+
+    void
     colorize();
 };
 

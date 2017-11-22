@@ -34,7 +34,7 @@ PCLViewer::PCLViewer(QWidget *parent) :
     // Set up the QVTK window
     viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
     viewer->setShowFPS(false);
-    viewer->setBackgroundColor(0.2, 0.2, 0.2);
+    viewer->setBackgroundColor(0.1, 0.1, 0.1);
     ui->qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(ui->qvtkWidget->GetInteractor(), ui->qvtkWidget->GetRenderWindow());
     ui->qvtkWidget->update();
@@ -209,7 +209,7 @@ PCLViewer::loadPcdFile(std::string filename)
     viewer->removeAllShapes();
 
     if (ui->showPointsCheckbox->isChecked()) {
-        viewer->addPointCloud(*cloud_smoothed, "cloud_smoothed");
+        addPointCloud();
     }
 
     if (ui->showMeshCheckbox->isChecked() && mesh != nullptr) {
@@ -233,10 +233,18 @@ PCLViewer::loadPcdFile(std::string filename)
 }
 
 void
+PCLViewer::addPointCloud()
+{
+    viewer->addPointCloud(*this->cloud_smoothed, "cloud_smoothed");
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "cloud_smoothed");
+
+}
+
+void
 PCLViewer::showPointsCheckBoxToggled(bool checked)
 {
     if (checked && !viewer->contains("cloud_smoothed")) {
-        viewer->addPointCloud(*this->cloud_smoothed, "cloud_smoothed");
+        addPointCloud();
     } else if (viewer->contains("cloud_smoothed")) {
         viewer->removePointCloud("cloud_smoothed");
     }
@@ -320,7 +328,7 @@ PCLViewer::colorize()
         auto value = static_cast<uint8_t>(255 * d / maxDistance);
         it->r = value;
         it->g = static_cast<uint8_t>(255 - value);
-        it->b = 192;
+        it->b = 64;
     }
 }
 
@@ -335,7 +343,7 @@ PCLViewer::removeOutliers()
 
     int len = cloud->size();
     std::cout << "Original size: " << cloud->size() << std::endl;
-    int lowIdx = static_cast<int>(len * 0.03);
+    int lowIdx = static_cast<int>(len * 0.01);
     int highIdx = static_cast<int>(len * 0.97);
     int countUp = len - highIdx;
 
