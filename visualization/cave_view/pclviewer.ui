@@ -179,22 +179,6 @@
      <string>Zoom out</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>200</y>
-      <width>211</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Keyboard shorcuts:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;j, J : screenshot&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-    </property>
-   </widget>
    <widget class="QSlider" name="backgroundSlider">
     <property name="geometry">
      <rect>
@@ -231,7 +215,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>250</y>
+      <y>190</y>
       <width>141</width>
       <height>101</height>
      </rect>

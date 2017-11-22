@@ -381,6 +381,8 @@ PCLViewer::setUiEnabled(bool enabled)
     ui->meshAsSurfaceRadioButton->setEnabled(enabled);
     ui->meshAsWireframeRadioButton->setEnabled(enabled);
 
+    ui->resetButton->setEnabled(enabled);
+
     ui->backgroundSlider->setEnabled(enabled);
 }
 
