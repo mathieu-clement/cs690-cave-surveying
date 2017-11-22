@@ -53,6 +53,9 @@ public Q_SLOTS:
     void
     setBackgroundColorInt(int percents);
 
+    void
+    radioButtonToggled(bool state);
+
 protected:
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
     PointCloudT::Ptr cloud;
@@ -109,7 +112,19 @@ private:
     setBackgroundColor(float grayLevel);
 
     void
+    setBackgroundBlack();
+
+    void
     colorize();
+
+    void
+    showMeshAsWireframe();
+
+    void
+    showMeshAsPoints();
+
+    void
+    showMeshAsSurface();
 };
 
 #endif // PCLVIEWER_H
