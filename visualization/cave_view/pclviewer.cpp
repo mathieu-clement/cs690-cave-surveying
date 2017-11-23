@@ -362,12 +362,14 @@ PCLViewer::radioButtonToggled(bool state)
 void
 PCLViewer::disableUi()
 {
+    releaseKeyboard();
     setUiEnabled(false);
 }
 
 void
 PCLViewer::enableUi()
 {
+    grabKeyboard();
     setUiEnabled(true);
 }
 
