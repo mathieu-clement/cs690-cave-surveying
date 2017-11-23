@@ -236,17 +236,20 @@ PCLViewer::loadPcdFile(std::string filename)
         ne.setInputCloud(*cloud_smoothed);
         ne.setRadiusSearch(params.normalsSearchRadius);
         Eigen::Vector4f centroid;
-        pcl::compute3DCentroid(**cloud_smoothed, centroid);
-        ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
+        //pcl::compute3DCentroid(**cloud_smoothed, centroid);
+        //ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
+        ne.setViewPoint(0.0f, 0.0f, 0.0f);
 
         pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal>());
         ne.compute(*cloud_normals);
 
+        /*
         for (size_t i = 0; i < cloud_normals->size(); ++i) {
             cloud_normals->points[i].normal_x *= -1;
             cloud_normals->points[i].normal_y *= -1;
             cloud_normals->points[i].normal_z *= -1;
         }
+        */
 
         if (!updateProgress(3, "Concatenating points and normals", &progress)) return;
 
