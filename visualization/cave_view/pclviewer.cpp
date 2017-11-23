@@ -76,7 +76,7 @@ PCLViewer::setBackgroundColor(float grayLevel)
 void
 PCLViewer::setBackgroundColorInt(int percents)
 {
-    setBackgroundColor(percents/100.0f);
+    setBackgroundColor(percents / 100.0f);
 }
 
 void
@@ -109,7 +109,7 @@ void
 PCLViewer::showMeshAsWireframe()
 {
     viewer->setRepresentationToWireframeForAllActors();
-    if(ui->backgroundSlider->value() > 60) {
+    if (ui->backgroundSlider->value() > 60) {
         setBackgroundBlack();
     }
     ui->qvtkWidget->update();
@@ -119,7 +119,7 @@ void
 PCLViewer::showMeshAsPoints()
 {
     viewer->setRepresentationToPointsForAllActors();
-    if(ui->backgroundSlider->value() > 60) {
+    if (ui->backgroundSlider->value() > 60) {
         setBackgroundBlack();
     }
     ui->qvtkWidget->update();
@@ -174,9 +174,6 @@ PCLViewer::loadPcdFile(std::string filename)
 
     pcl::io::loadPCDFile(filename.c_str(), *cloud);
 
-    removeOutliers();
-    colorize();
-
     ParamsLoader paramsLoader = filename;
     Params previousParams;
     Params *p_previousParams = nullptr;
@@ -195,11 +192,17 @@ PCLViewer::loadPcdFile(std::string filename)
     Params params = dialog.getParams();
     paramsLoader.write(params);
 
+    bool removeOutliersChanged = removeOutliersParamsChanged(p_previousParams, &params) || filename != lastFilename;
     bool smoothingChanged = smoothingParamsChanged(p_previousParams, &params) || filename != lastFilename;
     bool normalsChanged = normalsParamsChanged(p_previousParams, &params) || filename != lastFilename;
     lastFilename = filename;
 
-    if (smoothingChanged) {
+    if (removeOutliersChanged) {
+        removeOutliers();
+        colorize();
+    }
+
+    if (removeOutliersChanged || smoothingChanged) {
         if (!updateProgress(1, "Smoothing", &progress)) return;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr *pCloud_smoothed;
 
@@ -223,7 +226,7 @@ PCLViewer::loadPcdFile(std::string filename)
         this->cloud_smoothed = pCloud_smoothed;
     }
 
-    if ((smoothingChanged || normalsChanged) && params.meshAlgorithm != noMesh) {
+    if ((removeOutliersChanged || smoothingChanged || normalsChanged) && params.meshAlgorithm != noMesh) {
         if (!updateProgress(2, "Estimating normals", &progress)) return;
 
         pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> ne;

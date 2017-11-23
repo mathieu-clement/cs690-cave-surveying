@@ -25,6 +25,8 @@ public Q_SLOTS:
 
     void configureMesh();
 
+    void radioButtonToggled(bool state);
+
 protected:
     MeshAlgorithm meshAlgorithm;
     MeshParams meshParams;
@@ -35,6 +37,7 @@ protected:
 private:
     Ui::ParamsDialog *ui;
     MeshAlgorithm previousMeshAlgorithm;
+    bool removeOutliers = true;
 
     void loadParams(Params *params);
 };

@@ -1,6 +1,7 @@
 #include "paramsloader.h"
 
 #include "json.hpp"
+#include "params.h"
 #include <fstream>
 #include <iostream>
 #include <QDir>
@@ -37,6 +38,7 @@ ParamsLoader::read() {
 
     Params params;
 
+    JGET(j, params, removeOutliers);
     JGET(j, params, mlsEnabled);
     JGET(j, params, mlsSearchRadius);
     JGET(j, params, mlsPolynomialOrder);
@@ -87,6 +89,7 @@ ParamsLoader::read() {
 void
 ParamsLoader::write(Params params) {
     json j;
+    JADD(j, params, removeOutliers);
     JADD(j, params, mlsEnabled);
     JADD(j, params, mlsSearchRadius);
     JADD(j, params, mlsPolynomialOrder);
