@@ -128,6 +128,7 @@ ParamsDialog::getSelectedMeshAlgorithm() {
 void
 ParamsDialog::loadParams(Params *params) {
     ui->removeOutliersRadioButton->setChecked(params->removeOutliers);
+    ui->leaveOutliersRadioButton->setChecked(!params->removeOutliers);
     ui->mlsEnableCheckBox->setChecked(params->mlsEnabled);
     ui->mlsSearchRadiusSpinBox->setValue(params->mlsSearchRadius);
     ui->mlsUpsamplingStepSizeSpinBox->setValue(params->mlsUpsamplingStepSize);
