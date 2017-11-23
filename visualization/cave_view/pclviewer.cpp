@@ -311,6 +311,7 @@ PCLViewer::loadPcdFile(std::string filename)
     enableUi();
     if (params.meshAlgorithm == noMesh) {
         ui->showMeshCheckbox->setEnabled(false);
+        ui->showNormalsCheckbox->setEnabled(false);
         ui->showMeshCheckbox->setChecked(false);
         ui->meshAsSurfaceRadioButton->setEnabled(false);
         ui->meshAsPointsRadioButton->setEnabled(false);
