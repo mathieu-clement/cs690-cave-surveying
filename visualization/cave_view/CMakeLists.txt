@@ -30,36 +30,36 @@ QT5_ADD_RESOURCES(project_RESOURCES ${project_RESOURCES})
 include_directories(SYSTEM ${Qt5Widgets_INCLUDES})
 add_definitions(${Qt5Widgets_DEFINITIONS})
 
-ADD_EXECUTABLE(pcl_visualizer ${project_SOURCES}
+ADD_EXECUTABLE(cave_viewer ${project_SOURCES}
         ${project_FORMS_HEADERS}
         ${project_RESOURCES}
         ${project_HEADERS_MOC})
 
 #if(APPLE)
-#    set_target_properties (pcl_visualizer PROPERTIES
+#    set_target_properties (cave_viewer PROPERTIES
 #        MACOSX_BUNDLE YES
 #    )
 #endif(APPLE)
-TARGET_LINK_LIBRARIES(pcl_visualizer Qt5::Widgets ${PCL_LIBRARIES} ${VTK_LIBRARIES})
+TARGET_LINK_LIBRARIES(cave_viewer Qt5::Widgets ${PCL_LIBRARIES} ${VTK_LIBRARIES})
 
 #if(APPLE)
 #    add_custom_command(
-#        TARGET  pcl_visualizer POST_BUILD
+#        TARGET  cave_viewer POST_BUILD
 #        COMMAND ${CMAKE_COMMAND} -E copy
 #            ${CMAKE_SOURCE_DIR}/Info.plist
-#            ${CMAKE_CURRENT_BINARY_DIR}/pcl_visualizer.app/Contents/Info.plist)
+#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/Info.plist)
 #    add_custom_command(
-#        TARGET  pcl_visualizer POST_BUILD
+#        TARGET  cave_viewer POST_BUILD
 #        COMMAND ${CMAKE_COMMAND} -E make_directory
-#            ${CMAKE_CURRENT_BINARY_DIR}/pcl_visualizer.app/Contents/Resources/)
+#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/Resources/)
 #    add_custom_command(
-#        TARGET  pcl_visualizer POST_BUILD
+#        TARGET  cave_viewer POST_BUILD
 #        COMMAND ${CMAKE_COMMAND} -E copy
 #            ${CMAKE_SOURCE_DIR}/duck.icns
-#            ${CMAKE_CURRENT_BINARY_DIR}/pcl_visualizer.app/Contents/duck.icns)
+#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/duck.icns)
 #    add_custom_command(
-#        TARGET  pcl_visualizer POST_BUILD
+#        TARGET  cave_viewer POST_BUILD
 #        COMMAND ${CMAKE_COMMAND} -E copy
 #            ${CMAKE_SOURCE_DIR}/duck.icns
-#            ${CMAKE_CURRENT_BINARY_DIR}/pcl_visualizer.app/Contents/Resources/duck.icns)
+#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/Resources/duck.icns)
 #endif(APPLE)
