@@ -33,6 +33,10 @@ ParamsLoader::exists() {
 
 Params
 ParamsLoader::read() {
+    // Malformed JSON files WILL crash the program
+    // Older JSON format MIGHT crash the program
+    // TODO Add a "version" property
+
     json j;
     std::ifstream(jsonFilepath.toUtf8().constData()) >> j;
 

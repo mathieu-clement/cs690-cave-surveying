@@ -198,9 +198,13 @@ PCLViewer::loadPcdFile(std::string filename)
     lastFilename = filename;
 
     if (removeOutliersChanged) {
-        removeOutliers();
+        if (params.removeOutliers) {
+            removeOutliers();
+        }
         colorize();
     }
+
+    colorize();
 
     if (removeOutliersChanged || smoothingChanged) {
         if (!updateProgress(1, "Smoothing", &progress)) return;
