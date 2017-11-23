@@ -204,8 +204,6 @@ PCLViewer::loadPcdFile(std::string filename)
         colorize();
     }
 
-    colorize();
-
     if (removeOutliersChanged || smoothingChanged) {
         if (!updateProgress(1, "Smoothing", &progress)) return;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr *pCloud_smoothed;
