@@ -303,9 +303,12 @@ PCLViewer::loadPcdFile(std::string filename)
     ui->qvtkWidget->update();
 
     enableUi();
-    if (mesh == nullptr) {
+    if (params.meshAlgorithm == noMesh) {
         ui->showMeshCheckbox->setEnabled(false);
         ui->showMeshCheckbox->setChecked(false);
+        ui->meshAsSurfaceRadioButton->setEnabled(false);
+        ui->meshAsPointsRadioButton->setEnabled(false);
+        ui->meshAsWireframeRadioButton->setEnabled(false);
     }
 
     QFileInfo fi(QString::fromStdString(filename));
