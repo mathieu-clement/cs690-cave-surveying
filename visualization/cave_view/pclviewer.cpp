@@ -83,10 +83,13 @@ void
 PCLViewer::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_W) {
+        ui->meshAsWireframeRadioButton->setChecked(true);
         showMeshAsWireframe();
     } else if (event->key() == Qt::Key_P) {
+        ui->meshAsPointsRadioButton->setChecked(true);
         showMeshAsPoints();
     } else if (event->key() == Qt::Key_S) {
+        ui->meshAsSurfaceRadioButton->setChecked(true);
         showMeshAsSurface();
     } else if (event->key() == Qt::Key_J) {
         viewer->saveScreenshot("screenshot.png");
