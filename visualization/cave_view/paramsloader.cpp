@@ -79,7 +79,7 @@ ParamsLoader::read() {
         }
 
         case noMesh: {
-            params = {};
+            params.meshParams = {};
             break;
         }
 
