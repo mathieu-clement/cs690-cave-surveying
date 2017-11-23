@@ -3,6 +3,7 @@
 #include "build/ui_paramsdialog.h"
 #include "greedyprojectiontriangulationparamsdialog.h"
 #include "marchingcubesparamsdialog.h"
+#include "params.h"
 
 #include <iostream>
 
@@ -13,6 +14,8 @@ ParamsDialog::ParamsDialog(QWidget *parent, Params *previousParams) :
     this->setWindowTitle("Mesh Parameters");
     connect(ui->configureMeshButton, SIGNAL(clicked()), this, SLOT(configureMesh()));
     connect(ui->meshAlgorithmComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(activateMeshAlgorithm(int)));
+    connect(ui->removeOutliersRadioButton, SIGNAL(toggled(bool)), this, SLOT(radioButtonToggled(bool)));
+    connect(ui->leaveOutliersRadioButton, SIGNAL(toggled(bool)), this, SLOT(radioButtonToggled(bool)));
 
     if (previousParams != nullptr) {
         loadParams(previousParams);
@@ -32,6 +35,7 @@ ParamsDialog::getParams() {
     unsigned int normalsThreads = ui->normalsThreadsSpinBox->value();
 
     Params params = {
+            removeOutliers,
             mlsEnabled, mlsSearchRadius, mlsPolynomialOrder,
             mlsUpsamplingRadius, mlsUpsamplingStepSize,
             normalsSearchRadius, normalsThreads,
@@ -123,6 +127,7 @@ ParamsDialog::getSelectedMeshAlgorithm() {
 
 void
 ParamsDialog::loadParams(Params *params) {
+    ui->removeOutliersRadioButton->setChecked(params->removeOutliers);
     ui->mlsEnableCheckBox->setChecked(params->mlsEnabled);
     ui->mlsSearchRadiusSpinBox->setValue(params->mlsSearchRadius);
     ui->mlsUpsamplingStepSizeSpinBox->setValue(params->mlsUpsamplingStepSize);
@@ -159,6 +164,11 @@ ParamsDialog::loadParams(Params *params) {
     ui->meshAlgorithmComboBox->setCurrentIndex(index);
 
     meshParams = params->meshParams;
+}
+
+void ParamsDialog::radioButtonToggled(bool state)
+{
+    removeOutliers = ui->removeOutliersRadioButton->isChecked();
 }
 
 ParamsDialog::~ParamsDialog() {

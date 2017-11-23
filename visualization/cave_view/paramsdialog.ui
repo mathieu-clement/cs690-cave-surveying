@@ -1,401 +1,449 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>ParamsDialog</class>
-    <widget class="QDialog" name="ParamsDialog">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>411</width>
-                <height>481</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>Dialog</string>
-        </property>
-        <property name="modal">
-            <bool>true</bool>
-        </property>
-        <widget class="QLabel" name="label">
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>20</y>
-                    <width>371</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Moving Least Squares (smoothing + improve normals est.)</string>
-            </property>
-        </widget>
-        <widget class="QWidget" name="formLayoutWidget">
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>70</y>
-                    <width>361</width>
-                    <height>141</height>
-                </rect>
-            </property>
-            <layout class="QFormLayout" name="formLayout">
-                <item row="0" column="0">
-                    <widget class="QLabel" name="label_2">
-                        <property name="text">
-                            <string>Search radius:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="0">
-                    <widget class="QLabel" name="label_3">
-                        <property name="text">
-                            <string>Upsampling radius:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="2" column="0">
-                    <widget class="QLabel" name="label_4">
-                        <property name="text">
-                            <string>Upsampling step size:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="0" column="1">
-                    <widget class="QDoubleSpinBox" name="mlsSearchRadiusSpinBox">
-                        <property name="value">
-                            <double>10.000000000000000</double>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="mlsUpsamplingRadiusSpinBox">
-                        <property name="value">
-                            <double>5.000000000000000</double>
-                        </property>
-                    </widget>
-                </item>
-                <item row="2" column="1">
-                    <widget class="QDoubleSpinBox" name="mlsUpsamplingStepSizeSpinBox">
-                        <property name="value">
-                            <double>4.000000000000000</double>
-                        </property>
-                    </widget>
-                </item>
-                <item row="3" column="0">
-                    <widget class="QLabel" name="label_10">
-                        <property name="text">
-                            <string>Polynomial order:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="3" column="1">
-                    <widget class="QSpinBox" name="mlsPolynomialOrderSpinBox">
-                        <property name="minimum">
-                            <number>1</number>
-                        </property>
-                        <property name="maximum">
-                            <number>10</number>
-                        </property>
-                        <property name="value">
-                            <number>2</number>
-                        </property>
-                    </widget>
-                </item>
-            </layout>
-        </widget>
-        <widget class="QPushButton" name="okButton">
-            <property name="geometry">
-                <rect>
-                    <x>300</x>
-                    <y>440</y>
-                    <width>81</width>
-                    <height>32</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>OK</string>
-            </property>
-            <property name="default">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox" name="mlsEnableCheckBox">
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>50</y>
-                    <width>85</width>
-                    <height>18</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Enable</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QLabel" name="label_5">
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>360</y>
-                    <width>371</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Mesh / surface reconstruction</string>
-            </property>
-        </widget>
-        <widget class="QWidget" name="horizontalLayoutWidget">
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>390</y>
-                    <width>361</width>
-                    <height>31</height>
-                </rect>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                    <widget class="QLabel" name="label_6">
-                        <property name="text">
-                            <string>Algorithm:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QComboBox" name="meshAlgorithmComboBox">
-                        <item>
-                            <property name="text">
-                                <string>Poisson</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Greedy Projection Triangulation</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Marching Cubes</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>None</string>
-                            </property>
-                        </item>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QToolButton" name="configureMeshButton">
-                        <property name="text">
-                            <string>...</string>
-                        </property>
-                    </widget>
-                </item>
-            </layout>
-        </widget>
-        <widget class="QWidget" name="formLayoutWidget_2">
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>260</y>
-                    <width>361</width>
-                    <height>81</height>
-                </rect>
-            </property>
-            <layout class="QFormLayout" name="formLayout_2">
-                <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-                </property>
-                <item row="2" column="0">
-                    <widget class="QLabel" name="label_7">
-                        <property name="text">
-                            <string>Threads:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="2" column="1">
-                    <widget class="QSpinBox" name="normalsThreadsSpinBox">
-                        <property name="value">
-                            <number>8</number>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="0">
-                    <widget class="QLabel" name="label_8">
-                        <property name="text">
-                            <string>Search radius:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="normalsSearchRadiusSpinBox">
-                        <property name="value">
-                            <double>10.000000000000000</double>
-                        </property>
-                    </widget>
-                </item>
-            </layout>
-        </widget>
-        <widget class="QLabel" name="label_9">
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>230</y>
-                    <width>361</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Normals estimation</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" name="cancelButton">
-            <property name="geometry">
-                <rect>
-                    <x>210</x>
-                    <y>440</y>
-                    <width>91</width>
-                    <height>32</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Cancel</string>
-            </property>
-        </widget>
-    </widget>
-    <tabstops>
-        <tabstop>mlsEnableCheckBox</tabstop>
-        <tabstop>mlsSearchRadiusSpinBox</tabstop>
-        <tabstop>mlsUpsamplingRadiusSpinBox</tabstop>
-        <tabstop>mlsUpsamplingStepSizeSpinBox</tabstop>
-        <tabstop>mlsPolynomialOrderSpinBox</tabstop>
-        <tabstop>normalsSearchRadiusSpinBox</tabstop>
-        <tabstop>normalsThreadsSpinBox</tabstop>
-        <tabstop>meshAlgorithmComboBox</tabstop>
-        <tabstop>configureMeshButton</tabstop>
-        <tabstop>cancelButton</tabstop>
-        <tabstop>okButton</tabstop>
-    </tabstops>
-    <resources/>
-    <connections>
-        <connection>
-            <sender>okButton</sender>
-            <signal>clicked()</signal>
-            <receiver>ParamsDialog</receiver>
-            <slot>accept()</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>350</x>
-                    <y>175</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>199</x>
-                    <y>101</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>mlsEnableCheckBox</sender>
-            <signal>toggled(bool)</signal>
-            <receiver>mlsSearchRadiusSpinBox</receiver>
-            <slot>setEnabled(bool)</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>62</x>
-                    <y>58</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>271</x>
-                    <y>82</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>mlsEnableCheckBox</sender>
-            <signal>toggled(bool)</signal>
-            <receiver>mlsUpsamplingRadiusSpinBox</receiver>
-            <slot>setEnabled(bool)</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>62</x>
-                    <y>58</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>271</x>
-                    <y>116</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>mlsEnableCheckBox</sender>
-            <signal>toggled(bool)</signal>
-            <receiver>mlsUpsamplingStepSizeSpinBox</receiver>
-            <slot>setEnabled(bool)</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>62</x>
-                    <y>58</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>271</x>
-                    <y>150</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>mlsEnableCheckBox</sender>
-            <signal>toggled(bool)</signal>
-            <receiver>mlsPolynomialOrderSpinBox</receiver>
-            <slot>setEnabled(bool)</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>62</x>
-                    <y>58</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>268</x>
-                    <y>184</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>cancelButton</sender>
-            <signal>clicked()</signal>
-            <receiver>ParamsDialog</receiver>
-            <slot>reject()</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>255</x>
-                    <y>455</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>205</x>
-                    <y>240</y>
-                </hint>
-            </hints>
-        </connection>
-    </connections>
+ <class>ParamsDialog</class>
+ <widget class="QDialog" name="ParamsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>411</width>
+    <height>537</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>371</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Moving Least Squares (smoothing + improve normals est.)</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="formLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>361</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Search radius:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Upsampling radius:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Upsampling step size:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QDoubleSpinBox" name="mlsSearchRadiusSpinBox">
+      <property name="value">
+       <double>10.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QDoubleSpinBox" name="mlsUpsamplingRadiusSpinBox">
+      <property name="value">
+       <double>5.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QDoubleSpinBox" name="mlsUpsamplingStepSizeSpinBox">
+      <property name="value">
+       <double>4.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Polynomial order:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QSpinBox" name="mlsPolynomialOrderSpinBox">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>10</number>
+      </property>
+      <property name="value">
+       <number>2</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="okButton">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>500</y>
+     <width>81</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="mlsEnableCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>110</y>
+     <width>85</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enable</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>420</y>
+     <width>371</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Mesh / surface reconstruction</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>450</y>
+     <width>361</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Algorithm:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="meshAlgorithmComboBox">
+      <item>
+       <property name="text">
+        <string>Poisson</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Greedy Projection Triangulation</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Marching Cubes</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>None</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="configureMeshButton">
+      <property name="text">
+       <string>...</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="formLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>320</y>
+     <width>361</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout_2">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+    </property>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Threads:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QSpinBox" name="normalsThreadsSpinBox">
+      <property name="value">
+       <number>8</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Search radius:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QDoubleSpinBox" name="normalsSearchRadiusSpinBox">
+      <property name="value">
+       <double>10.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>290</y>
+     <width>361</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Normals estimation</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancelButton">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>500</y>
+     <width>91</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_11">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>371</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Outliers removal</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>30</y>
+     <width>361</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QRadioButton" name="removeOutliersRadioButton">
+      <property name="text">
+       <string>Remove outliers</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="leaveOutliersRadioButton">
+      <property name="text">
+       <string>Leave outliers</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>mlsEnableCheckBox</tabstop>
+  <tabstop>mlsSearchRadiusSpinBox</tabstop>
+  <tabstop>mlsUpsamplingRadiusSpinBox</tabstop>
+  <tabstop>mlsUpsamplingStepSizeSpinBox</tabstop>
+  <tabstop>mlsPolynomialOrderSpinBox</tabstop>
+  <tabstop>normalsSearchRadiusSpinBox</tabstop>
+  <tabstop>normalsThreadsSpinBox</tabstop>
+  <tabstop>meshAlgorithmComboBox</tabstop>
+  <tabstop>configureMeshButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>okButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ParamsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>350</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsSearchRadiusSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>82</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsUpsamplingRadiusSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>116</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsUpsamplingStepSizeSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>150</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mlsEnableCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mlsPolynomialOrderSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>184</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ParamsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>255</x>
+     <y>455</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>205</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

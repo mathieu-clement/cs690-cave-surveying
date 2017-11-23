@@ -39,6 +39,7 @@ typedef struct {
 } MeshParams;
 
 typedef struct {
+    bool removeOutliers;
     bool mlsEnabled;
     double mlsSearchRadius;
     unsigned int mlsPolynomialOrder;
@@ -49,6 +50,8 @@ typedef struct {
     MeshAlgorithm meshAlgorithm;
     MeshParams meshParams;
 } Params;
+
+bool removeOutliersParamsChanged(Params *p1, Params *p2);
 
 bool smoothingParamsChanged(Params *p1, Params *p2);
 
