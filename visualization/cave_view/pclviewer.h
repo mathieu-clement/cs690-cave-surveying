@@ -42,6 +42,9 @@ public Q_SLOTS:
     showPointsCheckBoxToggled(bool checked);
 
     void
+    showNormalsCheckboxToggled(bool checked);
+
+    void
     showMeshCheckBoxToggled(bool checked);
 
     void
@@ -76,6 +79,7 @@ private:
     Ui::PCLViewer *ui;
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr *cloud_smoothed;
+    pcl::PointCloud<pcl::Normal>::Ptr *cloud_normals;
     pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr *cloud_smoothed_normals;
     pcl::PolygonMesh *mesh;
     std::string lastFilename = "";
@@ -125,6 +129,12 @@ private:
 
     void
     showMeshAsSurface();
+
+    void
+    showNormals();
+
+    void
+    hideNormals();
 };
 
 #endif // PCLVIEWER_H

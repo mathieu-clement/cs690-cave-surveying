@@ -46,6 +46,7 @@ PCLViewer::PCLViewer(QWidget *parent) :
 
     // Connect checkboxes
     connect(ui->showPointsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showPointsCheckBoxToggled(bool)));
+    connect(ui->showNormalsCheckbox, SIGNAL(toggled(bool)), this, SLOT(showNormalsCheckboxToggled(bool)));
     connect(ui->showMeshCheckbox, SIGNAL(toggled(bool)), this, SLOT(showMeshCheckBoxToggled(bool)));
 
     // Connect radio buttons
@@ -240,8 +241,8 @@ PCLViewer::loadPcdFile(std::string filename)
         //ne.setViewPoint(centroid[0], centroid[1], centroid[2]);
         ne.setViewPoint(0.0f, 0.0f, 0.0f);
 
-        pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal>());
-        ne.compute(*cloud_normals);
+        cloud_normals = new pcl::PointCloud<pcl::Normal>::Ptr(new pcl::PointCloud<pcl::Normal>());
+        ne.compute(**cloud_normals);
 
         /*
         for (size_t i = 0; i < cloud_normals->size(); ++i) {
@@ -255,7 +256,7 @@ PCLViewer::loadPcdFile(std::string filename)
 
         cloud_smoothed_normals = new pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr(
                 new pcl::PointCloud<pcl::PointXYZRGBNormal>());
-        pcl::concatenateFields(**cloud_smoothed, *cloud_normals, **cloud_smoothed_normals);
+        pcl::concatenateFields(**cloud_smoothed, **cloud_normals, **cloud_smoothed_normals);
     }
 
     if (params.meshAlgorithm != noMesh) {
@@ -292,10 +293,12 @@ PCLViewer::loadPcdFile(std::string filename)
     viewer->removeAllPointClouds();
     viewer->removeAllShapes();
 
-    //viewer->addPointCloudNormals(*cloud_smoothed, *cloud_smoothed_normals, 100, 0.02f, "cloud_normals");
-
     if (ui->showPointsCheckbox->isChecked()) {
         addPointCloud();
+    }
+
+    if (ui->showNormalsCheckbox->isChecked()) {
+        showNormals();
     }
 
     if (ui->showMeshCheckbox->isChecked() && mesh != nullptr) {
@@ -326,7 +329,32 @@ PCLViewer::addPointCloud()
 {
     viewer->addPointCloud(*this->cloud_smoothed, "cloud_smoothed");
     viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "cloud_smoothed");
+}
 
+void
+PCLViewer::showNormalsCheckboxToggled(bool checked)
+{
+    if (checked) showNormals();
+    else hideNormals();
+}
+
+void
+PCLViewer::showNormals()
+{
+    if (!viewer->contains("cloud_normals")) {
+        viewer->addPointCloudNormals<pcl::PointXYZRGB, pcl::Normal>(
+                *cloud_smoothed, *cloud_normals, 10, 10.0f, "cloud_normals");
+        ui->qvtkWidget->update();
+    }
+}
+
+void
+PCLViewer::hideNormals()
+{
+    if (viewer->contains("cloud_normals")) {
+        viewer->removePointCloud("cloud_normals");
+        ui->qvtkWidget->update();
+    }
 }
 
 void
@@ -336,6 +364,7 @@ PCLViewer::showPointsCheckBoxToggled(bool checked)
         addPointCloud();
     } else if (viewer->contains("cloud_smoothed")) {
         viewer->removePointCloud("cloud_smoothed");
+        viewer->removePointCloud("cloud_normals");
     }
     ui->qvtkWidget->update();
 }
@@ -391,6 +420,7 @@ void
 PCLViewer::setUiEnabled(bool enabled)
 {
     ui->showPointsCheckbox->setEnabled(enabled);
+    ui->showNormalsCheckbox->setEnabled(enabled);
     ui->showMeshCheckbox->setEnabled(enabled);
 
     ui->meshAsPointsRadioButton->setEnabled(enabled);
