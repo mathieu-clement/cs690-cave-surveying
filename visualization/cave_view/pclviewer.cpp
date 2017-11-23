@@ -365,7 +365,6 @@ PCLViewer::showPointsCheckBoxToggled(bool checked)
         addPointCloud();
     } else if (viewer->contains("cloud_smoothed")) {
         viewer->removePointCloud("cloud_smoothed");
-        viewer->removePointCloud("cloud_normals");
     }
     ui->qvtkWidget->update();
 }
