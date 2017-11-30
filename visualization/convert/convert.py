@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import numpy as np
-import sys
 filer = open("sample.txt", "r")
 filew = open("converted.pcd", "w")
 numlines = len(filer.readlines())
@@ -17,8 +16,8 @@ filew.write("POINTS %d\n" %numlines)
 filew.write("DATA ascii\n")
 def spherical2cartesian(r, theta, phi):
     x = r * np.sin(theta*np.pi/180) * np.cos(phi*np.pi/180)
-    z = -1 * r * np.sin(theta*np.pi/180) * np.sin(phi*np.pi/180)
-    y = -1 * r * np.cos(theta*np.pi/180)
+    z = r * np.sin(theta*np.pi/180) * np.sin(phi*np.pi/180)
+    y = r * np.cos(theta*np.pi/180)
     return(x, y, z)
 filer = open("sample.txt", "r")
 for line in filer:
@@ -26,7 +25,7 @@ for line in filer:
     v = float(v.replace("V",""))
     h = float(h.replace("H",""))
     d = float(d.replace("\n",""))
-    (x, y, z) = spherical2cartesian(d, v, h)
+    (x, y, z) = spherical2cartesian(d, v-20, h/2.777777)
     filew.write("%f %f %f\n" %(x, y, z))
 filer.close()
 filew.close()
