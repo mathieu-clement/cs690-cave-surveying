@@ -135,11 +135,13 @@ void sweep() {
 
   for (int i = 140; i >= 30; i--) {
     vert_servo.write(i);
+    delay(50);
 
     Bitset bitset;
 
     for (int j = 0 ; j < 1000; ++j) {
-      while (!bitset.all()) {
+      int turns = 0;
+      while (!bitset.all() && turns < 4) {
         if (counter != lastCounter) {
           lastCounter = counter;
           if (!bitset.isSet(counter)) {
@@ -147,6 +149,7 @@ void sweep() {
             printval(i, counter);
           }
         }
+        turns++;
       }
     }
   } // for i
