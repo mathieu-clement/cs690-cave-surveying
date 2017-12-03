@@ -98,7 +98,7 @@ void setup() {
   Serial.begin(115200);
   delay(50);
 
-  lidar.begin(0, true);
+  lidar.begin(0, true); // min 22 ms before taking measurements
   lidar.configure(0);
 
   hor_servo.attach(HORIZONTAL_AXIS_PIN);
@@ -158,7 +158,7 @@ void sweep() {
     }
   } // for i
 
-  cont_servo.write(HIGH_VERT_ANGLE);
+  vert_servo.write(HIGH_VERT_ANGLE);
 } // sweep()
 
 
