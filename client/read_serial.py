@@ -5,7 +5,6 @@ import logging
 import serial
 import sys
 import time
-import tqdm
 
 logging.basicConfig()
 logger = logging.getLogger()
@@ -43,7 +42,6 @@ last_vertical = ''
 minV = 30
 maxV = 140
 rangeV = maxV - minV
-progress = tqdm.tqdm(range(100))
 
 with open(sys.argv[1], 'w') as f:
     while ser.is_open:
@@ -58,8 +56,7 @@ with open(sys.argv[1], 'w') as f:
         if vertical[0] == 'V' and vertical != last_vertical:
             v = int(vertical[1:])
             percents = round(100 * ((rangeV - v + minV) / rangeV))
-            progress.update(percents)
-            #logger.info('%s (%d %%)', vertical, percents)
+            logger.info('%s (%d %%)', vertical, percents)
             last_vertical = vertical
         f.write(line)
         f.write('\n')
