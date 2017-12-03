@@ -77,17 +77,22 @@ Servo vert_servo; //Vertical axis servo
 int HORIZONTAL_AXIS_PIN = 9;
 // Orange 10
 int VERTICAL_AXIS_PIN = 10;
+#define LOW_VERT_ANGLE 30
+#define HIGH_VERT_ANGLE 140
 
 // CONTINUOUS ROTATION SERVO
 // Red Vcc
 // Black GND
 // White 5
 int CONTINUOUS_SERVO_PIN = 5;
+#define CONT_SPEED 102
+#define MAX_TURNS 4
 
 volatile int stateA = LOW;
 volatile int stateB = LOW;
 volatile int counter = 0;
 volatile int lastCounter = 0;
+volatile int turns = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -101,7 +106,7 @@ void setup() {
 
   hor_servo.write(90);
   delay(500);
-  vert_servo.write(120);
+  vert_servo.write(HIGH_VERT_ANGLE);
   delay(500);
 
   pinMode (rotaryA, INPUT_PULLUP);
@@ -131,30 +136,29 @@ void loop() {
 }
 
 void sweep() {
-  cont_servo.write(104);
+  cont_servo.write(CONT_SPEED);
 
-  for (int i = 140; i >= 30; i--) {
+  for (int i = HIGH_VERT_ANGLE; i >= LOW_VERT_ANGLE; i--) {
     vert_servo.write(i);
     delay(50);
 
     Bitset bitset;
 
-    for (int j = 0 ; j < 1000; ++j) {
-      int turns = 0;
-      while (!bitset.all() && turns < 4) {
-        if (counter != lastCounter) {
-          lastCounter = counter;
-          if (!bitset.isSet(counter)) {
-            bitset.set(counter);
-            printval(i, counter);
-          }
+    turns = 0;
+    int cntBit = 0;
+    while (cntBit !=  1000 && turns < MAX_TURNS) {
+      if (counter != lastCounter) {
+        lastCounter = counter;
+        if (!bitset.isSet(counter)) {
+          bitset.set(counter);
+          cntBit++;
         }
-        turns++;
       }
+      printval(i, counter);
     }
   } // for i
 
-  cont_servo.write(90);
+  cont_servo.write(HIGH_VERT_ANGLE);
 } // sweep()
 
 
@@ -175,11 +179,13 @@ void changeA() {
       counter++;
       if (counter == 1000) {
         counter = 0;
+        turns++;
       }
     } else {
       counter--;
       if (counter == -1) {
         counter = 999;
+        turns++;
       }
     }
   }
