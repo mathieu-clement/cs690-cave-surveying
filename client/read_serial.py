@@ -43,7 +43,7 @@ minV = 30
 maxV = 140
 rangeV = maxV - minV
 
-with open(sys.argv[1], 'w') as f:
+with open(sys.argv[1], 'a') as f:
     while ser.is_open:
         line = ser.readline()
         if arduino_is_ready(line):
@@ -58,6 +58,7 @@ with open(sys.argv[1], 'w') as f:
             percents = round(100 * ((rangeV - v + minV) / rangeV))
             logger.info('%s (%d %%)', vertical, percents)
             last_vertical = vertical
+            f.flush()
         f.write(line)
         f.write('\n')
 
