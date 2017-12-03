@@ -10,8 +10,14 @@ def spherical2cartesian(r, theta, phi):
 
 class Coordinate:
     def __init__(self, v, h):
-        self.v = v
-        self.h = h
+        self.v = int(v)
+        self.h = int(h)
+
+    def __hash__(self):
+        return hash((self.v, self.h))
+
+    def __eq__(self, other):
+        return self.v == other.v and self.h == other.h
 
 points = {}
 
