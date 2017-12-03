@@ -85,7 +85,8 @@ int VERTICAL_AXIS_PIN = 10;
 // Black GND
 // White 5
 int CONTINUOUS_SERVO_PIN = 5;
-#define CONT_SPEED 102
+// try small decrements/increments
+#define CONT_SPEED 104
 #define MAX_TURNS 4
 
 volatile int stateA = LOW;
@@ -154,11 +155,12 @@ void sweep() {
           cntBit++;
         }
       }
-      printval(i, counter);
+      printval(i, 1000-counter);
     }
   } // for i
 
   vert_servo.write(HIGH_VERT_ANGLE);
+  cont_servo.write(90);
 } // sweep()
 
 
