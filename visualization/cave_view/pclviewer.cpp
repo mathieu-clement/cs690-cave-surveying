@@ -495,7 +495,7 @@ PCLViewer::removeOutliers()
     int len = cloud->size();
     std::cout << "Original size: " << cloud->size() << std::endl;
     int lowIdx = static_cast<int>(len * 0.01);
-    int highIdx = static_cast<int>(len * 0.97);
+    int highIdx = static_cast<int>(len * 0.99);
     int countUp = len - highIdx;
 
     auto it = cloud->begin();
