@@ -28,6 +28,8 @@ with open(sys.argv[1], "r") as filer:
             v = float(v[1:])
             h = float(h[1:])
             d = float(d[:-1])
+            if d < 10:
+                continue
             
             coord = Coordinate(v, h)
             
