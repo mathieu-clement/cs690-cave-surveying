@@ -8,25 +8,36 @@ def spherical2cartesian(r, theta, phi):
     y = r * np.cos(theta*np.pi/180)
     return(x, y, z)
 
-num_points = 0
+class Coordinate:
+    def __init__(self, v, h):
+        self.v = v
+        self.h = h
 
-with open(sys.argv[2], "w") as filew, open(sys.argv[1], "r") as filer:
+points = {}
+
+with open(sys.argv[1], "r") as filer:
     for line in filer:
         try:
             v, h, e, d = line.split(" ")
-            v = float(v.replace("V",""))
-            h = float(h.replace("H",""))
-            d = float(d.replace("\n",""))
-            (x, y, z) = spherical2cartesian(d, v-20, h/2.777777)
-            filew.write("%f %f %f\n" %(x, y, z))
-            num_points += 1
+            v = float(v[1:])
+            h = float(h[1:])
+            d = float(d[:-1])
+            
+            coord = Coordinate(v, h)
+            
+            if coord not in points:
+                points[coord] = []
+            points[coord].append(d)
         except ValueError:
             continue
 
+def write_cartesian(filew, v, h, d):
+    (x, y, z) = spherical2cartesian(d, v-20, h/2.777777)
+    filew.write("%f %f %f\n" % (x, y, z))
 
-with open(sys.argv[2], "r+") as filew:
-    content = filew.read()
-    filew.seek(0, 0)
+with open(sys.argv[2], "w") as filew:
+    num_points = len(points)
+
     filew.write("# .PCD v.7 - Point Cloud Data file format\n")
     filew.write("VERSION .7\n")
     filew.write("FIELDS x y z\n")
@@ -38,4 +49,7 @@ with open(sys.argv[2], "r+") as filew:
     filew.write("VIEWPOINT 0 0 0 1 0 0 0\n")
     filew.write("POINTS %d\n" % num_points)
     filew.write("DATA ascii\n")
-    filew.write(content)
+    
+    for coord, distances in points.items():
+        d = distances[0] if len(distances) == 1 else sum(distances)/len(distances)
+        write_cartesian(filew, coord.v, coord.h, d)
