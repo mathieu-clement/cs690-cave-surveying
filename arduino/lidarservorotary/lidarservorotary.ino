@@ -78,7 +78,7 @@ int HORIZONTAL_AXIS_PIN = 9;
 // Orange 10
 int VERTICAL_AXIS_PIN = 10;
 #define LOW_VERT_ANGLE 30
-#define HIGH_VERT_ANGLE 140
+#define HIGH_VERT_ANGLE 113
 
 // CONTINUOUS ROTATION SERVO
 // Red Vcc
@@ -86,7 +86,7 @@ int VERTICAL_AXIS_PIN = 10;
 // White 5
 int CONTINUOUS_SERVO_PIN = 5;
 // try small decrements/increments
-#define CONT_SPEED 104
+#define CONT_SPEED 100
 #define MAX_TURNS 4
 
 volatile int stateA = LOW;
