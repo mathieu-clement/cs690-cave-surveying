@@ -6,7 +6,7 @@
 // We use it to keep track of which point has been seen
 // for a particular longitude. There are 1000 data points
 // per revolution.
-// NOTE that space is very limited on the Atmega328P,
+// NOTE that dynamic memory is very limited on the Atmega328P,
 // the microcontroller used on the Arduino UNO board.
 class Bitset {
     int bins[125]; // ceil(1000/8) = 125
