@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD 11)
-#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-inconsistent-missing-override")
-#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override")
 set(QT_QMAKE_EXECUTABLE "/opt/local/libexec/qt5/bin/qmake")
 
 project(pcl-visualizer)
@@ -20,7 +18,6 @@ set(project_HEADERS pclviewer.h params.h paramsdialog.h poissonparamsdialog.h gr
 set(project_FORMS pclviewer.ui paramsdialog.ui poissonparamsdialog.ui greedyprojectiontriangulationparamsdialog.ui marchingcubesparamsdialog.ui)
 set(project_RESOURCES icons.qrc)
 
-#set  (VTK_LIBRARIES     vtkRendering vtkGraphics vtkHybrid QVTK)
 include(${VTK_USE_FILE})
 
 QT5_WRAP_CPP(project_HEADERS_MOC ${project_HEADERS})
@@ -35,31 +32,4 @@ ADD_EXECUTABLE(cave_viewer ${project_SOURCES}
         ${project_RESOURCES}
         ${project_HEADERS_MOC})
 
-#if(APPLE)
-#    set_target_properties (cave_viewer PROPERTIES
-#        MACOSX_BUNDLE YES
-#    )
-#endif(APPLE)
 TARGET_LINK_LIBRARIES(cave_viewer Qt5::Widgets ${PCL_LIBRARIES} ${VTK_LIBRARIES})
-
-#if(APPLE)
-#    add_custom_command(
-#        TARGET  cave_viewer POST_BUILD
-#        COMMAND ${CMAKE_COMMAND} -E copy
-#            ${CMAKE_SOURCE_DIR}/Info.plist
-#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/Info.plist)
-#    add_custom_command(
-#        TARGET  cave_viewer POST_BUILD
-#        COMMAND ${CMAKE_COMMAND} -E make_directory
-#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/Resources/)
-#    add_custom_command(
-#        TARGET  cave_viewer POST_BUILD
-#        COMMAND ${CMAKE_COMMAND} -E copy
-#            ${CMAKE_SOURCE_DIR}/duck.icns
-#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/duck.icns)
-#    add_custom_command(
-#        TARGET  cave_viewer POST_BUILD
-#        COMMAND ${CMAKE_COMMAND} -E copy
-#            ${CMAKE_SOURCE_DIR}/duck.icns
-#            ${CMAKE_CURRENT_BINARY_DIR}/cave_viewer.app/Contents/Resources/duck.icns)
-#endif(APPLE)
